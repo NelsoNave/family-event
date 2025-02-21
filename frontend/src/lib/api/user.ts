@@ -10,22 +10,25 @@ export const getUserInfo = async (): Promise<UserType> => {
       // Dummy data
       id: "12345",
       name: "John Doe",
-      profileImageUrl: "https://example.com/profile.jpg",
+      profileImageUrl: "/images/sample_profile.png",
       email: "johndoe@example.com",
-      family: [
+      userFamilies: [
         {
           id: "67890",
-          profileImageUrl: "https://example.com/family_member.jpg",
+          profileImageUrl: "/images/sample_profile.png",
           name: "Jane Doe",
         },
         {
           id: "11223",
-          profileImageUrl: "https://example.com/family_member_2.jpg",
+          profileImageUrl: "/images/sample_profile.png",
           name: "Sam Doe",
         },
       ],
     };
   } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+    }
     throw new Error("User not found");
   }
 };
