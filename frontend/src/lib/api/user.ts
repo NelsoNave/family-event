@@ -1,31 +1,40 @@
 import { UserType } from "@/types/user";
+import { getServerAxiosInstance } from "./axios-server";
 
 // Fetch user information
-export const getUserInfo = async (): Promise<UserType> => {
+export const getUserInfo = async (): Promise<{ user: UserType }> => {
   try {
-    // const axios = useAuthAxios();
-    // const response = await axios.get("/me");
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.get("/me");
+    return response.data.user;
 
-    return {
-      // Dummy data
-      id: "12345",
-      name: "John Doe",
-      profileImageUrl: "https://example.com/profile.jpg",
-      email: "johndoe@example.com",
-      family: [
-        {
-          id: "67890",
-          profileImageUrl: "https://example.com/family_member.jpg",
-          name: "Jane Doe",
-        },
-        {
-          id: "11223",
-          profileImageUrl: "https://example.com/family_member_2.jpg",
-          name: "Sam Doe",
-        },
-      ],
-    };
+    // ********** Uncomment the data below to use dummy data **********
+    // return {
+    //   // Dummy data
+    //   user: {
+    //     id: "12345",
+    //     name: "Tracy",
+    //     profileImageUrl: "/images/sample-family-1.png",
+    //     email: "tracy@example.com",
+    //     userFamilies: [
+    //       {
+    //         id: "67890",
+    //         profileImageUrl: "/images/sample-family-1.png",
+    //         name: "Jane Doe",
+    //       },
+    //       {
+    //         id: "11223",
+    //         profileImageUrl: "/images/sample-family-2.png",
+    //         name: "Sam Doe",
+    //       },
+    //     ],
+    //   },
+    // };
   } catch (err) {
-    throw new Error("User not found");
+    if (err instanceof Error) {
+      throw new Error();
+    } else {
+      throw new Error(String(err));
+    }
   }
 };

@@ -1,16 +1,16 @@
-// import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 import axios from "axios";
 import { useEffect } from "react";
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/";
 
 export const axiosInstance = axios.create({
   baseURL,
 });
 
-// custom hook to use auth token
+// Custom hook to use auth token
 export const useAuthAxios = () => {
-  // const { getToken } = useAuth();
+  const { getToken } = useAuth();
 
   useEffect(() => {
     const requestInterceptor = axiosInstance.interceptors.request.use(
@@ -26,7 +26,7 @@ export const useAuthAxios = () => {
       },
     );
 
-    // cleanup
+    // Cleanup
     return () => {
       axiosInstance.interceptors.request.eject(requestInterceptor);
     };
@@ -35,7 +35,7 @@ export const useAuthAxios = () => {
   return axiosInstance;
 };
 
-// public axios instance
+// Public axios instance
 export const publicAxios = axios.create({
   baseURL,
 });

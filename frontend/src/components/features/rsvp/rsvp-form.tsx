@@ -14,7 +14,7 @@ const RsvpForm = () => {
   };
 
   return (
-    <div className="mt-8 space-y-2 px-4">
+    <div className="mt-8 space-y-2 px-6">
       <h2 className="text-lg font-bold">RSVP</h2>
       <div className="flex w-full justify-between gap-2 rounded-lg border border-textBorder bg-white p-2">
         <RsvpButton

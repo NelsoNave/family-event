@@ -8,6 +8,4 @@ export type RsvpResponseType = {
   companions: { name: string }[];
   message: string;
   termsAccepted: boolean;
-  updateUserInfo: boolean;
-  updateFamilyInfo: boolean;
 };
