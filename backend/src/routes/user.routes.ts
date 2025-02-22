@@ -1,11 +1,15 @@
 import { Router } from "express";
-import requireAuthMiddleware from '../middleware/auth';
 import usersController from "../controllers/user.controller";
+import requireAuthMiddleware from "../middleware/auth";
 
-const usersRouter = Router()
+const usersRouter = Router();
 
 // Routes
-usersRouter.get('/', requireAuthMiddleware, usersController.getuserById)
+usersRouter.get("/", requireAuthMiddleware, usersController.getuserById);
+usersRouter.get(
+  "/events",
+  requireAuthMiddleware,
+  usersController.getEventInfoByEmail,
+);
 
-
-export default usersRouter
+export default usersRouter;
