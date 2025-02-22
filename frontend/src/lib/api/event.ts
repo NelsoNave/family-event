@@ -19,3 +19,4 @@ export const getEventInfo = async (eventId: string): Promise<EventType> => {
     throw new Error("Event not found");
   }
 };
+
