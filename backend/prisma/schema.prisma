@@ -77,9 +77,10 @@ model EventParticipants {
   userId  Int    @map("user_id")
   userFamilies     UserFamilies? @relation(fields: [userFamilyId], references: [id])
   userFamilyId     Int?    @map("user_family_id")
+  messageToHost    String @map("message_to_host")
   isAccepted Boolean    @map("is_accepted")
   isAttended Boolean    @map("is_attended")
-  
+
   @@unique(fields: [eventId, userId, userFamilyId], name: "event_participants_Id")
 
   @@map("event_participants")
@@ -113,7 +114,7 @@ model ParticipantNecessities {
   user       Users @relation(fields: [userId], references: [id])
   userId  Int    @map("user_id")
   isAdded Boolean    @map("is_added")
-  
+
   @@unique(fields: [necessityId, userId], name: "necessity_id")
 
   @@map("participant_necessities")

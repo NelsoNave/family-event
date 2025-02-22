@@ -3,5 +3,5 @@ export type UserType = {
   name: string;
   profileImageUrl: string;
   email: string;
-  family: { id: string; profileImageUrl: string; name: string }[];
+  userFamilies: { id: string; profileImageUrl: string; name: string }[];
 };

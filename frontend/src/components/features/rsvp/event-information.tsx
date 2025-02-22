@@ -1,65 +1,31 @@
-import { getEventInfo } from "@/lib/api/event";
+import {
+  dateFormatOptions,
+  formatDateTime,
+  timeFormatOptions,
+} from "@/lib/helpers/format-date";
+import { EventType } from "@/types/event";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 
-type EventInformationProps = {
-  id: string;
-};
-
-const formatDateTime = (
-  date: Date,
-  options: Intl.DateTimeFormatOptions,
-): string => {
-  return new Intl.DateTimeFormat("en-US", options).format(date);
-};
-
-const EventInformation = async ({ id }: EventInformationProps) => {
-  let response;
-
-  try {
-    response = await getEventInfo(id);
-  } catch (err) {
-    alert(err);
-    return null;
-  }
-
-  if (!response) {
-    notFound();
-  }
-
-  // Format date and time
-  const dateFormatOptions: Intl.DateTimeFormatOptions = {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  };
-
-  // Format time
-  const timeFormatOptions: Intl.DateTimeFormatOptions = {
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-  };
-
+const EventInformation = async ({ event }: { event: EventType }) => {
   return (
-    <section className="w-full space-y-4">
+    <section className="space-y-4">
       <Image
-        src={response.thumbnail}
+        src={event.thumbnailUrl}
         width={200}
         height={200}
         alt="thumbnail"
         className="w-full"
         priority
       />
-      <div className="space-y-2 px-4">
-        <h1 className="text-2xl font-bold">{response.title}</h1>
+      <div className="space-y-2 px-6">
+        <h1 className="text-2xl font-bold">{event.title}</h1>
         <div>
           <p className="font-semibold">
-            {formatDateTime(response.startTime, dateFormatOptions)}
+            {formatDateTime(new Date(event.startTime), dateFormatOptions)}
           </p>
           <p className="text-sm font-medium">
-            {formatDateTime(response.startTime, timeFormatOptions)} -
-            {formatDateTime(response.endTime, timeFormatOptions)}
+            {formatDateTime(new Date(event.startTime), timeFormatOptions)} -
+            {formatDateTime(new Date(event.endTime), timeFormatOptions)}
           </p>
         </div>
       </div>

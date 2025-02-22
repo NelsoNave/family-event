@@ -15,21 +15,22 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { getUserInfo } from "@/lib/api/user";
+import { useToast } from "@/hooks/use-toast";
+import { useAuthAxios } from "@/lib/api/axios-client";
+import { showErrorToast } from "@/lib/toast/toast-utils";
 import { RsvpResponseType } from "@/types/rsvp-response";
+import { UserType } from "@/types/user";
+import { useAuth } from "@clerk/clerk-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-// import { useAuth } from "@clerk/clerk-react";
 
 const formSchema = z.object({
   status: z.enum(["ACCEPT", "DECLINE"]),
@@ -50,8 +51,6 @@ const formSchema = z.object({
   termsAccepted: z.boolean().refine((val) => val === true, {
     message: "You must agree to the terms and conditions.",
   }),
-  updateUserInfo: z.boolean(),
-  updateFamilyInfo: z.boolean(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -71,80 +70,71 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
       message: "",
       companions: [],
       termsAccepted: false,
-      updateUserInfo: false,
-      updateFamilyInfo: false,
     },
   });
 
+  const axios = useAuthAxios();
   const params = useParams();
   const router = useRouter();
-  // const { isLoaded, isSignedIn } = useAuth();
-  const [family, setFamily] = useState<
-    { id: string; profileImageUrl: string; name: string }[]
+  const { toast } = useToast();
+  const { isLoaded, isSignedIn } = useAuth();
+
+  const [familyMemberOptions, setFamilyMemberOptions] = useState<
+    { name: string; profileImageUrl: string }[]
   >([]);
-  const [companions, setCompanions] = useState<string[]>([]);
+  const [companions, setCompanions] = useState<
+    { name: string; profileImageUrl?: string }[]
+  >([]);
   const [newCompanionName, setNewCompanionName] = useState<string>("");
   const [termsAccepted, setTermsAccepted] = useState(
     form.getValues("termsAccepted"),
   );
-  const [initialName, setInitialName] = useState<string>("");
   const [isEmailFetched, setIsEmailFetched] = useState(false);
-  const [initialCompanions, setInitialCompanions] = useState<string[]>([]);
+  const [selectedFamilyValue, setSelectedFamilyValue] = useState<
+    string | undefined
+  >("");
+  const [registeredFamilyMembers, setRegisteredFamilyMembers] = useState<
+    { name: string; profileImageUrl: string }[]
+  >([]);
 
   useEffect(() => {
+    // Fetch user information when they are logged in
     const fetchUserInfo = async () => {
-      // const { isLoaded, isSignedIn } = useAuth();
-
-      // if (isLoaded && !isSignedIn) {
-      //   return;
-      // }
+      if (!isLoaded || !isSignedIn) {
+        return;
+      }
 
       try {
-        const response = await getUserInfo();
-        setInitialName(response.name);
-        setIsEmailFetched(true);
-        form.setValue("name", response.name);
-        form.setValue("email", response.email);
-        setFamily(response.family);
+        const response = await axios.get<{ user: UserType }>(`/me`);
+        const userInformation = response.data.user;
 
-        // Initialize companions list
-        const initialCompanionNames = response.family.map(
-          (companion) => companion.name,
+        form.setValue("name", userInformation.name);
+        form.setValue("email", userInformation.email);
+
+        setFamilyMemberOptions(userInformation.userFamilies);
+        setIsEmailFetched(true);
+
+        const registeredFamily = userInformation.userFamilies.map((member) => {
+          return { name: member.name, profileImageUrl: member.profileImageUrl };
+        });
+
+        setRegisteredFamilyMembers(registeredFamily);
+      } catch (err: unknown) {
+        showErrorToast(
+          toast,
+          err,
+          "Failed to fetch user information. Please try again.",
         );
-        setInitialCompanions(initialCompanionNames);
-      } catch (err) {
-        alert(err); // TODO: use toast
       }
     };
 
     fetchUserInfo();
-  }, [form]);
-
-  // Detect if the name has changed
-  useEffect(() => {
-    if (form.getValues("name") !== initialName) {
-      form.setValue("updateUserInfo", true);
-    } else {
-      form.setValue("updateUserInfo", false);
-    }
-  }, [form.getValues("name"), initialName]);
-
-  // Detect if the companions have been modified
-  useEffect(() => {
-    const isCompanionModified = !companions.every((companion) =>
-      initialCompanions.includes(companion),
-    );
-
-    form.setValue("updateFamilyInfo", isCompanionModified);
-  }, [companions, initialCompanions, form]);
+  }, [isLoaded, isSignedIn, form, toast, axios]);
 
   const onSubmit = async (data: FormValues) => {
     try {
-      // if (isLoaded && !isSignedIn) {
-      //   return
-      // }
+      const eventId = params?.eventId;
 
-      const id = params?.eventId;
       const postData: RsvpResponseType = {
         status: data.status,
         restriction: data.restriction || "",
@@ -152,41 +142,95 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
           name: data.name,
           email: data.email,
         },
-        companions: companions.map((companionName) => ({
-          name: companionName,
+        companions: companions.map((companion) => ({
+          name: companion.name,
         })),
         message: data.message || "",
         termsAccepted: termsAccepted,
-        updateUserInfo: data.updateUserInfo,
-        updateFamilyInfo: data.updateFamilyInfo,
       };
 
-      const response = await axios.post(`/event/${id}/rsvp-form`, postData);
+      const response = await axios.post(
+        `/event/${eventId}/rsvp-form`,
+        postData,
+      );
 
       if (response.status !== 200) {
         throw new Error();
       }
-      router.push(`/rsvp/${id}/submitted`);
-    } catch (err) {
-      alert("Failed to submit form"); // TODO: use toast
+
+      router.push(`/rsvp/${eventId}/submitted`);
+    } catch (err: unknown) {
+      showErrorToast(
+        toast,
+        err,
+        "Failed to submit your RSVP. Please try again.",
+      );
     }
   };
 
   // Companion
-  const handleCompanionSelectChange = (selectedValue: string) => {
-    if (selectedValue && !companions.includes(selectedValue)) {
-      setCompanions([...companions, selectedValue]);
+  const handleFamilySelectChange = (selectedMember: string) => {
+    if (
+      selectedMember &&
+      !companions.some((companion) => companion.name === selectedMember)
+    ) {
+      const selectedFamilyMember = familyMemberOptions.find(
+        (member) => member.name === selectedMember,
+      );
+
+      if (selectedFamilyMember) {
+        setCompanions([...companions, selectedFamilyMember]);
+      }
+
+      setFamilyMemberOptions(
+        familyMemberOptions.filter((member) => member.name !== selectedMember),
+      );
+
+      setSelectedFamilyValue("");
     }
   };
 
-  const addCompanion = () => {
+  const handleAddCompanion = () => {
     if (newCompanionName.trim() === "") return;
-    setCompanions([...companions, newCompanionName]);
+    setCompanions([...companions, { name: newCompanionName }]);
     setNewCompanionName("");
   };
 
-  // Terms
-  const handleAgreeClick = () => {
+  const handleCompanionChange = (index: number, value: string) => {
+    const updatedCompanions = [...companions];
+    updatedCompanions[index] = {
+      name: value,
+      profileImageUrl: companions[index].profileImageUrl,
+    };
+    setCompanions(updatedCompanions);
+  };
+
+  const handleDeleteFamilyMembers = (companion: {
+    name: string;
+    profileImageUrl?: string;
+  }) => {
+    const updatedCompanions = companions.filter(
+      (existingCompanion) => existingCompanion.name !== companion.name,
+    );
+
+    setCompanions(updatedCompanions);
+
+    // Add the companion back to the family options
+    if (
+      registeredFamilyMembers.some((member) => member.name === companion.name)
+    ) {
+      setFamilyMemberOptions([
+        ...familyMemberOptions,
+        {
+          name: companion.name,
+          profileImageUrl: companion.profileImageUrl || "",
+        },
+      ]);
+    }
+  };
+
+  // Toggle terms accepted
+  const handleTermsAgreement = () => {
     setTermsAccepted(!termsAccepted);
     form.setValue("termsAccepted", !termsAccepted);
   };
@@ -209,7 +253,7 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                     <Input
                       placeholder="Enter your name"
                       {...field}
-                      className="font-medium text-text"
+                      className="font-semibold placeholder:text-textSub"
                     />
                   </FormControl>
                   <FormMessage />
@@ -229,7 +273,7 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                       type="email"
                       placeholder="Enter your email address"
                       {...field}
-                      className="text-te font-medium"
+                      className="font-semibold placeholder:text-textSub"
                       disabled={isEmailFetched}
                     />
                   </FormControl>
@@ -242,39 +286,52 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
             <div className="space-y-4">
               <h3 className="text-lg font-bold">Companion</h3>
               <div className="mt-4">
-                {companions.map((companion, index) => (
-                  <div key={index} className="mt-2 flex items-center space-x-2">
-                    <Input
-                      value={companion}
-                      onChange={(e) => {
-                        companions[index] = e.target.value;
-                        setCompanions([...companions]);
-                      }}
-                      className="mt-2 bg-white px-4 py-5 font-semibold"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const updatedCompanions = companions.filter(
-                          (companion) => companion !== companions[index],
-                        );
-                        setCompanions(updatedCompanions);
-                      }}
-                      className="text-red-500"
+                {companions.map(
+                  (
+                    companion: { name: string; profileImageUrl?: string },
+                    index: number,
+                  ) => (
+                    <div
+                      key={index}
+                      className="mt-2 flex items-center space-x-2"
                     >
-                      <Image
-                        src="/images/delete.svg"
-                        width={200}
-                        height={200}
-                        alt="delete icon"
-                        className="w-full"
-                      />
-                    </button>
-                  </div>
-                ))}
+                      <div className="relative flex w-full items-center">
+                        {companion.profileImageUrl && (
+                          <Image
+                            src={companion.profileImageUrl}
+                            width={32}
+                            height={32}
+                            alt="profile image"
+                            className="absolute left-2 top-[13px] h-8 w-8 rounded-full object-cover"
+                          />
+                        )}
+                        <Input
+                          value={companion.name}
+                          onChange={(e) =>
+                            handleCompanionChange(index, e.target.value)
+                          }
+                          className={`mt-2 w-full bg-white p-4 py-5 font-semibold ${companion.profileImageUrl ? "pl-12" : "pl-4"}`}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteFamilyMembers(companion)}
+                        className="text-red-500"
+                      >
+                        <Image
+                          src="/images/delete.svg"
+                          width={100}
+                          height={100}
+                          alt="delete icon"
+                          className="w-full"
+                        />
+                      </button>
+                    </div>
+                  ),
+                )}
               </div>
               {/* If the user is logged in, they can select companions from their family. */}
-              {family.length > 0 && (
+              {familyMemberOptions.length > 0 && (
                 <FormField
                   control={form.control}
                   name="companions"
@@ -283,18 +340,30 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                       <FormControl className="w-full rounded-md bg-white px-4 py-5">
                         <Select
                           {...field}
-                          value={undefined}
-                          onValueChange={handleCompanionSelectChange}
+                          value={selectedFamilyValue}
+                          onValueChange={handleFamilySelectChange}
                         >
-                          <SelectTrigger className="w-full bg-white px-4 py-5 text-sm font-medium text-textSub">
+                          <SelectTrigger className="w-full bg-white px-4 py-5 text-sm font-semibold text-textSub">
                             <SelectValue placeholder="Select from your family" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              <SelectLabel>Companion</SelectLabel>
-                              {family.map((companion, index) => (
-                                <SelectItem key={index} value={companion.name}>
-                                  {companion.name}
+                              {familyMemberOptions.map((member, index) => (
+                                <SelectItem
+                                  key={index}
+                                  value={member.name}
+                                  className="font-semibold"
+                                >
+                                  <div className="flex items-center gap-4 font-semibold">
+                                    <Image
+                                      src={member.profileImageUrl}
+                                      width={100}
+                                      height={100}
+                                      alt="profile image"
+                                      className="h-8 w-8 rounded-full object-cover"
+                                    />
+                                    <p>{member.name}</p>
+                                  </div>
                                 </SelectItem>
                               ))}
                             </SelectGroup>
@@ -312,13 +381,13 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                     value={newCompanionName}
                     onChange={(e) => setNewCompanionName(e.target.value)}
                     placeholder="Enter companion's name"
-                    className="mt-2 bg-white px-4 py-5 font-semibold"
+                    className="mt-2 bg-white px-4 py-5 font-semibold placeholder:text-textSub"
                   />
                 </label>
                 <button
                   type="button"
-                  onClick={addCompanion}
-                  className="ml-auto flex items-center gap-2 rounded-full border border-primary bg-white px-4 py-2 text-sm font-bold text-primary"
+                  onClick={handleAddCompanion}
+                  className="ml-auto flex items-center gap-2 rounded-full border border-primary bg-white px-4 py-2 text-sm font-bold text-primary hover:opacity-70"
                 >
                   <Image
                     src="/images/plus.svg"
@@ -351,7 +420,7 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                       <Textarea
                         placeholder="Enter your note"
                         {...field}
-                        className="h-28 font-medium text-textSub"
+                        className="h-28 font-semibold placeholder:text-textSub"
                       />
                     </FormControl>
                     <FormMessage />
@@ -375,7 +444,7 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                     <Textarea
                       placeholder="Enter your message"
                       {...field}
-                      className="h-28 font-medium text-textSub"
+                      className="h-28 font-semibold placeholder:text-textSub"
                     />
                   </FormControl>
                   <FormMessage />
@@ -391,8 +460,8 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                 <FormControl className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={handleAgreeClick}
-                    className="flex items-center gap-2 rounded-full font-bold text-white"
+                    onClick={handleTermsAgreement}
+                    className="flex items-center gap-2 rounded-full font-bold text-white hover:opacity-70"
                   >
                     {form.getValues("termsAccepted") ? (
                       <Image
@@ -420,7 +489,7 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
           />
           <Button
             type="submit"
-            className="w-full rounded-[40px] py-8 text-lg font-bold"
+            className="w-full rounded-[40px] py-8 text-lg font-bold hover:opacity-70"
           >
             Submit
           </Button>

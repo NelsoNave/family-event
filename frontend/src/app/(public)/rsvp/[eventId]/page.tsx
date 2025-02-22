@@ -1,10 +1,26 @@
 import EventInformation from "@/components/features/rsvp/event-information";
 import RsvpForm from "@/components/features/rsvp/rsvp-form";
+import { getEventInfo } from "@/lib/api/event";
+import { notFound } from "next/navigation";
 
-const RSVP = ({ params }: { params: { id: string } }) => {
+const RSVP = async ({ params }: { params: Promise<{ eventId: string }> }) => {
+  let eventData = null;
+  const { eventId } = await params;
+
+  try {
+    const response = await getEventInfo(eventId);
+    eventData = response.event;
+  } catch (err) {
+    console.error(err);
+    notFound();
+  }
+
   return (
-    <section className="mx-auto h-full w-full max-w-[375px]">
-      <EventInformation id={params.id} />
+    <section
+      className="max-w-md pb-3 md:mx-auto"
+      style={{ backgroundColor: eventData.theme }}
+    >
+      <EventInformation event={eventData} />
       <RsvpForm />
     </section>
   );

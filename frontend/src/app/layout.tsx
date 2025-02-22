@@ -1,4 +1,5 @@
 import Header from "@/components/layouts/header";
+import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
@@ -29,6 +30,7 @@ export default function RootLayout({
         <body className={`${quicksand.className} antialiased`}>
           <Header />
           <main>{children}</main>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
