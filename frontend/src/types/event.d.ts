@@ -16,3 +16,11 @@ export type EventType = {
   noteForNecessities: string;
   noteForThingsToBuy: string;
 };
+
+export type MyPageEventType = {
+  events: Array<
+    EventType & {
+      isHost: boolean;
+    }
+  >;
+};
