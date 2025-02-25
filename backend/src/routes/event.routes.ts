@@ -1,6 +1,7 @@
 import { Router } from "express";
 import eventController from "../controllers/event.controller";
 import necesitiesModel from "../controllers/necessities.controller";
+import participantNecesitiesModel from "../controllers/participantNecessities.controller";
 import requireAuthMiddleware from "../middleware/auth";
 
 const eventRouter = Router();
@@ -18,6 +19,18 @@ eventRouter.post(
   "/:event_id/necessities",
   requireAuthMiddleware,
   necesitiesModel.addNewNessitiesInfo,
+);
+
+eventRouter.get(
+  "/:event_id/me/necessities",
+  requireAuthMiddleware,
+  participantNecesitiesModel.getParticipantNecessities,
+);
+
+eventRouter.patch(
+  "/:event_id/me/necessities/:necessity_id",
+  //requireAuthMiddleware,
+  participantNecesitiesModel.updateParticipantNecessities,
 );
 
 export default eventRouter;
