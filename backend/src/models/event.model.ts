@@ -1,7 +1,12 @@
-import { PrismaClient } from "@prisma/client";
-import { NotFoundError } from "../errors";
+import { Prisma, PrismaClient } from "@prisma/client";
+import { error } from "console";
+import necessitiesModel from "../models/necessities.model";
+import participantNecessitiesModel from "../models/participantNecessities.model";
+import Event from "../types/event";
 
 const prisma = new PrismaClient();
+
+type Necessity = { item: string };
 
 // Fetch event infomation by id
 const fetchEventById = async (id: number) => {
@@ -11,17 +16,17 @@ const fetchEventById = async (id: number) => {
   return event;
 };
 
-const checkIsEventHostOrParticipant = async (
-  email: string,
+const updateEvent = async (
+  tx: Prisma.TransactionClient,
   eventId: number,
+  updates: Partial<Event>,
 ) => {
-  const user = await prisma.users.findUnique({
-    where: {
-      email: email,
-    },
-  });
-  if (!user) {
-    throw new NotFoundError("User");
+  const filteredUpdates = Object.fromEntries(
+    Object.entries(updates).filter(([_, v]) => v !== undefined),
+  );
+
+  if (Object.keys(filteredUpdates).length === 0) {
+    throw new Error("no valid update fields");
   }
   // check if the user is the host of the event
   const isHost = await prisma.events.findFirst({
@@ -40,7 +45,50 @@ const checkIsEventHostOrParticipant = async (
   return isParticipant ? true : false;
 };
 
+  const user = await prisma.events.update({
+    where: { id: eventId },
+    data: { ...filteredUpdates },
+  });
+
+  return user;
+};
+
+const createNewNecessitiesInfo = async (
+  eventId: number,
+  newNessitiesList: Necessity[],
+  newNote: string,
+) => {
+  try {
+    return await prisma.$transaction(async (tx) => {
+      let necessities = [];
+      if (newNessitiesList.length) {
+        for (let i = 0; i < newNessitiesList.length; i++) {
+          const newNessity = await necessitiesModel.createNewNecessities(
+            tx,
+            eventId,
+            newNessitiesList[i].item,
+          );
+          necessities.push(newNessity);
+          await participantNecessitiesModel.createNewParticipantNecessities(
+            tx,
+            eventId,
+            newNessity.id,
+          );
+        }
+      }
+      const updates = { noteForNecessities: newNote };
+      const updatedNote = await updateEvent(tx, eventId, updates);
+      const resultNote = updatedNote.noteForNecessities;
+
+      return { necessities, updatedNote };
+    });
+  } catch (err) {
+    console.error("Transaction failed:", error);
+    throw error;
+  }
+};
+
 export default {
   fetchEventById,
-  checkIsEventHostOrParticipant,
+  createNewNecessitiesInfo,
 };
