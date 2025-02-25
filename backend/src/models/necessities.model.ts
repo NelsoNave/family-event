@@ -39,6 +39,18 @@ const createNewNecessities = async (
   }
 };
 
+const updateNecessities = async (
+  tx: Prisma.TransactionClient,
+  eventId: number,
+  item: string,
+) => {
+  try {
+  } catch (err) {
+    console.error("faild to add necessity", err);
+    throw err;
+  }
+};
+
 export default {
   fetchNecessities,
   createNewNecessities,

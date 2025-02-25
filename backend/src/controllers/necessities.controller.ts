@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import eventModel from "../models/event.model";
 import necessitiesModel from "../models/necessities.model";
 
+type Necessity = { id?: string; item: string };
+
 const getNessities = async (
   req: Request<{ event_id: string }>,
   res: Response,
@@ -46,7 +48,31 @@ const addNewNessitiesInfo = async (
   }
 };
 
+const updateNessities = async (
+  req: Request<{ event_id: string }>,
+  res: Response,
+) => {
+  try {
+    const eventId = Number(req.params.event_id);
+    const nessitiesList = req.body.necessities;
+
+    const newNessitiesList = nessitiesList.map((necessity: Necessity) => {
+      if (!necessity.id) {
+        return necessity;
+      }
+    });
+
+    const updateNessitiesList = {};
+
+    res.status(200).json({});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Unable to create Nessities" });
+  }
+};
+
 export default {
   getNessities,
   addNewNessitiesInfo,
+  updateNessities,
 };
