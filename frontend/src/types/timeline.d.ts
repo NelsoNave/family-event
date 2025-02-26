@@ -1,4 +1,4 @@
-export type TimeLineType = {
+export type TimelineType = {
   id: string;
   title: string;
   description: string;
