@@ -1,11 +1,10 @@
-import { TimelineType } from "@/types/timeline";
-import { AxiosError } from "axios";
+import { TimeLineType } from "@/types/time-line";
 import { getServerAxiosInstance } from "./axios-server";
 
-// Fetch timeline
+// Fetch event information for RSVP
 export const getTimeline = async (
   eventId: string,
-): Promise<{ timelines: TimelineType[] }> => {
+): Promise<{ timeLine: TimeLineType[] }> => {
   try {
     const axiosInstance = await getServerAxiosInstance();
     const response = (await axiosInstance.get(`/events/${eventId}/timelines`))
@@ -13,10 +12,10 @@ export const getTimeline = async (
 
     return response;
   } catch (err) {
-    if (err instanceof AxiosError) {
-      throw new AxiosError(err.response?.data.message);
+    if (err instanceof Error) {
+      throw new Error();
     } else {
-      throw new Error("Failed to fetch activity. Please try again.");
+      throw new Error(String(err));
     }
   }
 };
