@@ -27,3 +27,26 @@ export const addActivity = async ({
     }
   }
 };
+
+// Delete activity
+export const deleteActivity = async (
+  eventId: string,
+  timelineId: string,
+): Promise<{
+  success: boolean;
+  message: string;
+}> => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.delete(
+      `events/${eventId}/timelines/${timelineId}`,
+    );
+
+    return response.data;
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+    }
+    throw new Error("Failed to delete activity");
+  }
+};
