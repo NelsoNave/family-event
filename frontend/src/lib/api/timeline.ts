@@ -1,14 +1,16 @@
-import { EventType } from "@/types/event";
+import { TimeLineType } from "@/types/time-line";
 import { getServerAxiosInstance } from "./axios-server";
 
 // Fetch event information for RSVP
-export const getEventInformation = async (
+export const getTimeline = async (
   eventId: string,
-): Promise<{ event: EventType }> => {
+): Promise<{ timeLine: TimeLineType[] }> => {
   try {
     const axiosInstance = await getServerAxiosInstance();
-    const response = await axiosInstance.get(`/events/${eventId}`);
-    return response.data;
+    const response = (await axiosInstance.get(`/events/${eventId}/timelines`))
+      .data.data;
+
+    return response;
   } catch (err) {
     if (err instanceof Error) {
       throw new Error();
@@ -17,4 +19,3 @@ export const getEventInformation = async (
     }
   }
 };
-
