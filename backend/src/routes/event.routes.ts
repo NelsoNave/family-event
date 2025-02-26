@@ -59,6 +59,18 @@ eventRouter.patch(
   "/:event_id/participants/:participant_id/attendance",
   eventParticipantsController.updateParticipantAttendance,
 );
+eventRouter.delete(
+  "/:event_id/participants/:participant_id",
+  eventParticipantsController.deleteParticipant,
+);
+eventRouter.post(
+  "/:event_id/participants/temporary",
+  eventParticipantsController.addTemporaryParticipant,
+);
+eventRouter.delete(
+  "/:event_id/participants/temporary/:participant_id",
+  eventParticipantsController.deleteTemporaryParticipant,
+);
 
 //Album
 eventRouter.get(

@@ -106,9 +106,53 @@ const deleteParticipant = async (
   }
 };
 
+const addTemporaryParticipant = async (
+  req: Request<{ event_id: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const eventId = Number(req.params.event_id);
+    if (isNaN(eventId)) {
+      throw new ValidationError("Invalid event ID");
+    }
+    const name = req.body.name;
+    if (!name) {
+      throw new ValidationError("Name is required");
+    }
+    await eventParticipantsModel.addTemporaryParticipant(eventId, name);
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const deleteTemporaryParticipant = async (
+  req: Request<{ event_id: string; participant_id: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const eventId = Number(req.params.event_id);
+    const participantId = Number(req.params.participant_id);
+    if (isNaN(eventId) || isNaN(participantId)) {
+      throw new ValidationError("Invalid event ID or participant ID");
+    }
+    await eventParticipantsModel.deleteTemporaryParticipant(
+      eventId,
+      participantId,
+    );
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   getEventParticipants,
   getWhoIsComing,
   updateParticipantAttendance,
   deleteParticipant,
+  addTemporaryParticipant,
+  deleteTemporaryParticipant,
 };
