@@ -18,3 +18,19 @@ export const timeFormatOptions: Intl.DateTimeFormatOptions = {
   minute: "numeric",
   hour12: true,
 };
+
+// Day
+export const dayFormatOptions: Intl.DateTimeFormatOptions = {
+  day: "2-digit",
+};
+
+// Weekday
+export const weekdayFormatOptions: Intl.DateTimeFormatOptions = {
+  weekday: "short",
+};
+
+// MonthAndYear
+export const monthAndYearFormatOptions: Intl.DateTimeFormatOptions = {
+  month: "short",
+  year: "numeric",
+};
