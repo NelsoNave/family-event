@@ -5,11 +5,13 @@ import { ActionDropdown } from "./action-dropdown";
 type ActivityCardProps = {
   activityData: TimelineType;
   isEven: boolean;
+  eventId: string;
 };
 
 export default function ActivityCard({
   activityData,
   isEven,
+  eventId,
 }: ActivityCardProps) {
   return (
     <div className="mb-4 flex h-[144px] items-center gap-2 overflow-y-auto">
@@ -29,7 +31,7 @@ export default function ActivityCard({
       >
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">{activityData.title}</h2>
-          <ActionDropdown />
+          <ActionDropdown eventId={eventId} timelineId={activityData.id} />
         </div>
         <p className="text-sm font-bold">{activityData.description}</p>
       </div>

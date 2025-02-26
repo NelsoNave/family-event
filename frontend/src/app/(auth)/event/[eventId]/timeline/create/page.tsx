@@ -10,7 +10,7 @@ export default async function CreateActivity({
   return (
     <section className="space-y-4">
       <h1 className="text-xl font-bold">Add Activity</h1>
-      <ActivityForm eventId={eventId} />
+      <ActivityForm eventId={eventId} isCreateActivity />
     </section>
   );
 }
