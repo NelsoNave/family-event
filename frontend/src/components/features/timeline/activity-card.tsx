@@ -22,7 +22,9 @@ export default function ActivityCard({
         </p>
       </div>
       <div
-        className={`h-full flex-[8] space-y-2 rounded-xl bg-background p-4 ${isEven ? "bg-background" : "bg-accentGreen text-white"}`}
+        className={`h-full flex-[8] space-y-2 rounded-xl p-4 ${
+          isEven ? "bg-background" : "bg-accentGreen text-white"
+        }`}
       >
         <h2 className="text-lg font-bold">{activityData.title}</h2>
         <p className="text-sm font-bold">{activityData.description}</p>
