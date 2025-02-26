@@ -55,24 +55,24 @@ const updateEvent = async (
 
 const createNewNecessitiesInfo = async (
   eventId: number,
-  newNessitiesList: Necessity[],
+  newNecessitiesList: Necessity[],
   newNote: string,
 ) => {
   try {
     return await prisma.$transaction(async (tx) => {
       let necessities = [];
-      if (newNessitiesList.length) {
-        for (let i = 0; i < newNessitiesList.length; i++) {
-          const newNessity = await necessitiesModel.createNewNecessities(
+      if (newNecessitiesList.length) {
+        for (let i = 0; i < newNecessitiesList.length; i++) {
+          const newNecessity = await necessitiesModel.createNewNecessities(
             tx,
             eventId,
-            newNessitiesList[i].item,
+            newNecessitiesList[i].item,
           );
-          necessities.push(newNessity);
+          necessities.push(newNecessity);
           await participantNecessitiesModel.createNewParticipantNecessities(
             tx,
             eventId,
-            newNessity.id,
+            newNecessity.id,
           );
         }
       }

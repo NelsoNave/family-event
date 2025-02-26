@@ -12,13 +12,19 @@ eventRouter.get("/:event_id", eventController.getEventById);
 eventRouter.get(
   "/:event_id/necessities",
   requireAuthMiddleware,
-  necesitiesModel.getNessities,
+  necesitiesModel.getNecessities,
 );
 
 eventRouter.post(
   "/:event_id/necessities",
   requireAuthMiddleware,
-  necesitiesModel.addNewNessitiesInfo,
+  necesitiesModel.addNewNecessitiesInfo,
+);
+
+eventRouter.patch(
+  "/:event_id/necessities",
+  //requireAuthMiddleware,
+  necesitiesModel.updateNecessities,
 );
 
 eventRouter.get(

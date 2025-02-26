@@ -26,16 +26,33 @@ const createNewNecessities = async (
   item: string,
 ) => {
   try {
-    const newNessity = await tx.necessities.create({
+    const newNecessity = await tx.necessities.create({
       data: {
         eventId: eventId,
         item: item,
       },
     });
-    return newNessity;
+    return newNecessity;
   } catch (err) {
     console.error("faild to add necessity", error);
     throw error;
+  }
+};
+
+const lockNecessities = async (
+  tx: Prisma.TransactionClient,
+  eventId: number,
+) => {
+  try {
+    await tx.$queryRaw`
+    SELECT * FROM necessities n
+RIGHT JOIN participant_necessities pn
+ON n.id = pn.necessity_id
+WHERE n.event_id = ${eventId}
+FOR UPDATE;`;
+  } catch (err) {
+    console.error("faild to add necessity", err);
+    throw err;
   }
 };
 
