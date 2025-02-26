@@ -1,19 +1,14 @@
 import { formatDateTime, timeFormatOptions } from "@/lib/helpers/format-date";
 import { TimelineType } from "@/types/timeline";
-import { ActionDropdown } from "./action-dropdown";
 
 type ActivityCardProps = {
   activityData: TimelineType;
   isEven: boolean;
-  eventId: string;
-  isHost: boolean;
 };
 
 export default function ActivityCard({
   activityData,
   isEven,
-  eventId,
-  isHost,
 }: ActivityCardProps) {
   return (
     <div className="mb-4 flex h-[144px] items-center gap-2 overflow-y-auto">
@@ -27,16 +22,9 @@ export default function ActivityCard({
         </p>
       </div>
       <div
-        className={`h-full flex-[8] space-y-2 rounded-xl p-4 ${
-          isEven ? "bg-background" : "bg-accentGreen text-white"
-        }`}
+        className={`h-full flex-[8] space-y-2 rounded-xl bg-background p-4 ${isEven ? "bg-background" : "bg-accentGreen text-white"}`}
       >
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold">{activityData.title}</h2>
-          {isHost && (
-            <ActionDropdown eventId={eventId} activityId={activityData.id} />
-          )}
-        </div>
+        <h2 className="text-lg font-bold">{activityData.title}</h2>
         <p className="text-sm font-bold">{activityData.description}</p>
       </div>
     </div>
