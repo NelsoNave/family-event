@@ -55,7 +55,22 @@ const updateParticipantNecessities = async (
     });
     return result;
   } catch (err) {
-    console.error("faild to add participant necessity", err);
+    console.error("faild to update participant necessity", err);
+    throw err;
+  }
+};
+
+const deleteParticipantNecessities = async (
+  tx: Prisma.TransactionClient,
+  necessityId: number,
+) => {
+  try {
+    const result = await tx.participantNecessities.deleteMany({
+      where: { necessityId: necessityId },
+    });
+    return result;
+  } catch (err) {
+    console.error("faild to delete participant necessity", err);
     throw err;
   }
 };
@@ -65,4 +80,5 @@ export default {
   addNewParticipantNecessitiesByRsvp,
   createNewParticipantNecessities,
   updateParticipantNecessities,
+  deleteParticipantNecessities,
 };

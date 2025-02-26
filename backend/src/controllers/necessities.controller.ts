@@ -41,20 +41,22 @@ const addNewNecessitiesInfo = async (
     const necessities = result.necessities;
     const noteForNecessities = result.updatedNote?.noteForNecessities;
 
-    res.status(200).json({ data: { necessities, noteForNecessities } });
+    res.status(200).json({
+      success: true,
+      message: "added necessities successfully!",
+      data: { necessities, noteForNecessities },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Unable to create Necessities" });
   }
 };
 
-const updateNecessities = async (
+const updateNecessitiesInfo = async (
   req: Request<{ event_id: string }>,
   res: Response,
 ) => {
   try {
-    //lock
-
     const eventId = Number(req.params.event_id);
     const necessitiesList = req.body.necessities;
 
@@ -83,19 +85,29 @@ const updateNecessities = async (
         ),
     );
 
-    console.log(newNecessitiesList);
-    console.log(updateNecessitiesList);
-    console.log(deleteNecessitiesList);
+    const result = await eventModel.updateNewNecessities(
+      eventId,
+      newNecessitiesList,
+      updateNecessitiesList,
+      deleteNecessitiesList,
+    );
 
-    res.status(200).json({});
+    const necessities = result.necessities;
+    const noteForNecessities = result.note;
+
+    res.status(200).json({
+      success: true,
+      message: "updated necessities successfully!",
+      data: { necessities, noteForNecessities },
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Unable to create Necessities" });
+    res.status(500).json({ error: "Unable to update Necessities" });
   }
 };
 
 export default {
   getNecessities,
   addNewNecessitiesInfo,
-  updateNecessities,
+  updateNecessitiesInfo,
 };

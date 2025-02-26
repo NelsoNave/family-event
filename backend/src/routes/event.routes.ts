@@ -23,8 +23,8 @@ eventRouter.post(
 
 eventRouter.patch(
   "/:event_id/necessities",
-  //requireAuthMiddleware,
-  necesitiesModel.updateNecessities,
+  requireAuthMiddleware,
+  necesitiesModel.updateNecessitiesInfo,
 );
 
 eventRouter.get(
@@ -35,7 +35,7 @@ eventRouter.get(
 
 eventRouter.patch(
   "/:event_id/me/necessities/:necessity_id",
-  //requireAuthMiddleware,
+  requireAuthMiddleware,
   participantNecesitiesModel.updateParticipantNecessities,
 );
 

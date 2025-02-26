@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import RsvpForm from "../types/rsvpform";
 import EventParticipants from "./eventParticipants.model";
-import ParticipantNecessities from "./participantNecessities.model";
+import ParticipantNecessitiesModel from "./participantNecessities.model";
 import User from "./user.model";
 import UserFamilies from "./userFamilies.model";
 
@@ -29,7 +29,7 @@ const submitNewUserRsvp = async (
       );
 
       if (isAccepted) {
-        await ParticipantNecessities.addNewParticipantNecessitiesByRsvp(
+        await ParticipantNecessitiesModel.addNewParticipantNecessitiesByRsvp(
           tx,
           eventId,
           newUser.id,
@@ -79,7 +79,7 @@ const submitExistingUserRsvp = async (
       );
 
       if (isAccepted) {
-        await ParticipantNecessities.addNewParticipantNecessitiesByRsvp(
+        await ParticipantNecessitiesModel.addNewParticipantNecessitiesByRsvp(
           tx,
           eventId,
           userId,

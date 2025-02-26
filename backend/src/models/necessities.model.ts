@@ -46,24 +46,46 @@ const lockNecessities = async (
   try {
     await tx.$queryRaw`
     SELECT * FROM necessities n
-RIGHT JOIN participant_necessities pn
-ON n.id = pn.necessity_id
-WHERE n.event_id = ${eventId}
-FOR UPDATE;`;
+    RIGHT JOIN participant_necessities pn
+    ON n.id = pn.necessity_id
+    WHERE n.event_id = ${eventId}
+    FOR UPDATE;`;
   } catch (err) {
-    console.error("faild to add necessity", err);
+    console.error("faild to lock", err);
     throw err;
   }
 };
 
 const updateNecessities = async (
   tx: Prisma.TransactionClient,
-  eventId: number,
+  necessityId: number,
   item: string,
 ) => {
   try {
+    const updatedNecessity = await tx.necessities.update({
+      where: { id: necessityId },
+      data: {
+        item: item,
+      },
+    });
+    return updatedNecessity;
   } catch (err) {
-    console.error("faild to add necessity", err);
+    console.error("faild to update necessity", err);
+    throw err;
+  }
+};
+
+const deleteNecessities = async (
+  tx: Prisma.TransactionClient,
+  necessityId: number,
+) => {
+  try {
+    const deletedNecessity = await tx.necessities.delete({
+      where: { id: necessityId },
+    });
+    return deletedNecessity;
+  } catch (err) {
+    console.error("faild to delete necessity", err);
     throw err;
   }
 };
@@ -71,4 +93,7 @@ const updateNecessities = async (
 export default {
   fetchNecessities,
   createNewNecessities,
+  lockNecessities,
+  updateNecessities,
+  deleteNecessities,
 };
