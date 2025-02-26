@@ -9,12 +9,10 @@ export default function BreadcrumbNavigation({
   previousPageName,
 }: BreadcrumbNavigationProps) {
   return (
-    <div className="sticky top-10 z-10 bg-white py-4">
-      <Link href={path}>
-        <p className="text-sm font-medium">
-          <span className="mr-2">&lt;</span> {previousPageName}
-        </p>
-      </Link>
-    </div>
+    <Link href={path}>
+      <p className="text-sm font-medium">
+        <span className="mr-2">&lt;</span> {previousPageName}
+      </p>
+    </Link>
   );
 }
