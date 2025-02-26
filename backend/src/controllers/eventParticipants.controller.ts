@@ -88,8 +88,27 @@ const updateParticipantAttendance = async (
   }
 };
 
+const deleteParticipant = async (
+  req: Request<{ event_id: string; participant_id: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const eventId = Number(req.params.event_id);
+    const participantId = Number(req.params.participant_id);
+    if (isNaN(eventId) || isNaN(participantId)) {
+      throw new ValidationError("Invalid event ID or participant ID");
+    }
+    await eventParticipantsModel.deleteParticipant(eventId, participantId);
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   getEventParticipants,
   getWhoIsComing,
   updateParticipantAttendance,
+  deleteParticipant,
 };
