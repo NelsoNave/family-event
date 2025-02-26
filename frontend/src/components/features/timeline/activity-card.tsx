@@ -1,5 +1,6 @@
 import { formatDateTime, timeFormatOptions } from "@/lib/helpers/format-date";
 import { TimelineType } from "@/types/timeline";
+import { ActionDropdown } from "./action-dropdown";
 
 type ActivityCardProps = {
   activityData: TimelineType;
@@ -26,7 +27,10 @@ export default function ActivityCard({
           isEven ? "bg-background" : "bg-accentGreen text-white"
         }`}
       >
-        <h2 className="text-lg font-bold">{activityData.title}</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold">{activityData.title}</h2>
+          <ActionDropdown />
+        </div>
         <p className="text-sm font-bold">{activityData.description}</p>
       </div>
     </div>
