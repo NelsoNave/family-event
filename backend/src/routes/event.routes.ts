@@ -51,6 +51,10 @@ eventRouter.get(
   "/:event_id/participants",
   eventParticipantsController.getEventParticipants,
 );
+eventRouter.get(
+  "/:event_id/who-is-coming",
+  eventParticipantsController.getWhoIsComing,
+);
 eventRouter.patch(
   "/:event_id/participants/:participant_id/attendance",
   eventParticipantsController.updateParticipantAttendance,
