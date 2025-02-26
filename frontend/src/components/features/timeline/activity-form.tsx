@@ -15,7 +15,7 @@ import { addActivity } from "@/lib/actions/event/timeline";
 import { showErrorToast } from "@/lib/toast/toast-utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 type ActivityFormProps = {
@@ -31,6 +31,8 @@ const FormSchema = z.object({
   description: z.string().min(2, {
     message: "Activity detail must be at least 2 characters.",
   }),
+  startTime: z.string(),
+  endTime: z.string(),
 });
 
 export function ActivityForm({ eventId, isCreateActivity }: ActivityFormProps) {
@@ -39,6 +41,8 @@ export function ActivityForm({ eventId, isCreateActivity }: ActivityFormProps) {
     defaultValues: {
       title: "",
       description: "",
+      startTime: "00:00",
+      endTime: "00:00",
     },
   });
 
@@ -52,8 +56,8 @@ export function ActivityForm({ eventId, isCreateActivity }: ActivityFormProps) {
           activityData: {
             title: data.title,
             description: data.description,
-            startTime: "2025-02-25T19:40:00Z",
-            endTime: "2025-02-25T19:50:00Z",
+            startTime: data.startTime,
+            endTime: data.endTime,
           },
           eventId,
         });
@@ -72,6 +76,56 @@ export function ActivityForm({ eventId, isCreateActivity }: ActivityFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+        <div className="flex gap-6">
+          <FormField
+            control={form.control}
+            name="startTime"
+            render={() => (
+              <FormItem className="flex w-full flex-col space-y-2">
+                <FormLabel className="font-semibold">Start time</FormLabel>
+                <FormControl>
+                  <Controller
+                    name="startTime"
+                    control={form.control}
+                    render={({ field }) => (
+                      <input
+                        type="time"
+                        id="start-time"
+                        {...field}
+                        className="h-10 rounded-md border border-border p-4 font-medium"
+                      />
+                    )}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="endTime"
+            render={() => (
+              <FormItem className="flex w-full flex-col space-y-2">
+                <FormLabel className="font-semibold">End time</FormLabel>
+                <FormControl>
+                  <Controller
+                    name="endTime"
+                    control={form.control}
+                    render={({ field }) => (
+                      <input
+                        type="time"
+                        id="end-time"
+                        {...field}
+                        className="h-10 rounded-md border border-border p-4 font-medium"
+                      />
+                    )}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="title"
