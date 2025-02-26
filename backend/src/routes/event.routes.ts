@@ -46,29 +46,35 @@ eventRouter.delete(
 );
 
 // Participants
-// TODO add middleware
-eventRouter.get(
-  "/:event_id/participants",
-  eventParticipantsController.getEventParticipants,
-);
 eventRouter.get(
   "/:event_id/who-is-coming",
+  isEventParticipant,
   eventParticipantsController.getWhoIsComing,
+);
+
+eventRouter.get(
+  "/:event_id/participants",
+  isEventHost,
+  eventParticipantsController.getEventParticipants,
 );
 eventRouter.patch(
   "/:event_id/participants/:participant_id/attendance",
+  isEventHost,
   eventParticipantsController.updateParticipantAttendance,
 );
 eventRouter.delete(
   "/:event_id/participants/:participant_id",
+  isEventHost,
   eventParticipantsController.deleteParticipant,
 );
 eventRouter.post(
   "/:event_id/participants/temporary",
+  isEventHost,
   eventParticipantsController.addTemporaryParticipant,
 );
 eventRouter.delete(
   "/:event_id/participants/temporary/:participant_id",
+  isEventHost,
   eventParticipantsController.deleteTemporaryParticipant,
 );
 
