@@ -20,6 +20,8 @@ import { z } from "zod";
 
 type ActivityFormProps = {
   eventId: string;
+  timelineId?: string;
+  isCreateActivity: boolean;
 };
 
 const FormSchema = z.object({
@@ -31,7 +33,7 @@ const FormSchema = z.object({
   }),
 });
 
-export function ActivityForm({ eventId }: ActivityFormProps) {
+export function ActivityForm({ eventId, isCreateActivity }: ActivityFormProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -45,18 +47,22 @@ export function ActivityForm({ eventId }: ActivityFormProps) {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const response = await addActivity({
-        activityData: {
-          title: data.title,
-          description: data.description,
-          startTime: "2025-02-25T19:40:00Z",
-          endTime: "2025-02-25T19:50:00Z",
-        },
-        eventId,
-      });
+      if (isCreateActivity) {
+        const response = await addActivity({
+          activityData: {
+            title: data.title,
+            description: data.description,
+            startTime: "2025-02-25T19:40:00Z",
+            endTime: "2025-02-25T19:50:00Z",
+          },
+          eventId,
+        });
 
-      if (response && response.success) {
-        router.push(`/event/${eventId}/timeline`);
+        if (response && response.success) {
+          router.push(`/event/${eventId}/timeline`);
+        }
+      } else {
+        // TODO: update activity
       }
     } catch (err) {
       showErrorToast(toast, err, "Failed to add activity. Please try again.");
@@ -105,7 +111,7 @@ export function ActivityForm({ eventId }: ActivityFormProps) {
           type="submit"
           className="h-10 w-full rounded-full text-base font-bold"
         >
-          Submit
+          {isCreateActivity ? "Add timeline" : "Edit timeline"}
         </Button>
       </form>
     </Form>
