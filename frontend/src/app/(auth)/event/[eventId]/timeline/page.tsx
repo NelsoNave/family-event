@@ -13,7 +13,7 @@ import { EventType } from "@/types/event";
 import { TimelineType } from "@/types/timeline";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function TimeLine({
   params,
@@ -35,6 +35,11 @@ export default async function TimeLine({
   } catch (err) {
     console.error(err);
     notFound();
+  }
+
+  // If no timeline data exists, redirect to the create timeline page
+  if (timeline.length === 0) {
+    redirect(`/event/${eventId}/timeline/create`);
   }
 
   return (
