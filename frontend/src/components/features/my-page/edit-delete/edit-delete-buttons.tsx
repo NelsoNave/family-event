@@ -7,7 +7,7 @@ import Modal from "../../modal";
 import PersonModal from "../../person-modal";
 
 type DeleteAction = (
-  id?: string | string[],
+  id?: string,
 ) => Promise<{ success: boolean; message: string }>;
 
 type EditDeleteButtonsProps = {
