@@ -69,28 +69,40 @@ export default async function TimeLine({
       </div>
       <div className="px-4">
         {timeline.length > 0 ? (
-          timeline.map((activity, index) => (
-            <div key={activity.id}>
-              {index === 0 && (
-                <Link href={`/event/${eventId}/timeline/create`}>
-                  <Button className="hover: mb-4 ml-auto flex w-4/5 border-[0.3px] border-textSub bg-white shadow-sm hover:bg-textSub/10">
-                    <Plus className="text-primary" />
-                  </Button>
-                </Link>
-              )}
-              <ActivityCard
-                activityData={activity}
-                key={activity.id}
-                isEven={index % 2 === 0}
-                eventId={eventId}
-              />
-              <Link href={`/event/${eventId}/timeline/create`}>
-                <Button className="hover: mb-4 ml-auto flex w-4/5 border-[0.3px] border-textSub bg-white shadow-sm hover:bg-textSub/10">
-                  <Plus className="text-primary" />
-                </Button>
-              </Link>
-            </div>
-          ))
+          timeline.map((activity, index) => {
+            const previousActivity = timeline[index - 1];
+
+            // Not display the add button if the end time of the previous activity matches the start time of the current activity.
+            const isHideAddButton =
+              previousActivity &&
+              new Date(previousActivity.endTime).getTime() ===
+                new Date(activity.startTime).getTime();
+
+            return (
+              <div key={activity.id}>
+                {!isHideAddButton && (
+                  <Link href={`/event/${eventId}/timeline/create`}>
+                    <Button className="hover: mb-4 ml-auto flex w-4/5 border-[0.3px] border-textSub bg-white shadow-sm hover:bg-textSub/10">
+                      <Plus className="text-primary" />
+                    </Button>
+                  </Link>
+                )}
+                <ActivityCard
+                  activityData={activity}
+                  key={activity.id}
+                  isEven={index % 2 === 0}
+                  eventId={eventId}
+                />
+                {index === timeline.length - 1 && (
+                  <Link href={`/event/${eventId}/timeline/create`}>
+                    <Button className="hover: mb-4 ml-auto flex w-4/5 border-[0.3px] border-textSub bg-white shadow-sm hover:bg-textSub/10">
+                      <Plus className="text-primary" />
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            );
+          })
         ) : (
           <p>No activities found.</p>
         )}
