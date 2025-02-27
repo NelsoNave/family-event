@@ -39,15 +39,13 @@ export default function EditActivity() {
         } else {
           console.error("Timeline not found.");
         }
-
-        console.log("Fetched data:", timelines);
       } catch (error) {
         console.error("Error fetching event data:", error);
       }
     };
 
     fetchData();
-  }, [eventIdStr, timelineIdStr, axios]);
+  }, [eventIdStr, timelineIdStr, axios, timelineId]);
 
   if (!eventData) {
     return <div>Loading...</div>;
@@ -63,8 +61,7 @@ export default function EditActivity() {
       <ActivityForm
         eventId={eventIdStr}
         isCreateActivity={false}
-        // timelineId={timelineIdStr}
-        // activityData={eventData}
+        activityData={eventData}
       />
     </section>
   );

@@ -71,6 +71,13 @@ export default async function TimeLine({
         {timeline.length > 0 ? (
           timeline.map((activity, index) => (
             <div key={activity.id}>
+              {index === 0 && (
+                <Link href={`/event/${eventId}/timeline/create`}>
+                  <Button className="hover: mb-4 ml-auto flex w-4/5 border-[0.3px] border-textSub bg-white shadow-sm hover:bg-textSub/10">
+                    <Plus className="text-primary" />
+                  </Button>
+                </Link>
+              )}
               <ActivityCard
                 activityData={activity}
                 key={activity.id}

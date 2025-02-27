@@ -11,14 +11,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { addActivity } from "@/lib/actions/event/timeline";
+import { addActivity, updateActivity } from "@/lib/actions/event/timeline";
 import { useAuthAxios } from "@/lib/api/axios-client";
 import { showErrorToast } from "@/lib/toast/toast-utils";
+import { EventType } from "@/types/event";
 import { TimelineType } from "@/types/timeline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Controller, EventType, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 type ActivityFormProps = {
@@ -43,9 +44,10 @@ export function ActivityForm({
   eventId,
   isCreateActivity,
   activityData,
-  timelineId,
 }: ActivityFormProps) {
   const router = useRouter();
+  const axios = useAuthAxios();
+  const [eventData, setEventData] = useState<EventType | null>(null);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -57,8 +59,19 @@ export function ActivityForm({
     },
   });
 
-  const [eventData, setEventData] = useState<EventType | null>(null);
-  const axios = useAuthAxios();
+  const handleActivitySubmission = async (activityData: {
+    title: string;
+    description: string;
+    startTime: string;
+    endTime: string;
+  }) => {
+    if (isCreateActivity) {
+      console.log(activityData);
+      return await addActivity({ activityData, eventId });
+    } else {
+      return await updateActivity({ activityData, eventId });
+    }
+  };
 
   useEffect(() => {
     if (!eventId) {
@@ -72,10 +85,10 @@ export function ActivityForm({
           event: { event: EventType };
         }>(`/events/${eventId}`);
 
-        const timelines = response.data.event;
+        const event = response.data.event;
 
-        if (timelines) {
-          setEventData(timelines.startTime);
+        if (event) {
+          setEventData(event.startTime);
         } else {
           console.error("Timeline not found.");
         }
@@ -85,7 +98,7 @@ export function ActivityForm({
     };
 
     fetchData();
-  }, [eventData]);
+  }, [axios, eventId]);
 
   if (!eventData) {
     return <div>Loading...</div>;
@@ -94,40 +107,21 @@ export function ActivityForm({
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
       const date = new Date(eventData);
-      const dateStringWithoutTime = date.toISOString().replace(/T.*Z$/, "");
-      const formattedStartTime = `${dateStringWithoutTime}T${data.startTime}:00.000Z`;
-      const formattedEndTime = `${dateStringWithoutTime}T${data.endTime}:00.000Z`;
+      const targetDate = date.toISOString().replace(/T.*Z$/, "");
+      const formattedStartTime = `${targetDate}T${data.startTime}:00.000Z`;
+      const formattedEndTime = `${targetDate}T${data.endTime}:00.000Z`;
 
-      if (isCreateActivity) {
-        const response = await addActivity({
-          activityData: {
-            title: data.title,
-            description: data.description,
-            startTime: formattedStartTime,
-            endTime: formattedEndTime,
-          },
-          eventId,
-        });
+      const activityData = {
+        title: data.title,
+        description: data.description,
+        startTime: formattedStartTime,
+        endTime: formattedEndTime,
+      };
 
-        if (response && response.success) {
-          router.push(`/event/${eventId}/timeline`);
-        }
-      } else {
-        // Update activity
+      const response = await handleActivitySubmission(activityData);
 
-        const response = await addActivity({
-          activityData: {
-            title: data.title,
-            description: data.description,
-            startTime: formattedStartTime,
-            endTime: formattedEndTime,
-          },
-          eventId,
-        });
-
-        if (response && response.success) {
-          router.push(`/event/${eventId}/timeline`);
-        }
+      if (response?.success) {
+        router.push(`/event/${eventId}/timeline`);
       }
     } catch (err) {
       showErrorToast(toast, err, "Failed to add activity. Please try again.");
