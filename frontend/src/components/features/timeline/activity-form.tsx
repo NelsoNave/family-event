@@ -76,34 +76,43 @@ export function ActivityForm({
     startTime: string;
     endTime: string;
   }) => {
-    if (isCreateActivity) {
-      return await addActivity({ activityData, eventId });
-    } else {
-      return await updateActivity({ activityData, eventId });
+    try {
+      if (isCreateActivity) {
+        return await addActivity({ activityData, eventId });
+      } else {
+        return await updateActivity({ activityData, eventId });
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        showErrorToast(toast, err, err.message);
+      } else {
+        showErrorToast(
+          toast,
+          err,
+          "An error occurred while processing your request. Please try again.",
+        );
+      }
     }
   };
 
   useEffect(() => {
-    if (!eventId) {
-      console.error("Event ID is required.");
-      return;
-    }
-
     const fetchData = async () => {
       try {
         const response = await axios.get<{
-          event: { event: EventType };
+          event: EventType;
         }>(`/events/${eventId}`);
 
-        const event = response.data.event;
+        const eventData = response.data.event;
 
-        if (event) {
-          setEventDate(event.startTime);
-        } else {
-          console.error("Timeline not found.");
+        if (eventData) {
+          setEventDate(eventData.startTime);
         }
-      } catch (error) {
-        console.error("Error fetching event data:", error);
+      } catch (err) {
+        showErrorToast(
+          toast,
+          err,
+          "Failed to fetch event information. Please try again.",
+        );
       }
     };
 
