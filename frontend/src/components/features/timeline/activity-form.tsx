@@ -10,18 +10,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/use-toast";
 import { addActivity } from "@/lib/actions/event/timeline";
+import { useAuthAxios } from "@/lib/api/axios-client";
 import { showErrorToast } from "@/lib/toast/toast-utils";
+import { TimelineType } from "@/types/timeline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Controller, EventType, useForm } from "react-hook-form";
 import { z } from "zod";
 
 type ActivityFormProps = {
   eventId: string;
   timelineId?: string;
   isCreateActivity: boolean;
+  activityData?: TimelineType;
 };
 
 const FormSchema = z.object({
@@ -35,29 +39,72 @@ const FormSchema = z.object({
   endTime: z.string(),
 });
 
-export function ActivityForm({ eventId, isCreateActivity }: ActivityFormProps) {
+export function ActivityForm({
+  eventId,
+  isCreateActivity,
+  activityData,
+  timelineId,
+}: ActivityFormProps) {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      title: "",
-      description: "",
       startTime: "00:00",
       endTime: "00:00",
+      title: isCreateActivity ? "" : activityData?.title || "",
+      description: isCreateActivity ? "" : activityData?.description || "",
     },
   });
 
-  const { toast } = useToast();
-  const router = useRouter();
+  const [eventData, setEventData] = useState<EventType | null>(null);
+  const axios = useAuthAxios();
+
+  useEffect(() => {
+    if (!eventId) {
+      console.error("Event ID is required.");
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get<{
+          event: { event: EventType };
+        }>(`/events/${eventId}`);
+
+        const timelines = response.data.event;
+
+        if (timelines) {
+          setEventData(timelines.startTime);
+        } else {
+          console.error("Timeline not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching event data:", error);
+      }
+    };
+
+    fetchData();
+  }, [eventData]);
+
+  if (!eventData) {
+    return <div>Loading...</div>;
+  }
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
+      const date = new Date(eventData);
+      const dateStringWithoutTime = date.toISOString().replace(/T.*Z$/, "");
+      const formattedStartTime = `${dateStringWithoutTime}T${data.startTime}:00.000Z`;
+      const formattedEndTime = `${dateStringWithoutTime}T${data.endTime}:00.000Z`;
+
       if (isCreateActivity) {
         const response = await addActivity({
           activityData: {
             title: data.title,
             description: data.description,
-            startTime: data.startTime,
-            endTime: data.endTime,
+            startTime: formattedStartTime,
+            endTime: formattedEndTime,
           },
           eventId,
         });
@@ -66,7 +113,21 @@ export function ActivityForm({ eventId, isCreateActivity }: ActivityFormProps) {
           router.push(`/event/${eventId}/timeline`);
         }
       } else {
-        // TODO: update activity
+        // Update activity
+
+        const response = await addActivity({
+          activityData: {
+            title: data.title,
+            description: data.description,
+            startTime: formattedStartTime,
+            endTime: formattedEndTime,
+          },
+          eventId,
+        });
+
+        if (response && response.success) {
+          router.push(`/event/${eventId}/timeline`);
+        }
       }
     } catch (err) {
       showErrorToast(toast, err, "Failed to add activity. Please try again.");
@@ -151,9 +212,9 @@ export function ActivityForm({ eventId, isCreateActivity }: ActivityFormProps) {
               <FormLabel className="font-semibold">Activity detail</FormLabel>
               <FormControl>
                 <textarea
-                  placeholder="Enter activity details"
                   className="w-full rounded-md border p-4 font-medium placeholder:text-textSub"
                   rows={4}
+                  placeholder="Enter activity details"
                   {...field}
                 />
               </FormControl>
@@ -165,7 +226,7 @@ export function ActivityForm({ eventId, isCreateActivity }: ActivityFormProps) {
           type="submit"
           className="h-10 w-full rounded-full text-base font-bold"
         >
-          {isCreateActivity ? "Add timeline" : "Edit timeline"}
+          {isCreateActivity ? "Add timeline" : "Update timeline"}
         </Button>
       </form>
     </Form>

@@ -28,6 +28,31 @@ export const addActivity = async ({
   }
 };
 
+// Update activity
+export const updateActivity = async ({
+  activityData,
+  eventId,
+}: {
+  activityData: Omit<TimelineType, "id">;
+  eventId: string;
+}) => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.post(
+      `/events/${eventId}/timelines`,
+      activityData,
+    );
+
+    return response.data;
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new Error(err.message || "Unknown error occurred");
+    } else {
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
+
 // Delete activity
 export const deleteActivity = async (
   eventId: string,

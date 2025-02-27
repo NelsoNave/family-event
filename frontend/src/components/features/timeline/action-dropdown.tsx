@@ -14,10 +14,10 @@ import { useEffect, useState } from "react";
 
 type ActionDropdownProps = {
   eventId: string;
-  timelineId: string;
+  activityId: string;
 };
 
-export function ActionDropdown({ eventId, timelineId }: ActionDropdownProps) {
+export function ActionDropdown({ eventId, activityId }: ActionDropdownProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -30,7 +30,7 @@ export function ActionDropdown({ eventId, timelineId }: ActionDropdownProps) {
   }
 
   const handleDeleteActivity = async () => {
-    const response = await deleteActivity(eventId, timelineId);
+    const response = await deleteActivity(eventId, activityId);
     if (response.success) {
       router.push(`/event/${eventId}/timeline`);
     }
@@ -44,7 +44,7 @@ export function ActionDropdown({ eventId, timelineId }: ActionDropdownProps) {
       <DropdownMenuContent className="w-40">
         <DropdownMenuItem>
           <Link
-            href={`/event/${eventId}/timeline/${timelineId}/edit`}
+            href={`/event/${eventId}/timeline/${activityId}/edit`}
             className="flex w-full justify-between"
           >
             <span className="font-medium">Edit Activity</span>

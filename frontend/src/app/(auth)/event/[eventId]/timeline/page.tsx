@@ -38,12 +38,12 @@ export default async function TimeLine({
   }
 
   return (
-    <section className="space-y-4 px-4">
+    <section className="space-y-4">
       <BreadcrumbNavigation
         path={`/event/${eventId}`}
         previousPageName="Event Home"
       />
-      <div className="flex gap-3">
+      <div className="flex gap-3 px-4">
         <p className="text-5xl font-bold">
           {formatDateTime(new Date(eventData.startTime), dayFormatOptions)}
         </p>
@@ -62,7 +62,7 @@ export default async function TimeLine({
           </p>
         </div>
       </div>
-      <div>
+      <div className="px-4">
         {timeline.length > 0 ? (
           timeline.map((activity, index) => (
             <div key={activity.id}>
