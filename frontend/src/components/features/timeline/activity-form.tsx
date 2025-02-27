@@ -77,7 +77,6 @@ export function ActivityForm({
     endTime: string;
   }) => {
     if (isCreateActivity) {
-      console.log(activityData);
       return await addActivity({ activityData, eventId });
     } else {
       return await updateActivity({ activityData, eventId });
