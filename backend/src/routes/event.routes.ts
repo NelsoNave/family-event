@@ -3,24 +3,11 @@ import albumController from "../controllers/album.controller";
 import eventController from "../controllers/event.controller";
 import eventParticipantsController from "../controllers/eventParticipants.controller";
 import timelineController from "../controllers/timeline.controller";
-import {
-  isEventHost,
-  isEventHostOrParticipant,
-} from "../middleware/event.auth";
-import upload from "../middleware/uploadMiddleware";
+import { isEventHost, isEventHostOrParticipant } from "../middleware/event.auth";
 const eventRouter = Router();
 
 // Routes
-eventRouter.get(
-  "/:event_id",
-  isEventHostOrParticipant,
-  eventController.getEventById,
-);
-eventRouter.get(
-  "/:event_id/is-host",
-  isEventHostOrParticipant,
-  eventController.checkIsEventHost,
-);
+eventRouter.get("/:event_id", isEventHostOrParticipant, eventController.getEventById);
 
 // Timelines
 eventRouter.get(

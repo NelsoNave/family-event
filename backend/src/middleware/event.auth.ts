@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { ForbiddenError } from "../errors";
 import {
   checkIsRequestFromHost,
-  checkIsRequestFromHostOrParticipant,
+  checkIsRequestFromHost,
 } from "../utils/request-checker";
 
 /**

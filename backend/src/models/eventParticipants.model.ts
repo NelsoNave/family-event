@@ -1,6 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { DEFAULT_PROFILE_IMAGE } from "../constants/default.image";
-import { NotFoundError } from "../errors";
 import type {
   ParticipantWithUser,
   TempParticipant,
