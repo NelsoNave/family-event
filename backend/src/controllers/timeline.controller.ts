@@ -1,5 +1,4 @@
-import console from "console";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ValidationError } from "../errors/validation.error";
 import timelineModel from "../models/timeline.model";
 import { validateTimeline } from "../validators/timeline.validator";
@@ -13,18 +12,18 @@ import { validateTimeline } from "../validators/timeline.validator";
 const getEventTimelines = async (
   req: Request<{ event_id: string }>,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const eventId = Number(req.params.event_id);
-    // Validate ID
     if (isNaN(eventId)) {
       throw new ValidationError("Invalid event ID");
     }
+
     const timelines = await timelineModel.fetchTimelinesByEventId(eventId);
     res.status(200).json({ data: { timelines } });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Unable to get timeline by id" });
+    next(err);
   }
 };
 
@@ -38,6 +37,7 @@ const getEventTimelines = async (
 const createTimeline = async (
   req: Request<{ event_id: string }>,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const eventId = Number(req.params.event_id);
@@ -47,26 +47,17 @@ const createTimeline = async (
     }
     const { title, description, startTime, endTime } = req.body;
     validateTimeline({ title, description, startTime, endTime });
-    const createdTimeline = await timelineModel.createTimeline(
-      eventId,
-      {
-        title,
-        description,
-        startTime: new Date(startTime),
-        endTime: new Date(endTime),
-      },
-    );
-
-    res.status(200).json({ success: true, data: { timeline: createdTimeline } });
+    const createdTimeline = await timelineModel.createTimeline(eventId, {
+      title,
+      description,
+      startTime: new Date(startTime),
+      endTime: new Date(endTime),
+    });
+    res
+      .status(200)
+      .json({ success: true, data: { timeline: createdTimeline } });
   } catch (err) {
-    if (err instanceof ValidationError) {
-      res.status(400).json({ success: false, error: err.message });
-    } else {
-      console.error(err);
-      res
-        .status(500)
-        .json({ success: false, error: "Unable to create timeline" });
-    }
+    next(err);
   }
 };
 
@@ -79,6 +70,7 @@ const createTimeline = async (
 const updateTimeline = async (
   req: Request<{ event_id: string; timeline_id: string }>,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const eventId = Number(req.params.event_id);
@@ -88,9 +80,10 @@ const updateTimeline = async (
     if (isNaN(eventId) || isNaN(timelineId)) {
       throw new ValidationError("Invalid event or timeline ID");
     }
-
+    console.log("xx");
     const { title, description, startTime, endTime } = req.body;
     validateTimeline({ title, description, startTime, endTime });
+    console.log("yy");
     const updatedTimeline = await timelineModel.updateTimeline(
       eventId,
       timelineId,
@@ -105,14 +98,7 @@ const updateTimeline = async (
       .status(200)
       .json({ success: true, data: { timeline: updatedTimeline } });
   } catch (err) {
-    if (err instanceof ValidationError) {
-      res.status(400).json({ success: false, error: err.message });
-    } else {
-      console.error(err);
-      res
-        .status(500)
-        .json({ success: false, error: "Unable to update timeline" });
-    }
+    next(err);
   }
 };
 
@@ -120,6 +106,7 @@ const updateTimeline = async (
 const deleteTimeline = async (
   req: Request<{ event_id: string; timeline_id: string }>,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const eventId = Number(req.params.event_id);
@@ -133,21 +120,10 @@ const deleteTimeline = async (
     await timelineModel.deleteTimeline(eventId, timelineId);
     res.status(200).json({
       success: true,
-      message: "Timeline deleted successfully"
+      message: "Timeline deleted successfully",
     });
   } catch (err) {
-    if (err instanceof ValidationError) {
-      res.status(400).json({
-        success: false,
-        error: err.message
-      });
-    } else {
-      console.error(err);
-      res.status(500).json({
-        success: false,
-        error: "Unable to delete timeline"
-      });
-    }
+    next(err);
   }
 };
 
