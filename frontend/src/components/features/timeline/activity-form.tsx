@@ -119,8 +119,12 @@ export function ActivityForm({
     try {
       const date = new Date(eventDate);
       const targetDate = date.toISOString().replace(/T.*Z$/, "");
-      const formattedStartTime = `${targetDate}T${data.startTime}:00.000Z`;
-      const formattedEndTime = `${targetDate}T${data.endTime}:00.000Z`;
+      const formattedStartTime = new Date(
+        `${targetDate}T${data.startTime}:00`,
+      ).toISOString();
+      const formattedEndTime = new Date(
+        `${targetDate}T${data.endTime}:00`,
+      ).toISOString();
 
       const activityData = {
         title: data.title,
