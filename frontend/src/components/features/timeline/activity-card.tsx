@@ -31,7 +31,7 @@ export default function ActivityCard({
       >
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">{activityData.title}</h2>
-          <ActionDropdown eventId={eventId} timelineId={activityData.id} />
+          <ActionDropdown eventId={eventId} activityId={activityData.id} />
         </div>
         <p className="text-sm font-bold">{activityData.description}</p>
       </div>
