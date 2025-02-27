@@ -24,6 +24,9 @@ export default async function TimeLine({
   let eventData: EventType | null = null;
   const { eventId } = await params;
 
+  // TODO: Fetch the user's role (host or guest)
+  const isHost = false;
+
   try {
     // Fetch event date
     const responseEvent = await getEventInformation(eventId);
@@ -80,7 +83,7 @@ export default async function TimeLine({
 
             return (
               <div key={activity.id}>
-                {!isHideAddButton && (
+                {!isHideAddButton && isHost && (
                   <Link href={`/event/${eventId}/timeline/create`}>
                     <Button className="hover: mb-4 ml-auto flex w-4/5 border-[0.3px] border-textSub bg-white shadow-sm hover:bg-textSub/10">
                       <Plus className="text-primary" />
@@ -93,7 +96,7 @@ export default async function TimeLine({
                   isEven={index % 2 === 0}
                   eventId={eventId}
                 />
-                {index === timeline.length - 1 && (
+                {index === timeline.length - 1 && isHost && (
                   <Link href={`/event/${eventId}/timeline/create`}>
                     <Button className="hover: mb-4 ml-auto flex w-4/5 border-[0.3px] border-textSub bg-white shadow-sm hover:bg-textSub/10">
                       <Plus className="text-primary" />
