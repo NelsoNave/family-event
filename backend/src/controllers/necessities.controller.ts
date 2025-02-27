@@ -59,6 +59,7 @@ const updateNecessitiesInfo = async (
   try {
     const eventId = Number(req.params.event_id);
     const necessitiesList = req.body.necessities;
+    const newNote = req.body.noteForNecessities;
 
     const newNecessitiesList = necessitiesList.filter(
       (necessity: Necessity) => !necessity.id,
@@ -87,6 +88,7 @@ const updateNecessitiesInfo = async (
 
     const result = await eventModel.updateNewNecessities(
       eventId,
+      newNote,
       newNecessitiesList,
       updateNecessitiesList,
       deleteNecessitiesList,
