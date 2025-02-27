@@ -246,7 +246,7 @@ export function ActivityForm({
           type="submit"
           className="h-10 w-full rounded-full text-base font-bold"
         >
-          {isCreateActivity ? "Add timeline" : "Update timeline"}
+          {isCreateActivity ? "Add activity" : "Update activity"}
         </Button>
       </form>
     </Form>
