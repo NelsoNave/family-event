@@ -5,10 +5,10 @@ import { TimelineType } from "@/types/timeline";
 
 // Add activity
 export const addActivity = async ({
-  activityData,
+  requestData,
   eventId,
 }: {
-  activityData: Omit<TimelineType, "id">;
+  requestData: Omit<TimelineType, "id">;
   eventId: string;
 }): Promise<{
   success: boolean;
@@ -18,7 +18,7 @@ export const addActivity = async ({
     const axiosInstance = await getServerAxiosInstance();
     const response = await axiosInstance.post(
       `/events/${eventId}/timelines`,
-      activityData,
+      requestData,
     );
 
     return response.data;
@@ -30,20 +30,22 @@ export const addActivity = async ({
 
 // Update activity
 export const updateActivity = async ({
-  activityData,
+  requestData,
   eventId,
+  activityId,
 }: {
-  activityData: Omit<TimelineType, "id">;
+  requestData: Omit<TimelineType, "id">;
   eventId: string;
+  activityId: string;
 }): Promise<{
   success: boolean;
   message: string;
 }> => {
   try {
     const axiosInstance = await getServerAxiosInstance();
-    const response = await axiosInstance.post(
-      `/events/${eventId}/timelines`,
-      activityData,
+    const response = await axiosInstance.put(
+      `/events/${eventId}/timelines/${activityId}`,
+      requestData,
     );
 
     return response.data;
