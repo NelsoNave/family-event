@@ -54,7 +54,9 @@ export function ActivityForm({
 }: ActivityFormProps) {
   const router = useRouter();
   const axios = useAuthAxios();
-  const [eventData, setEventData] = useState<EventType | null>(null);
+  const [eventDate, setEventDate] = useState<EventType["startTime"] | null>(
+    null,
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -97,7 +99,7 @@ export function ActivityForm({
         const event = response.data.event;
 
         if (event) {
-          setEventData(event.startTime);
+          setEventDate(event.startTime);
         } else {
           console.error("Timeline not found.");
         }
@@ -109,13 +111,13 @@ export function ActivityForm({
     fetchData();
   }, [axios, eventId]);
 
-  if (!eventData) {
+  if (!eventDate) {
     return <div>Loading...</div>;
   }
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     try {
-      const date = new Date(eventData);
+      const date = new Date(eventDate);
       const targetDate = date.toISOString().replace(/T.*Z$/, "");
       const formattedStartTime = `${targetDate}T${data.startTime}:00.000Z`;
       const formattedEndTime = `${targetDate}T${data.endTime}:00.000Z`;
