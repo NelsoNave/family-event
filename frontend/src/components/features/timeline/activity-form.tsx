@@ -40,6 +40,13 @@ const FormSchema = z.object({
   endTime: z.string(),
 });
 
+const extractTime = (datetime: string) => {
+  const date = new Date(datetime);
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${hours}:${minutes}`;
+};
+
 export function ActivityForm({
   eventId,
   isCreateActivity,
@@ -52,8 +59,10 @@ export function ActivityForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      startTime: "00:00",
-      endTime: "00:00",
+      startTime: isCreateActivity
+        ? ""
+        : extractTime(activityData?.startTime || ""),
+      endTime: isCreateActivity ? "" : extractTime(activityData?.endTime || ""),
       title: isCreateActivity ? "" : activityData?.title || "",
       description: isCreateActivity ? "" : activityData?.description || "",
     },
