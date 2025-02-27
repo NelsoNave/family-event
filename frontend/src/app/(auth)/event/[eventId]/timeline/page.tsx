@@ -48,7 +48,7 @@ export default async function TimeLine({
         path={`/event/${eventId}`}
         previousPageName="Event Home"
       />
-      <div className="flex gap-3 px-4">
+      <div className="flex gap-3">
         <p className="text-5xl font-bold">
           {formatDateTime(new Date(eventData.startTime), dayFormatOptions)}
         </p>
@@ -67,7 +67,7 @@ export default async function TimeLine({
           </p>
         </div>
       </div>
-      <div className="px-4">
+      <div>
         {timeline.length > 0 ? (
           timeline.map((activity, index) => {
             const previousActivity = timeline[index - 1];
