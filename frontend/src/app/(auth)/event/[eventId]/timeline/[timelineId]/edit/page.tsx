@@ -2,27 +2,28 @@
 
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
 import { ActivityForm } from "@/components/features/timeline/activity-form";
+import { useToast } from "@/hooks/use-toast";
 import { useAuthAxios } from "@/lib/api/axios-client";
+import { showErrorToast } from "@/lib/toast/toast-utils";
 import { TimelineType } from "@/types/timeline";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function EditActivity() {
   const { eventId, timelineId } = useParams();
+  const [activityData, setActivityData] = useState<TimelineType | null>(null);
+  const axios = useAuthAxios();
+  const { toast } = useToast();
 
   const eventIdStr = typeof eventId === "string" ? eventId : "";
   const timelineIdStr = typeof timelineId === "string" ? timelineId : "";
 
-  const [eventData, setEventData] = useState<TimelineType | null>(null);
-  const axios = useAuthAxios();
-
   useEffect(() => {
     if (!eventIdStr) {
-      console.error("Event ID is required.");
-      return;
+      notFound();
     }
 
-    const fetchData = async () => {
+    const fetchTimelineData = async () => {
       try {
         const response = await axios.get<{
           data: { timelines: TimelineType[] };
@@ -35,19 +36,21 @@ export default function EditActivity() {
         );
 
         if (selectedTimeline) {
-          setEventData(selectedTimeline);
-        } else {
-          console.error("Timeline not found.");
+          setActivityData(selectedTimeline);
         }
-      } catch (error) {
-        console.error("Error fetching event data:", error);
+      } catch (err) {
+        showErrorToast(
+          toast,
+          err,
+          "Failed to fetch the event information. Please try again.",
+        );
       }
     };
 
-    fetchData();
-  }, [eventIdStr, timelineIdStr, axios, timelineId]);
+    fetchTimelineData();
+  }, [eventIdStr, timelineIdStr, axios, timelineId, toast]);
 
-  if (!eventData) {
+  if (!activityData) {
     return <div>Loading...</div>;
   }
 
@@ -61,7 +64,7 @@ export default function EditActivity() {
       <ActivityForm
         eventId={eventIdStr}
         isCreateActivity={false}
-        activityData={eventData}
+        activityData={activityData}
       />
     </section>
   );

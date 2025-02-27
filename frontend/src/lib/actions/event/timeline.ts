@@ -10,7 +10,10 @@ export const addActivity = async ({
 }: {
   activityData: Omit<TimelineType, "id">;
   eventId: string;
-}) => {
+}): Promise<{
+  success: boolean;
+  message: string;
+}> => {
   try {
     const axiosInstance = await getServerAxiosInstance();
     const response = await axiosInstance.post(
@@ -35,7 +38,10 @@ export const updateActivity = async ({
 }: {
   activityData: Omit<TimelineType, "id">;
   eventId: string;
-}) => {
+}): Promise<{
+  success: boolean;
+  message: string;
+}> => {
   try {
     const axiosInstance = await getServerAxiosInstance();
     const response = await axiosInstance.post(
@@ -69,9 +75,10 @@ export const deleteActivity = async (
 
     return response.data;
   } catch (err) {
-    if (err instanceof Error) {
-      console.error(err.message);
-    }
-    throw new Error("Failed to delete activity");
+   if (err instanceof Error) {
+     throw new Error(err.message || "Unknown error occurred");
+   } else {
+     throw new Error("An unexpected error occurred");
+   }
   }
 };

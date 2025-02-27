@@ -6,7 +6,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 import { deleteActivity } from "@/lib/actions/event/timeline";
+import { showErrorToast } from "@/lib/toast/toast-utils";
 import { CircleX, Ellipsis, PencilLine } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -20,6 +22,7 @@ type ActionDropdownProps = {
 export function ActionDropdown({ eventId, activityId }: ActionDropdownProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     setIsLoading(true);
@@ -30,9 +33,18 @@ export function ActionDropdown({ eventId, activityId }: ActionDropdownProps) {
   }
 
   const handleDeleteActivity = async () => {
-    const response = await deleteActivity(eventId, activityId);
-    if (response.success) {
-      router.push(`/event/${eventId}/timeline`);
+    try {
+      const response = await deleteActivity(eventId, activityId);
+
+      if (response.success) {
+        router.push(`/event/${eventId}/timeline`);
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        showErrorToast(toast, err, err.message);
+      } else {
+        showErrorToast(toast, err, "Failed to delete activity");
+      }
     }
   };
 
