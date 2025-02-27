@@ -23,11 +23,8 @@ export const addActivity = async ({
 
     return response.data;
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message || "Unknown error occurred");
-    } else {
-      throw new Error("An unexpected error occurred");
-    }
+    console.error(err);
+    throw new Error("Failed to create activity. Please try again.");
   }
 };
 
@@ -51,11 +48,8 @@ export const updateActivity = async ({
 
     return response.data;
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error(err.message || "Unknown error occurred");
-    } else {
-      throw new Error("An unexpected error occurred");
-    }
+    console.error(err);
+    throw new Error("Failed to update activity. Please try again.");
   }
 };
 
@@ -75,10 +69,7 @@ export const deleteActivity = async (
 
     return response.data;
   } catch (err) {
-   if (err instanceof Error) {
-     throw new Error(err.message || "Unknown error occurred");
-   } else {
-     throw new Error("An unexpected error occurred");
-   }
+    console.error(err);
+    throw new Error("Failed to delete activity. Please try again.");
   }
 };
