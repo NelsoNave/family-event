@@ -18,6 +18,7 @@ import { NecessitiesResponseType } from "@/types/necessities/necessities-respons
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon, X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -34,7 +35,11 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function NecessitiesForm() {
+type NecessitiesFormProps = {
+  initialData?: NecessitiesResponseType | null;
+};
+
+export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
   const axios = useAuthAxios();
   const params = useParams();
   const router = useRouter();
@@ -48,11 +53,20 @@ export default function NecessitiesForm() {
     },
   });
 
-  const { control, handleSubmit } = form;
+  const { control, handleSubmit, reset } = form;
   const { fields, append, remove } = useFieldArray({
     control,
     name: "necessities",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      reset({
+        necessities: initialData.necessities,
+        noteForNecessities: initialData.noteForNecessities || "",
+      });
+    }
+  }, [initialData, reset]);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -63,10 +77,15 @@ export default function NecessitiesForm() {
         noteForNecessities: data.noteForNecessities || "",
       };
 
-      const response = await axios.post(
-        `/events/${eventId}/necessities`,
-        postData,
-      );
+      let response;
+      if (initialData) {
+        response = await axios.patch(
+          `/events/${eventId}/necessities`,
+          postData,
+        );
+      } else {
+        response = await axios.post(`/events/${eventId}/necessities`, postData);
+      }
 
       if (response.status !== 200) {
         throw new Error();
@@ -137,7 +156,7 @@ export default function NecessitiesForm() {
             type="submit"
             className="h-auto w-full rounded-full py-3 text-base font-bold"
           >
-            Create item list
+            {initialData ? "Update item list" : "Create item list"}
           </Button>
         </div>
       </form>
