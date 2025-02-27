@@ -37,7 +37,6 @@ const getWhoIsComing = async (
     if (isNaN(eventId)) {
       throw new ValidationError("Invalid event ID");
     }
-
     const { acceptedParticipants, tempParticipants } =
       await eventParticipantsModel.getEventParticipants(eventId);
 
@@ -51,7 +50,7 @@ const getWhoIsComing = async (
         ...tempParticipants.map((participant) => ({
           id: participant.id,
           name: participant.name,
-          profileImageUrl: "", // TODO add default image
+          profileImageUrl: participant.profileImageUrl,
         })),
       ],
     };

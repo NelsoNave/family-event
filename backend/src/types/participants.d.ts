@@ -1,3 +1,5 @@
+import { EventTempParticipant } from "@prisma/client";
+
 interface ParticipantWithUser {
   id: number;
   name: string;
@@ -8,4 +10,8 @@ interface ParticipantWithUser {
   isAttended: boolean;
 }
 
-export default ParticipantWithUser;
+interface TempParticipant extends Omit<EventTempParticipant, "eventId"> {
+  profileImageUrl: string;
+}
+
+export type { ParticipantWithUser, TempParticipant };
