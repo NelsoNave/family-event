@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { HostNecessitiesType } from "@/types/necessities/necessities";
+import { HostNecessitiesListType } from "@/types/necessities";
 import Link from "next/link";
 
 type HostNecessitiesContainerProps = {
-  hostNecessities: HostNecessitiesType;
+  hostNecessities: HostNecessitiesListType;
 };
 
 export default async function HostNecessitiesContainer({
@@ -31,7 +31,7 @@ export default async function HostNecessitiesContainer({
           </p>
         </div>
       )}
-      <Link href={`necessities/edit`} className="mt-6 p-4 flex">
+      <Link href={`necessities/edit`} className="mt-6 flex p-4">
         <Button
           type="button"
           className="h-auto w-full rounded-full py-3 text-base font-bold"

@@ -14,7 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useAuthAxios } from "@/lib/api/axios-client";
 import { showErrorToast } from "@/lib/toast/toast-utils";
-import { NecessitiesResponseType } from "@/types/necessities/necessities-response";
+import { HostNecessitiesListType } from "@/types/necessities";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon, X } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -36,7 +36,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 type NecessitiesFormProps = {
-  initialData?: NecessitiesResponseType | null;
+  initialData: HostNecessitiesListType | null;
 };
 
 export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
@@ -72,8 +72,11 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
     try {
       const eventId = params?.eventId;
 
-      const postData: NecessitiesResponseType = {
-        necessities: data.necessities,
+      const postData: HostNecessitiesListType = {
+        necessities: data.necessities.map((item, index) => ({
+          ...item,
+          id: initialData?.necessities[index]?.id ?? ""
+        })),
         noteForNecessities: data.noteForNecessities || "",
       };
 
@@ -156,7 +159,7 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
             type="submit"
             className="h-auto w-full rounded-full py-3 text-base font-bold"
           >
-            {initialData ? "Update item list" : "Create item list"}
+            {initialData?.necessities && initialData.necessities.length > 0 ? "Update item list" : "Create item list"}
           </Button>
         </div>
       </form>
