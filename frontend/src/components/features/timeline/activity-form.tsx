@@ -24,7 +24,6 @@ import { z } from "zod";
 
 type ActivityFormProps = {
   eventId: string;
-  timelineId?: string;
   isCreateActivity: boolean;
   activityData?: TimelineType;
 };
@@ -70,7 +69,7 @@ export function ActivityForm({
     },
   });
 
-  const handleActivitySubmission = async (activityData: {
+  const handleActivitySubmission = async (requestData: {
     title: string;
     description: string;
     startTime: string;
@@ -78,9 +77,13 @@ export function ActivityForm({
   }) => {
     try {
       if (isCreateActivity) {
-        return await addActivity({ activityData, eventId });
+        return await addActivity({ requestData, eventId });
       } else {
-        return await updateActivity({ activityData, eventId });
+        return await updateActivity({
+          requestData,
+          eventId,
+          activityId: activityData?.id || "",
+        });
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -134,14 +137,14 @@ export function ActivityForm({
         `${targetDate}T${data.endTime}:00`,
       ).toISOString();
 
-      const activityData = {
+      const requestData = {
         title: data.title,
         description: data.description,
         startTime: formattedStartTime,
         endTime: formattedEndTime,
       };
 
-      const response = await handleActivitySubmission(activityData);
+      const response = await handleActivitySubmission(requestData);
 
       if (response?.success) {
         router.push(`/event/${eventId}/timeline`);
