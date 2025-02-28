@@ -61,11 +61,7 @@ export default function EditActivity() {
         previousPageName="Timeline"
       />
       <h1 className="text-xl font-bold">Edit Activity</h1>
-      <ActivityForm
-        eventId={eventIdStr}
-        isCreateActivity={false}
-        activityData={activityData}
-      />
+      <ActivityForm eventId={eventIdStr} activityData={activityData} />
     </section>
   );
 }

@@ -19,7 +19,7 @@ export default async function CreateActivity({
     <section className="space-y-4">
       <BreadcrumbNavigation {...breadcrumbProps} />
       <h1 className="text-xl font-bold">Add Activity</h1>
-      <ActivityForm eventId={eventId} isCreateActivity />
+      <ActivityForm eventId={eventId} />
     </section>
   );
 }
