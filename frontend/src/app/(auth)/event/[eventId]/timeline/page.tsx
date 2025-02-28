@@ -83,7 +83,7 @@ export default async function TimeLine({
 
             return (
               <div key={activity.id}>
-                {!isHideAddButton && isHost && (
+                {isHost && !isHideAddButton && (
                   <Link href={`/event/${eventId}/timeline/create`}>
                     <Button className="hover: mb-4 ml-auto flex w-4/5 border-[0.3px] border-textSub bg-white shadow-sm hover:bg-textSub/10">
                       <Plus className="text-primary" />
@@ -96,7 +96,7 @@ export default async function TimeLine({
                   isEven={index % 2 === 0}
                   eventId={eventId}
                 />
-                {index === timeline.length - 1 && isHost && (
+                {isHost && index === timeline.length - 1 && (
                   <Link href={`/event/${eventId}/timeline/create`}>
                     <Button className="hover: mb-4 ml-auto flex w-4/5 border-[0.3px] border-textSub bg-white shadow-sm hover:bg-textSub/10">
                       <Plus className="text-primary" />
