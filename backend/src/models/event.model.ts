@@ -3,7 +3,7 @@ import { error } from "console";
 import necessitiesModel from "../models/necessities.model";
 import participantNecessitiesModel from "../models/participantNecessities.model";
 import Event from "../types/event";
-import { Necessity, NecessityItem } from "../types/necessities";
+import { Necessity } from "../types/necessities";
 
 const prisma = new PrismaClient();
 
@@ -54,7 +54,7 @@ const updateEvent = async (
 
 const createNewNecessitiesInfo = async (
   eventId: number,
-  newNecessitiesList: NecessityItem[],
+  newNecessitiesList: Omit<Necessity, "id">[],
   newNote: string,
 ) => {
   try {

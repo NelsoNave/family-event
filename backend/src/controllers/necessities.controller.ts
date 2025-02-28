@@ -1,12 +1,12 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import eventModel from "../models/event.model";
 import necessitiesModel from "../models/necessities.model";
-
-type Necessity = { id?: number | null; item: string };
+import { Necessity } from "../types/necessities";
 
 const getNecessities = async (
   req: Request<{ event_id: string }>,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const eventId = Number(req.params.event_id);
@@ -18,14 +18,14 @@ const getNecessities = async (
 
     res.status(200).json({ data: { necessities, noteForNecessities } });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Unable to get Necessities" });
+    next(err);
   }
 };
 
 const addNewNecessitiesInfo = async (
   req: Request<{ event_id: string }>,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const eventId = Number(req.params.event_id);
@@ -47,14 +47,14 @@ const addNewNecessitiesInfo = async (
       data: { necessities, noteForNecessities },
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Unable to create Necessities" });
+    next(err);
   }
 };
 
 const updateNecessitiesInfo = async (
   req: Request<{ event_id: string }>,
   res: Response,
+  next: NextFunction,
 ) => {
   try {
     const eventId = Number(req.params.event_id);
@@ -80,9 +80,9 @@ const updateNecessitiesInfo = async (
     );
 
     const deleteNecessitiesList = existingNecessitiesList.filter(
-      (necessity: Necessity) =>
-        updateOrDeleteList.some(
-          (newNecessity: Necessity) => newNecessity.id !== necessity.id,
+      (oldItem) =>
+        !updateOrDeleteList.some(
+          (newItem: Necessity) => newItem.id === oldItem.id,
         ),
     );
 
@@ -103,8 +103,7 @@ const updateNecessitiesInfo = async (
       data: { necessities, noteForNecessities },
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Unable to update Necessities" });
+    next(err);
   }
 };
 

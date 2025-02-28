@@ -10,6 +10,9 @@ const fetchNecessities = async (eventId: number) => {
       id: true,
       item: true,
     },
+    orderBy: {
+      id: "asc",
+    },
   });
   const noteForNecessities = await prisma.events.findUnique({
     where: { id: eventId },
