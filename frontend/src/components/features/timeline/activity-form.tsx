@@ -24,7 +24,6 @@ import { z } from "zod";
 
 type ActivityFormProps = {
   eventId: string;
-  isCreateActivity: boolean;
   activityData?: TimelineType;
 };
 
@@ -57,11 +56,7 @@ const extractTime = (datetime: string) => {
   return `${hours}:${minutes}`;
 };
 
-export function ActivityForm({
-  eventId,
-  isCreateActivity,
-  activityData,
-}: ActivityFormProps) {
+export function ActivityForm({ eventId, activityData }: ActivityFormProps) {
   const router = useRouter();
   const axios = useAuthAxios();
   const [eventDate, setEventDate] = useState<EventType["startTime"] | null>(
@@ -71,12 +66,10 @@ export function ActivityForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      startTime: isCreateActivity
-        ? ""
-        : extractTime(activityData?.startTime || ""),
-      endTime: isCreateActivity ? "" : extractTime(activityData?.endTime || ""),
-      title: isCreateActivity ? "" : activityData?.title || "",
-      description: isCreateActivity ? "" : activityData?.description || "",
+      startTime: activityData ? extractTime(activityData.startTime) : "",
+      endTime: activityData ? extractTime(activityData?.endTime) : "",
+      title: activityData?.title || "",
+      description: activityData?.description || "",
     },
   });
 
@@ -87,14 +80,14 @@ export function ActivityForm({
     endTime: string;
   }) => {
     try {
-      if (isCreateActivity) {
-        return await addActivity({ requestData, eventId });
-      } else {
+      if (activityData) {
         return await updateActivity({
           requestData,
           eventId,
           activityId: activityData?.id || "",
         });
+      } else {
+        return await addActivity({ requestData, eventId });
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -257,7 +250,7 @@ export function ActivityForm({
           type="submit"
           className="h-10 w-full rounded-full text-base font-bold"
         >
-          {isCreateActivity ? "Add activity" : "Update activity"}
+          {activityData ? "Update activity" : "Add activity"}
         </Button>
       </form>
     </Form>
