@@ -1,9 +1,9 @@
 import Header from "@/components/layouts/header";
 import { Toaster } from "@/components/ui/toaster";
-import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./providers";
 
 const quicksand = Quicksand({
   variable: "--font-quick-sans",
@@ -23,16 +23,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-    >
-      <html lang="en">
-        <body className={`${quicksand.className} antialiased`}>
+    <html lang="en">
+      <body className={`${quicksand.className} antialiased`}>
+        <Providers>
           <Header />
           <main>{children}</main>
           <Toaster />
-        </body>
-      </html>
-    </ClerkProvider>
+        </Providers>
+      </body>
+    </html>
   );
 }
