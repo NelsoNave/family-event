@@ -52,7 +52,6 @@ export function ActionDropdown({ eventId, activityId }: ActionDropdownProps) {
 
       if (response.success) {
         router.push(`/event/${eventId}/timeline`);
-        setIsDialogOpen(false);
       }
     } catch (err) {
       if (err instanceof Error) {
