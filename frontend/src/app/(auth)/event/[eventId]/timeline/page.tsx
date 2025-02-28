@@ -25,7 +25,7 @@ export default async function TimeLine({
   const { eventId } = await params;
 
   // TODO: Fetch the user's role (host or guest)
-  const isHost = false;
+  const isHost = true;
 
   try {
     // Fetch event date
