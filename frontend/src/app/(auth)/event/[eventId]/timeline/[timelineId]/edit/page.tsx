@@ -31,12 +31,12 @@ export default function EditActivity() {
 
         const timelines = response.data.data.timelines;
 
-        const selectedTimeline = timelines.find(
+        const selectedActivity = timelines.find(
           (timeline) => timeline.id == timelineId,
         );
 
-        if (selectedTimeline) {
-          setActivityData(selectedTimeline);
+        if (selectedActivity) {
+          setActivityData(selectedActivity);
         }
       } catch (err) {
         showErrorToast(
