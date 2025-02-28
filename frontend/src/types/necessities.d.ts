@@ -13,7 +13,7 @@ export type HostNecessitiesListType = {
 };
 
 export type HostNecessitiesPostType = {
-  necessities: Omit<BaseNecessityType, "id">[];
+  necessities: Pick<BaseNecessityType, "id" | "item">[];
   noteForNecessities?: string;
 };
 
