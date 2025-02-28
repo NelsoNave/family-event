@@ -2,6 +2,7 @@
 
 import { getServerAxiosInstance } from "@/lib/api/axios-server";
 import { TimelineType } from "@/types/timeline";
+import { AxiosError } from "axios";
 
 // Add activity
 export const addActivity = async ({
@@ -23,8 +24,11 @@ export const addActivity = async ({
 
     return response.data;
   } catch (err) {
-    console.error(err);
-    throw new Error("Failed to create activity. Please try again.");
+    if (err instanceof AxiosError) {
+      throw new AxiosError(err.response?.data.message);
+    } else {
+      throw new Error("Failed to create activity. Please try again.");
+    }
   }
 };
 
@@ -50,8 +54,11 @@ export const updateActivity = async ({
 
     return response.data;
   } catch (err) {
-    console.error(err);
-    throw new Error("Failed to update activity. Please try again.");
+    if (err instanceof AxiosError) {
+      throw new AxiosError(err.response?.data.message);
+    } else {
+      throw new AxiosError("Failed to update activity. Please try again.");
+    }
   }
 };
 
@@ -71,7 +78,10 @@ export const deleteActivity = async (
 
     return response.data;
   } catch (err) {
-    console.error(err);
-    throw new Error("Failed to delete activity. Please try again.");
+    if (err instanceof AxiosError) {
+      throw new AxiosError(err.response?.data.message);
+    } else {
+      throw new Error("Failed to delete activity. Please try again.");
+    }
   }
 };

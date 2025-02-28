@@ -58,7 +58,11 @@ export function ActionDropdown({ eventId, activityId }: ActionDropdownProps) {
       if (err instanceof Error) {
         showErrorToast(toast, err, err.message);
       } else {
-        showErrorToast(toast, err, "Failed to delete activity");
+        showErrorToast(
+          toast,
+          err,
+          "Failed to delete activity. Please try again.",
+        );
       }
       setIsDialogOpen(false);
     }
