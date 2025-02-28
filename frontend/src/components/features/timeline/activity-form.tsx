@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { addActivity, updateActivity } from "@/lib/actions/event/timeline";
 import { useAuthAxios } from "@/lib/api/axios-client";
+import { extractTime } from "@/lib/helpers/time-utils";
 import { showErrorToast } from "@/lib/toast/toast-utils";
 import { EventType } from "@/types/event";
 import { TimelineType } from "@/types/timeline";
@@ -48,13 +49,6 @@ const FormSchema = z
       path: ["endTime"],
     },
   );
-
-const extractTime = (datetime: string) => {
-  const date = new Date(datetime);
-  const hours = date.getHours().toString().padStart(2, "0");
-  const minutes = date.getMinutes().toString().padStart(2, "0");
-  return `${hours}:${minutes}`;
-};
 
 export function ActivityForm({ eventId, activityData }: ActivityFormProps) {
   const router = useRouter();
