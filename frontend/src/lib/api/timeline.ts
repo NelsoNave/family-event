@@ -1,7 +1,8 @@
 import { TimelineType } from "@/types/timeline";
+import { AxiosError } from "axios";
 import { getServerAxiosInstance } from "./axios-server";
 
-// Fetch event information for RSVP
+// Fetch timeline
 export const getTimeline = async (
   eventId: string,
 ): Promise<{ timelines: TimelineType[] }> => {
@@ -12,10 +13,10 @@ export const getTimeline = async (
 
     return response;
   } catch (err) {
-    if (err instanceof Error) {
-      throw new Error();
+    if (err instanceof AxiosError) {
+      throw new AxiosError(err.response?.data.message);
     } else {
-      throw new Error(String(err));
+      throw new Error("Failed to create activity. Please try again.");
     }
   }
 };
