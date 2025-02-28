@@ -28,7 +28,7 @@ export default async function TimeLine({
   const isHost = true;
 
   try {
-    // Fetch event date
+    // Fetch event data
     const responseEvent = await getEventInformation(eventId);
     eventData = responseEvent.event;
 
