@@ -28,16 +28,27 @@ type ActivityFormProps = {
   activityData?: TimelineType;
 };
 
-const FormSchema = z.object({
-  title: z.string().min(2, {
-    message: "Activity title must be at least 2 characters.",
-  }),
-  description: z.string().min(2, {
-    message: "Activity detail must be at least 2 characters.",
-  }),
-  startTime: z.string(),
-  endTime: z.string(),
-});
+const FormSchema = z
+  .object({
+    title: z.string().min(2, {
+      message: "Activity title must be at least 2 characters.",
+    }),
+    description: z.string().min(2, {
+      message: "Activity detail must be at least 2 characters.",
+    }),
+    startTime: z.string(),
+    endTime: z.string(),
+  })
+  .refine(
+    (data) => {
+      if (!data.startTime || !data.endTime) return true;
+      return data.startTime < data.endTime;
+    },
+    {
+      message: "End time must be after start time",
+      path: ["endTime"],
+    },
+  );
 
 const extractTime = (datetime: string) => {
   const date = new Date(datetime);
