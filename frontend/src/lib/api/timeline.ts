@@ -16,7 +16,7 @@ export const getTimeline = async (
     if (err instanceof AxiosError) {
       throw new AxiosError(err.response?.data.message);
     } else {
-      throw new Error("Failed to create activity. Please try again.");
+      throw new Error("Failed to fetch activity. Please try again.");
     }
   }
 };
