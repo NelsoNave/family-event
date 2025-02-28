@@ -50,21 +50,21 @@ export default function GuestNecessitiesListItem({
       <Button
         variant="ghost"
         onClick={handleBringingToggle}
-        className="flex w-full justify-between gap-2 p-0 hover:bg-transparent hover:opacity-75"
+        className="flex w-full justify-between gap-2 p-0 text-base hover:bg-transparent hover:opacity-75"
       >
         {item}
         {isAdded ? (
           <Image
             src="/images/checked.svg"
-            width={16}
-            height={16}
+            width={20}
+            height={20}
             alt="icon for item checked"
           />
         ) : (
           <Image
             src="/images/unchecked.svg"
-            width={16}
-            height={16}
+            width={20}
+            height={20}
             alt="icon for item unchecked"
           />
         )}

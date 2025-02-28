@@ -29,7 +29,7 @@ const formSchema = z.object({
         item: z.string().min(1, "Item name is required"),
       }),
     )
-    .min(1, "At least one necessity is required"),
+    .default([]),
   noteForNecessities: z.string().optional(),
 });
 
@@ -51,6 +51,7 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
       necessities: [{ item: "" }],
       noteForNecessities: "",
     },
+    shouldUnregister: true,
   });
 
   const { control, handleSubmit, reset } = form;
@@ -72,11 +73,18 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
     try {
       const eventId = params?.eventId;
 
+      const filteredNecessities = data.necessities.filter(
+        (item) => item.item.trim() !== "",
+      );
+
       const postData: HostNecessitiesListType = {
-        necessities: data.necessities.map((item, index) => ({
-          ...item,
-          id: initialData?.necessities[index]?.id ?? ""
-        })),
+        necessities: filteredNecessities.map((item, index) => {
+          const initialItem = initialData?.necessities[index];
+          return {
+            ...item,
+            id: initialItem?.id ?? "",
+          };
+        }),
         noteForNecessities: data.noteForNecessities || "",
       };
 
@@ -124,6 +132,9 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
                         variant="ghost"
                         size="icon"
                         onClick={() => remove(index)}
+                        // NOTE: confirm whether it's okay to submit with zero item
+                        // disabled={fields.length <= 1}
+                        className="hover:opacity-70 peer-disabled:hover:cursor-not-allowed"
                       >
                         <X size={16} />
                       </Button>
@@ -139,7 +150,7 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
               type="button"
               variant="outline"
               onClick={() => append({ item: "" })}
-              className="rounded-full border border-accentGreen bg-white text-accentGreen"
+              className="rounded-full border border-accentGreen bg-white text-accentGreen hover:bg-accentGreen hover:text-white"
             >
               <PlusIcon size={16} /> Add item
             </Button>
@@ -159,7 +170,9 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
             type="submit"
             className="h-auto w-full rounded-full py-3 text-base font-bold"
           >
-            {initialData?.necessities && initialData.necessities.length > 0 ? "Update item list" : "Create item list"}
+            {initialData?.necessities && initialData.necessities.length > 0
+              ? "Update item list"
+              : "Create item list"}
           </Button>
         </div>
       </form>

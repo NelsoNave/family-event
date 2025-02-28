@@ -1,5 +1,5 @@
-// import HostNecessitiesContainer from "@/components/features/event/necessities/host/host-necessities-container";
 import GuestNecessitiesContainer from "@/components/features/event/necessities/guest/guest-necessities-container";
+import HostNecessitiesContainer from "@/components/features/event/necessities/host/host-necessities-container";
 import {
   getGuestNecessitiesInfo,
   getHostNecessitiesInfo,
@@ -30,7 +30,7 @@ export default async function page({
         guestNecessities={guestNecessities}
         eventId={eventId}
       />
-      {/* <HostNecessitiesContainer hostNecessities={hostNecessities}  /> */}
+      <HostNecessitiesContainer hostNecessities={hostNecessities} />
     </>
   );
 }
