@@ -15,11 +15,8 @@ export default function EditActivity() {
   const axios = useAuthAxios();
   const { toast } = useToast();
 
-  const eventIdStr = typeof eventId === "string" ? eventId : "";
-  const timelineIdStr = typeof timelineId === "string" ? timelineId : "";
-
   useEffect(() => {
-    if (!eventIdStr) {
+    if (!eventId) {
       notFound();
     }
 
@@ -27,12 +24,12 @@ export default function EditActivity() {
       try {
         const response = await axios.get<{
           data: { timelines: TimelineType[] };
-        }>(`/events/${eventIdStr}/timelines`);
+        }>(`/events/${eventId}/timelines`);
 
         const timelines = response.data.data.timelines;
 
         const selectedActivity = timelines.find(
-          (timeline) => timeline.id == timelineId,
+          (timeline) => Number(timeline.id) === Number(timelineId),
         );
 
         if (selectedActivity) {
@@ -48,7 +45,7 @@ export default function EditActivity() {
     };
 
     fetchTimelineData();
-  }, [eventIdStr, timelineIdStr, axios, timelineId, toast]);
+  }, [eventId, timelineId, axios, timelineId, toast]);
 
   if (!activityData) {
     return <div>Loading...</div>;
@@ -57,11 +54,11 @@ export default function EditActivity() {
   return (
     <section className="space-y-4">
       <BreadcrumbNavigation
-        path={`/event/${eventIdStr}/timeline`}
+        path={`/event/${eventId}/timeline`}
         previousPageName="Timeline"
       />
       <h1 className="text-xl font-bold">Edit Activity</h1>
-      <ActivityForm eventId={eventIdStr} activityData={activityData} />
+      <ActivityForm eventId={eventId as string} activityData={activityData} />
     </section>
   );
 }
