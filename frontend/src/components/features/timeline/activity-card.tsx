@@ -6,12 +6,14 @@ type ActivityCardProps = {
   activityData: TimelineType;
   isEven: boolean;
   eventId: string;
+  isHost: boolean;
 };
 
 export default function ActivityCard({
   activityData,
   isEven,
   eventId,
+  isHost,
 }: ActivityCardProps) {
   return (
     <div className="mb-4 flex h-[144px] items-center gap-2 overflow-y-auto">
@@ -31,7 +33,9 @@ export default function ActivityCard({
       >
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">{activityData.title}</h2>
-          <ActionDropdown eventId={eventId} activityId={activityData.id} />
+          {isHost && (
+            <ActionDropdown eventId={eventId} activityId={activityData.id} />
+          )}
         </div>
         <p className="text-sm font-bold">{activityData.description}</p>
       </div>
