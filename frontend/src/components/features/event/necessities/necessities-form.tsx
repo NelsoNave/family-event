@@ -91,8 +91,6 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
         noteForNecessities: data.noteForNecessities || "",
       };
 
-      console.log("postData", postData);
-
       let response;
       if (initialData) {
         response = await axios.patch(
@@ -102,8 +100,6 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
       } else {
         response = await axios.post(`/events/${eventId}/necessities`, postData);
       }
-
-      console.log("response", response);
 
       if (response.status !== 200) {
         throw new Error();
