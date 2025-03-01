@@ -29,7 +29,7 @@ export default function EditActivity() {
         const timelines = response.data.data.timelines;
 
         const selectedActivity = timelines.find(
-          (timeline) => Number(timeline.id) === Number(timelineId),
+          (timeline) => timeline.id === Number(timelineId),
         );
 
         if (selectedActivity) {
@@ -45,7 +45,7 @@ export default function EditActivity() {
     };
 
     fetchTimelineData();
-  }, [eventId, timelineId, axios, timelineId, toast]);
+  }, [eventId, timelineId, axios, toast]);
 
   if (!activityData) {
     return <div>Loading...</div>;

@@ -40,7 +40,7 @@ export const updateActivity = async ({
 }: {
   requestData: Omit<TimelineType, "id">;
   eventId: string;
-  activityId: string;
+  activityId: number;
 }): Promise<{
   success: boolean;
   message: string;
@@ -65,7 +65,7 @@ export const updateActivity = async ({
 // Delete activity
 export const deleteActivity = async (
   eventId: string,
-  timelineId: string,
+  activityId: number,
 ): Promise<{
   success: boolean;
   message: string;
@@ -73,7 +73,7 @@ export const deleteActivity = async (
   try {
     const axiosInstance = await getServerAxiosInstance();
     const response = await axiosInstance.delete(
-      `events/${eventId}/timelines/${timelineId}`,
+      `events/${eventId}/timelines/${activityId}`,
     );
 
     return response.data;

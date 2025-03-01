@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 
 type ActionDropdownProps = {
   eventId: string;
-  activityId: string;
+  activityId: number;
 };
 
 export function ActionDropdown({ eventId, activityId }: ActionDropdownProps) {
