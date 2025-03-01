@@ -166,16 +166,15 @@ model Pictures {
   imageUrl String    @map("image_url")
   imagePublicId String    @map("image_public_url")
 
-  facePictures FacePictures[]
-
   @@map("pictures")
 }
 
-model FacePictures {
-  id        Int       @id @default(autoincrement())
-  picture   Pictures   @relation(fields: [pictureId], references: [id], onDelete: Cascade)
-  pictureId Int       @map("picture_id")
-  tag       String
+model facePictures
+ {
+  id        Int      @id @default(autoincrement())
+  picture       Pictures @relation(fields: [pictureId], references: [id])
+  pictureId     Int  @map("picture_id")
+  tag String
 
   @@map("face_pictures")
 }
