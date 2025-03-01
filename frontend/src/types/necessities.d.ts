@@ -1,5 +1,5 @@
 export type BaseNecessityType = {
-  id: string;
+  id: number; // ID は文字列じゃなくて数値で！
   item: string;
 };
 
