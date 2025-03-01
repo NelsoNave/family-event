@@ -18,7 +18,7 @@ export default async function HostNecessitiesContainer({
         <ul className="list-disc pl-6">
           {hostNecessities.necessities.map(({ id, item }) => (
             <li key={id} className="py-2 font-medium">
-              {id}: {item} {/* 表示用に ID を追加（あとで消してね） */}
+              {item}
             </li>
           ))}
         </ul>

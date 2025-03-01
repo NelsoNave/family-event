@@ -29,7 +29,7 @@ const formSchema = z.object({
   necessities: z
     .array(
       z.object({
-        id: z.number().default(0), // 数字を使うように（文字列じゃなくて）
+        id: z.number().default(0),
         item: z.string().min(1, "Item name is required"),
       }),
     )
@@ -53,9 +53,9 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       necessities: initialData?.necessities.map((n) => ({
-        id: n.id ? Number(n.id) : 0, // IDがなかったら0にする
+        id: n.id ? Number(n.id) : 0,
         item: n.item ?? "",
-      })) ?? [{ id: 0, item: "" }], // 新しいアイテムは ID 0 からスタート
+      })) ?? [{ id: 0, item: "" }],
       noteForNecessities: initialData?.noteForNecessities || "",
     },
     shouldUnregister: true,
@@ -125,7 +125,7 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
           <div className="space-y-2">
             {fields.map((field, index) => (
               <div key={field.id}>
-                {/* ID を記録するための隠し入力 */}
+                {/* NOTE: Add id information */}
                 <input
                   type="hidden"
                   {...form.register(`necessities.${index}.id`)}

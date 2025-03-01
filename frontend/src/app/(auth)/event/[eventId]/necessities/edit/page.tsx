@@ -3,7 +3,7 @@ import { getHostNecessitiesInfo } from "@/lib/actions/event/necessities";
 
 export default async function page({params}: {params: Promise<{ eventId: string }>}) {
     const { eventId } = await params;
-    const hostNecessities = await getHostNecessitiesInfo(Number(eventId));
+    const hostNecessities = await getHostNecessitiesInfo(eventId);
 
   return (
     <section className="grid gap-6">
