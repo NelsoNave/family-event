@@ -78,7 +78,7 @@ export function ActivityForm({ eventId, activityData }: ActivityFormProps) {
         return await updateActivity({
           requestData,
           eventId,
-          activityId: activityData?.id || "",
+          activityId: activityData?.id,
         });
       } else {
         return await addActivity({ requestData, eventId });
