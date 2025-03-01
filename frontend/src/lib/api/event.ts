@@ -18,3 +18,14 @@ export const getEventInformation = async (
   }
 };
 
+export const checkIsHost = async (eventId: string): Promise<boolean> => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.get<{ isHost: boolean }>(
+      `events/${eventId}/is-host`,
+    );
+    return response.data.isHost;
+  } catch (err) {
+    throw new Error(String(err));
+  }
+};

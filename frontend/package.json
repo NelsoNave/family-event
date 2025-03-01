@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.12.0",
+    "@googlemaps/js-api-loader": "^1.16.8",
     "@hookform/resolvers": "^4.1.0",
+    "@next/third-parties": "^15.2.0",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-alert-dialog": "^1.1.6",
     "@radix-ui/react-aspect-ratio": "^1.1.2",
@@ -63,6 +65,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
