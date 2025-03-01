@@ -1,7 +1,7 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
 import ActivityCard from "@/components/features/timeline/activity-card";
 import { Button } from "@/components/ui/button";
-import { getEventInformation } from "@/lib/api/event";
+import { checkIsHost, getEventInformation } from "@/lib/api/event";
 import { getTimeline } from "@/lib/api/timeline";
 import {
   dayFormatOptions,
@@ -24,10 +24,11 @@ export default async function TimeLine({
   let eventData: EventType | null = null;
   const { eventId } = await params;
 
-  // TODO: Fetch the user's role (host or guest)
-  const isHost = true;
+  let isHost = false;
 
   try {
+    isHost = await checkIsHost(eventId);
+
     // Fetch event data
     const responseEvent = await getEventInformation(eventId);
     eventData = responseEvent.event;
@@ -94,6 +95,7 @@ export default async function TimeLine({
                 key={activity.id}
                 isEven={index % 2 === 0}
                 eventId={eventId}
+                isHost={isHost}
               />
               {isHost && index === timeline.length - 1 && (
                 <Link href={`/event/${eventId}/timeline/create`}>
