@@ -1,7 +1,7 @@
 import EventDetail from "@/components/features/event/event-detail";
 import MenuIcon from "@/components/features/event/menu-icon";
 import { MENU_LIST } from "@/constants/icons";
-import { getEventInformation } from "@/lib/api/event";
+import { checkIsHost, getEventInformation } from "@/lib/api/event";
 import { notFound } from "next/navigation";
 
 export default async function EventHome({
@@ -10,11 +10,14 @@ export default async function EventHome({
   params: Promise<{ eventId: string }>;
 }) {
   let eventData = null;
+  let isHost = false;
   const { eventId } = await params;
 
   try {
     const response = await getEventInformation(eventId);
     eventData = response.event;
+
+    isHost = await checkIsHost(eventId);
   } catch (err) {
     console.error(err);
     notFound();
@@ -22,6 +25,7 @@ export default async function EventHome({
 
   return (
     <section className="space-y-8">
+      {isHost ? "You are a host" : "You are a guest"}
       {eventData ? <EventDetail eventData={eventData} /> : <p>Loading...</p>}
 
       {/* TODO: Change the displayed icon based on whether the user is a host or a
