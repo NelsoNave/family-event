@@ -1,0 +1,137 @@
+"use server";
+
+import { getServerAxiosInstance } from "@/lib/api/axios-server";
+import { ParticipantsResponseType } from "@/types/participant";
+import { AxiosError } from "axios";
+
+// Fetch participants
+export const getParticipants = async (
+  eventId: string,
+): Promise<ParticipantsResponseType> => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = (
+      await axiosInstance.get(`/events/${eventId}/participants`)
+    ).data.data;
+
+    return response;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      throw new AxiosError(err.response?.data.message);
+    } else {
+      throw new Error("Failed to fetch participants. Please try again.");
+    }
+  }
+};
+
+// Update participants attendance
+export const updateParticipantsAttendance = async ({
+  eventId,
+  participantId,
+  isAttended,
+}: {
+  eventId: string;
+  participantId: number;
+  isAttended: boolean;
+}): Promise<{
+  success: boolean;
+  message: string;
+}> => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.patch(
+      `/events/${eventId}/participants/${participantId}/attendance`,
+      isAttended,
+    );
+
+    return response.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      throw new AxiosError(err.response?.data.message);
+    } else {
+      throw new AxiosError(
+        "Failed to update participants attendance. Please try again.",
+      );
+    }
+  }
+};
+
+// Delete participants
+export const deleteParticipant = async (
+  eventId: string,
+  participantId: number,
+): Promise<{
+  success: boolean;
+  message: string;
+}> => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.delete(
+      `events/${eventId}/participants/${participantId}`,
+    );
+
+    return response.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      throw new AxiosError(err.response?.data.message);
+    } else {
+      throw new Error("Failed to delete participant. Please try again.");
+    }
+  }
+};
+
+// Add temporary participant
+export const addTemporaryParticipant = async ({
+  eventId,
+  name,
+}: {
+  eventId: string;
+  name: string;
+}): Promise<{
+  success: boolean;
+  message: string;
+}> => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.post(
+      `/events/${eventId}/participants/temporary`,
+      name,
+    );
+
+    return response.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      throw new AxiosError(err.response?.data.message);
+    } else {
+      throw new AxiosError(
+        "Failed to add temporary participant. Please try again.",
+      );
+    }
+  }
+};
+
+// Delete temporary participants
+export const deleteTemporaryParticipant = async (
+  eventId: string,
+  participantId: number,
+): Promise<{
+  success: boolean;
+  message: string;
+}> => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.delete(
+      `events/${eventId}/temporary/${participantId}`,
+    );
+
+    return response.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      throw new AxiosError(err.response?.data.message);
+    } else {
+      throw new Error(
+        "Failed to delete temporary participant. Please try again.",
+      );
+    }
+  }
+};
