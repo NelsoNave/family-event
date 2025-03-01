@@ -89,9 +89,9 @@ const updateUser = async (req: Request, res: Response) => {
         return res.status(400).json({ error: "request has no info" });
       }
 
-      let newProfileImageUrl = "";
+      let newProfileImageUrl = { url: "", publicId: "" };
       if (file) {
-        newProfileImageUrl = await uploadImage.uploadImage(
+        const newProfileImageUrl = await uploadImage.uploadImage(
           file.buffer,
           "profiles",
         );
@@ -100,7 +100,8 @@ const updateUser = async (req: Request, res: Response) => {
       let updates: Record<string, any> = {};
 
       updates.name = newName;
-      if (is_remove_image || file) updates.profileImageUrl = newProfileImageUrl;
+      if (is_remove_image || file)
+        updates.profileImageUrl = newProfileImageUrl.url;
 
       const updatedUser = await usersModel.updateUser(tx, user.id, updates);
 
@@ -163,7 +164,7 @@ const addNewUserFamily = async (req: Request, res: Response) => {
         res.status(404).json({ error: "User not found" });
         return;
       }
-      let newProfileImageUrl = "";
+      let newProfileImageUrl = { url: "", publicId: "" };
       if (file) {
         newProfileImageUrl = await uploadImage.uploadImage(
           file.buffer,
@@ -175,7 +176,7 @@ const addNewUserFamily = async (req: Request, res: Response) => {
         tx,
         user.id,
         newName,
-        newProfileImageUrl,
+        newProfileImageUrl.url,
       );
 
       res.status(200).json({
@@ -205,7 +206,7 @@ const updateUserFamily = async (
         return res.status(400).json({ error: "request has no info" });
       }
 
-      let newProfileImageUrl = "";
+      let newProfileImageUrl = { url: "", publicId: "" };
       if (file) {
         newProfileImageUrl = await uploadImage.uploadImage(
           file.buffer,
@@ -216,7 +217,8 @@ const updateUserFamily = async (
       let updates: Record<string, any> = {};
 
       updates.name = newName;
-      if (is_remove_image || file) updates.profileImageUrl = newProfileImageUrl;
+      if (is_remove_image || file)
+        updates.profileImageUrl = newProfileImageUrl.url;
 
       const updatedUser = await userFamiliesModel.updateUserFamily(
         tx,
