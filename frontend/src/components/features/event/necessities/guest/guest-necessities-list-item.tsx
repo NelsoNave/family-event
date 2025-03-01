@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 type GuestNecessitiesListItemProps = {
-  necessityId: string;
+  necessityId: number;
   item: string;
   initialIsAdded: boolean;
   eventId: string;
@@ -28,7 +28,7 @@ export default function GuestNecessitiesListItem({
     try {
       const response = await switchGuestNecessitiesStatus(
         eventId,
-        necessityId,
+        String(necessityId),
         !isAdded,
       );
       setIsAdded(response.data.necessity.isAdded);

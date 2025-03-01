@@ -1,37 +1,59 @@
-// import GuestNecessitiesContainer from "@/components/features/event/necessities/guest/guest-necessities-container";
+import GuestNecessitiesContainer from "@/components/features/event/necessities/guest/guest-necessities-container";
 import HostNecessitiesContainer from "@/components/features/event/necessities/host/host-necessities-container";
 import {
-  // getGuestNecessitiesInfo,
+  getGuestNecessitiesInfo,
   getHostNecessitiesInfo,
 } from "@/lib/actions/event/necessities";
-import { redirect } from "next/navigation";
+import { checkIsHost } from "@/lib/api/event";
+import { notFound, redirect } from "next/navigation";
 
 export default async function page({
   params,
 }: {
   params: Promise<{ eventId: string }>;
 }) {
+  let hostNecessities;
+  let guestNecessities;
+  let isHost = false;
   const { eventId } = await params;
-  const hostNecessities = await getHostNecessitiesInfo(eventId);
 
-  console.log("hostNecessities", hostNecessities)
+  try {
+    isHost = await checkIsHost(eventId);
+
+    if (isHost) {
+      hostNecessities = await getHostNecessitiesInfo(eventId);
+    } else {
+      guestNecessities = await getGuestNecessitiesInfo(eventId);
+    }
+  } catch (err) {
+    console.error(err);
+    notFound();
+  }
+
   if (
-    !hostNecessities.necessities ||
-    hostNecessities.necessities.length === 0
+    isHost &&
+    (!hostNecessities ||
+      !hostNecessities.necessities ||
+      hostNecessities.necessities.length === 0)
   ) {
     redirect("necessities/create");
   }
 
-
-  // const guestNecessities = await getGuestNecessitiesInfo(eventId);
-
   return (
     <>
-      {/* <GuestNecessitiesContainer
-        guestNecessities={guestNecessities}
-        eventId={eventId}
-      /> */}
-      <HostNecessitiesContainer hostNecessities={hostNecessities} />
+      {isHost ? (
+        <HostNecessitiesContainer
+          hostNecessities={
+            hostNecessities ?? { necessities: [], noteForNecessities: "" }
+          }
+          eventId={eventId}
+        />
+      ) : (
+        <GuestNecessitiesContainer
+          guestNecessities={guestNecessities}
+          eventId={eventId}
+        />
+      )}
     </>
   );
 }
