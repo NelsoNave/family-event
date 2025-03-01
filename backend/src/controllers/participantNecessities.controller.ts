@@ -31,10 +31,9 @@ const getParticipantNecessities = async (
     const noteForNecessities = result.note?.noteForNecessities;
 
     res.status(200).json({
-      uccess: true,
+      success: true,
       message: "get guest necessities successfully!",
-      data: { necessities },
-      noteForNecessities,
+      data: { necessities, noteForNecessities },
     });
   } catch (err) {
     console.error(err);
