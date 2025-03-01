@@ -31,10 +31,6 @@ export const checkIsRequestFromHostOrParticipant = async (
   if (!userId) {
     throw new UnauthorizedError();
   }
-  const user = await clerkClient.users.getUser(userId);
-  if (!user) {
-    throw new NotFoundError("User");
-  }
   const eventId = Number(req.params.event_id);
   if (isNaN(eventId)) {
     throw new ValidationError("Invalid event ID");
