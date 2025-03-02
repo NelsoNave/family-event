@@ -1,5 +1,5 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
-import ParticipantsContainer from "@/components/features/event/participant/participants-container";
+import ParticipantsSection from "@/components/features/event/participant/participants-section";
 import WhoIsComing from "@/components/features/event/participant/who-is-coming";
 import { checkIsHost } from "@/lib/api/event";
 import { notFound } from "next/navigation";
@@ -25,7 +25,11 @@ export default async function page({
         path={`/event/${eventId}`}
         previousPageName="Event Home"
       />
-      {isHost ? <ParticipantsContainer eventId={eventId} /> : <WhoIsComing eventId={eventId} />}
+      {isHost ? (
+        <ParticipantsSection eventId={eventId} />
+      ) : (
+        <WhoIsComing eventId={eventId} />
+      )}
     </section>
   );
 }

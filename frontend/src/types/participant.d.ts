@@ -15,6 +15,7 @@ export type TempParticipantsType = Omit<
 
 export type AllParticipantsType = BaseParticipantsType & {
   isTemp: boolean;
+  uniqueId: string;
 };
 
 export type ParticipantsResponseType = {

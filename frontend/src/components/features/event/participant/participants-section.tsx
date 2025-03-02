@@ -12,15 +12,15 @@ import { useAuth } from "@clerk/nextjs";
 import { PlusIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import PersonModal from "../../person-modal";
-import ParticipantListItem from "./participant-list-item";
+import ParticipantItem from "./participant-item";
 
-type ParticipantsContainerProps = {
+type ParticipantsSectionProps = {
   eventId: string;
 };
 
-export default function ParticipantsContainer({
+export default function ParticipantsSection({
   eventId,
-}: ParticipantsContainerProps) {
+}: ParticipantsSectionProps) {
   const axios = useAuthAxios();
   const { toast } = useToast();
   const { isLoaded, isSignedIn } = useAuth();
@@ -44,6 +44,7 @@ export default function ParticipantsContainer({
           (participant) => ({
             ...participant,
             isTemp: false,
+            uniqueId: `accepted-${participant.id}`,
           }),
         ),
         ...(participantsInformation.tempParticipants ?? []).map((temp) => ({
@@ -51,6 +52,7 @@ export default function ParticipantsContainer({
           isTemp: true,
           isAccepted: false,
           profileImageUrl: "/images/profile_default.png",
+          uniqueId: `temp-${temp.id}`,
         })),
       ];
 
@@ -88,9 +90,9 @@ export default function ParticipantsContainer({
           </h1>
           <ul className="grid gap-4">
             {participantsInfoData.map(
-              ({ id, isTemp, isAttended, name, profileImageUrl }) => (
-                <ParticipantListItem
-                  key={id}
+              ({ id, isTemp, isAttended, name, profileImageUrl, uniqueId }) => (
+                <ParticipantItem
+                  key={uniqueId}
                   eventId={eventId}
                   participantId={id}
                   isTemp={isTemp}

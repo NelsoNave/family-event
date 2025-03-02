@@ -1,9 +1,10 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
-import AcceptedParticipantsContainer from "@/components/features/event/rsvp/accepted-participants-container";
-import DeclinedParticipantsContainer from "@/components/features/event/rsvp/declined-participants-container";
+import ParticipantsList from "@/components/features/event/rsvp/participants-list";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getParticipants } from "@/lib/actions/event/participant";
-import { notFound } from "next/navigation";
+import { checkIsHost } from "@/lib/api/event";
+import { BaseParticipantsType } from "@/types/participant";
+import { notFound, redirect } from "next/navigation";
 
 export default async function page({
   params,
@@ -11,16 +12,32 @@ export default async function page({
   params: Promise<{ eventId: string }>;
 }) {
   const { eventId } = await params;
-  let acceptedParticipants;
-  let declinedParticipants;
+  let isHost;
+  let acceptedParticipants: BaseParticipantsType[] = [];
+  let declinedParticipants: BaseParticipantsType[] = [];
 
   try {
-    const response = await getParticipants(eventId)
+    isHost = await checkIsHost(eventId);
+
+    if (!isHost) {
+      redirect(`/event/${eventId}`);
+    }
+
+    const response = await getParticipants(eventId);
+
+    if (!response.acceptedParticipants) {
+      throw new Error("Accepted participants data is missing");
+    }
+    if (!response.declinedParticipants) {
+      throw new Error("Declined participants data is missing");
+    }
+
     acceptedParticipants = response.acceptedParticipants;
     declinedParticipants = response.declinedParticipants;
-  } catch(err) {
-    console.error(err)
-    notFound()
+    
+  } catch (err) {
+    console.error(err);
+    notFound();
   }
 
   return (
@@ -46,10 +63,10 @@ export default async function page({
           </TabsTrigger>
         </TabsList>
         <TabsContent value="attending">
-          <AcceptedParticipantsContainer acceptedParticipants={acceptedParticipants} />
+          <ParticipantsList participantsData={acceptedParticipants} />
         </TabsContent>
         <TabsContent value="notAttending">
-          <DeclinedParticipantsContainer declinedParticipants={declinedParticipants} />
+          <ParticipantsList participantsData={declinedParticipants} />
         </TabsContent>
       </Tabs>
     </section>

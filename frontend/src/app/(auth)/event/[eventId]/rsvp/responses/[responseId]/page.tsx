@@ -1,8 +1,9 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
 import { getParticipants } from "@/lib/actions/event/participant";
+import { checkIsHost } from "@/lib/api/event";
 import { BaseParticipantsType } from "@/types/participant";
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function page({
   params,
@@ -10,9 +11,16 @@ export default async function page({
   params: Promise<{ eventId: string; responseId: string }>;
 }) {
   const { eventId, responseId } = await params;
+  let isHost;
   let participant: BaseParticipantsType | undefined;
 
   try {
+    isHost = await checkIsHost(eventId);
+
+    if (!isHost) {
+      redirect(`/event/${eventId}`);
+    }
+
     const response = await getParticipants(eventId);
     const { acceptedParticipants, declinedParticipants } = response;
 

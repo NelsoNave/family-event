@@ -15,7 +15,7 @@ import { notFound } from "next/navigation";
 import { useState } from "react";
 import Modal from "../../modal";
 
-type ParticipantListItemProps = {
+type ParticipantItemProps = {
   initialIsAttended: boolean;
   isTemp: boolean;
   eventId: string;
@@ -25,7 +25,7 @@ type ParticipantListItemProps = {
   refreshData: () => void;
 };
 
-export default function ParticipantListItem({
+export default function ParticipantItem({
   initialIsAttended,
   isTemp,
   eventId,
@@ -33,7 +33,7 @@ export default function ParticipantListItem({
   name,
   profileImageUrl,
   refreshData,
-}: ParticipantListItemProps) {
+}: ParticipantItemProps) {
   const { toast } = useToast();
   const [isAttended, setIsAttended] = useState<boolean>(initialIsAttended);
 
@@ -79,21 +79,20 @@ export default function ParticipantListItem({
   };
 
   const handleDelete = async () => {
-    let response;
-    if (isTemp) {
-      response = await deleteTemporaryParticipant(eventId, participantId);
+    try {
+      const response = isTemp
+        ? await deleteTemporaryParticipant(eventId, participantId)
+        : await deleteParticipant(eventId, participantId);
+
       if (response.success && refreshData) {
         refreshData();
       }
+
       return response;
-    } else if (!isTemp) {
-      response = await deleteParticipant(eventId, participantId);
-      if (response.success && refreshData) {
-        refreshData();
-      }
-      return response;
+    } catch (err) {
+      console.error(`Failed to delete participant`, err);
+      return { success: false, message: "No action performed" };
     }
-    return { success: false, message: "No action performed" };
   };
 
   return (
