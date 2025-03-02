@@ -30,17 +30,17 @@ const formSchema = z.object({
     .array(
       z.object({
         id: z.number().default(0),
-        item: z.string().min(1, "Item name is required"),
+        item: z.string().trim().min(1, "Item name is required"),
       }),
     )
     .default([]),
-  noteForNecessities: z.string().optional(),
+  noteForNecessities: z.string().trim().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 type NecessitiesFormProps = {
-  initialData: HostNecessitiesListType | null;
+  initialData?: HostNecessitiesListType | null;
 };
 
 export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {

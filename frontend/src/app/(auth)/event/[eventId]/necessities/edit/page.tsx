@@ -1,7 +1,8 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
 import NecessitiesForm from "@/components/features/event/necessities/necessities-form";
 import { getHostNecessitiesInfo } from "@/lib/actions/event/necessities";
-import { notFound } from "next/navigation";
+import { checkIsHost } from "@/lib/api/event";
+import { notFound, redirect } from "next/navigation";
 
 export default async function page({
   params,
@@ -12,7 +13,12 @@ export default async function page({
   let hostNecessities;
 
   try {
-    hostNecessities = await getHostNecessitiesInfo(eventId);
+    const isHost = await checkIsHost(eventId)
+    if(isHost) {
+      hostNecessities = await getHostNecessitiesInfo(eventId);
+    } else {
+      redirect(`/event/${eventId}`)
+    }
   } catch (err) {
     console.error(err);
     notFound();
