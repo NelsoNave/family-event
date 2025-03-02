@@ -15,12 +15,10 @@ import PersonModal from "../../person-modal";
 import ParticipantListItem from "./participant-list-item";
 
 type ParticipantsContainerProps = {
-  // participants: AllParticipantsType[];
   eventId: string;
 };
 
 export default function ParticipantsContainer({
-  // participants,
   eventId,
 }: ParticipantsContainerProps) {
   const axios = useAuthAxios();
@@ -83,7 +81,7 @@ export default function ParticipantsContainer({
       {!isLoaded ? (
         <p>Loading...</p>
       ) : (
-        <>
+        <section className="grid gap-4">
           <h1 className="text-xl font-bold">
             Guest list{" "}
             <span className="text-base">({participantsInfoData.length})</span>
@@ -120,7 +118,7 @@ export default function ParticipantsContainer({
             onSuccess={refreshData}
             errorMessage="Failed to add temporary participant"
           />
-        </>
+        </section>
       )}
     </>
   );
