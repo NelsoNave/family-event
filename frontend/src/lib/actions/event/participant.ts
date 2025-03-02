@@ -10,14 +10,12 @@ export const getParticipants = async (
 ): Promise<ParticipantsResponseType> => {
   try {
     const axiosInstance = await getServerAxiosInstance();
-    const response = (
-      await axiosInstance.get(`/events/${eventId}/participants`)
-    ).data.data;
+    const response = await axiosInstance.get(`/events/${eventId}/participants`);
 
-    return response;
+    return response.data.data;
   } catch (err) {
     if (err instanceof AxiosError) {
-      throw new AxiosError(err.response?.data.message);
+      throw err;
     } else {
       throw new Error("Failed to fetch participants. Please try again.");
     }
@@ -25,15 +23,11 @@ export const getParticipants = async (
 };
 
 // Update participants attendance
-export const updateParticipantsAttendance = async ({
-  eventId,
-  participantId,
-  isAttended,
-}: {
-  eventId: string;
-  participantId: number;
-  isAttended: boolean;
-}): Promise<{
+export const updateParticipantsAttendance = async (
+  eventId: string,
+  participantId: number,
+  isAttended: boolean,
+): Promise<{
   success: boolean;
   message: string;
 }> => {
@@ -41,13 +35,13 @@ export const updateParticipantsAttendance = async ({
     const axiosInstance = await getServerAxiosInstance();
     const response = await axiosInstance.patch(
       `/events/${eventId}/participants/${participantId}/attendance`,
-      isAttended,
+      {isAttended},
     );
 
     return response.data;
   } catch (err) {
     if (err instanceof AxiosError) {
-      throw new AxiosError(err.response?.data.message);
+      throw err;
     } else {
       throw new AxiosError(
         "Failed to update participants attendance. Please try again.",
@@ -81,13 +75,10 @@ export const deleteParticipant = async (
 };
 
 // Add temporary participant
-export const addTemporaryParticipant = async ({
-  eventId,
-  name,
-}: {
-  eventId: string;
-  name: string;
-}): Promise<{
+export const addTemporaryParticipant = async (
+  eventId: string,
+  name: string,
+): Promise<{
   success: boolean;
   message: string;
 }> => {
@@ -95,7 +86,7 @@ export const addTemporaryParticipant = async ({
     const axiosInstance = await getServerAxiosInstance();
     const response = await axiosInstance.post(
       `/events/${eventId}/participants/temporary`,
-      name,
+      { name },
     );
 
     return response.data;

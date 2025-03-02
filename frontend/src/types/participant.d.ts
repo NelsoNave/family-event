@@ -1,5 +1,5 @@
 export type BaseParticipantsType = {
-  id: string;
+  id: number;
   name: string;
   profileImageUrl: string;
   isAccepted: boolean;
@@ -8,10 +8,10 @@ export type BaseParticipantsType = {
   restrictionNote: string;
 };
 
-export type TmpParticipantsType = Omit<BaseParticipantsType, "isAccepted" | "profileImageUrl">;
+export type TempParticipantsType = Omit<BaseParticipantsType, "isAccepted" | "profileImageUrl">;
 
 export type ParticipantsResponseType = {
   acceptedParticipants: BaseParticipantsType[];
   declinedParticipants: BaseParticipantsType[];
-  tmpParticipants: TmpParticipantsType[];
+  tempParticipants: TempParticipantsType[];
 };

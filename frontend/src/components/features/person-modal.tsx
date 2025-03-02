@@ -30,17 +30,19 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { addTemporaryParticipant } from "@/lib/actions/event/participant";
 
 type PersonModalProps = {
   trigger?: ReactNode;
   title: string;
   defaultName?: string;
   defaultImage?: string;
-  type: "user" | "family";
-  mode: "new" | "edit";
+  type: "user" | "family" | "guest";
+  mode?: "new" | "edit";
   familyId?: string;
+  eventId?: string;
   errorMessage: string;
-  onSuccess?: () => void; // Callback type
+  onSuccess?: () => void;
 };
 
 export default function PersonModal({
@@ -51,6 +53,7 @@ export default function PersonModal({
   type,
   mode,
   familyId,
+  eventId,
   errorMessage,
   onSuccess,
 }: PersonModalProps) {
@@ -65,8 +68,8 @@ export default function PersonModal({
 
   useEffect(() => {
     if (isOpen) {
-      setName(defaultName || ""); // Update name when modal is opened
-      setImageUrl(defaultImage); // Update image when modal is opened
+      setName(defaultName || "");
+      setImageUrl(defaultImage);
     }
   }, [isOpen, defaultName, defaultImage]);
 
@@ -88,7 +91,7 @@ export default function PersonModal({
     e.stopPropagation();
     revokeObjectURL();
     setImageUrl("/images/profile_default.png");
-    setImageUrlData(null)
+    setImageUrlData(null);
   };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,6 +132,8 @@ export default function PersonModal({
           name,
           profileImageUrl: imageUrlData,
         });
+      } else if(eventId && type === "guest") {
+        response = await addTemporaryParticipant(eventId, name)
       }
 
       if (mode === "new") {
@@ -146,7 +151,7 @@ export default function PersonModal({
       resetForm();
 
       if (onSuccess) {
-        onSuccess(); // Trigger callback 'handleUpdate' after submitting
+        onSuccess();
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -185,32 +190,36 @@ export default function PersonModal({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="grid gap-6">
           <div className="grid justify-items-center gap-4">
-            <div className="relative">
-              <button
-                type="button"
-                className="absolute -right-8"
-                onClick={handleImageDelete}
-              >
-                <X size={14} />
-              </button>
-              <button type="button" onClick={handleImageClick}>
-                <Image
-                  src={imageUrl}
-                  alt={name}
-                  className="h-16 w-16 rounded-full object-cover"
-                  width={64}
-                  height={64}
+            {type !== "guest" && (
+              <>
+                <div className="relative">
+                  <button
+                    type="button"
+                    className="absolute -right-8"
+                    onClick={handleImageDelete}
+                  >
+                    <X size={14} />
+                  </button>
+                  <button type="button" onClick={handleImageClick}>
+                    <Image
+                      src={imageUrl}
+                      alt={name}
+                      className="h-16 w-16 rounded-full object-cover"
+                      width={64}
+                      height={64}
+                    />
+                  </button>
+                </div>
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  onChange={handleImageChange}
+                  hidden
+                  ref={inputImageRef}
                 />
-              </button>
-            </div>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              onChange={handleImageChange}
-              hidden
-              ref={inputImageRef}
-            />
+              </>
+            )}
             <div className="grid w-full gap-2">
               <Label htmlFor="name">Name</Label>
               <Input
