@@ -4,16 +4,19 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
   deleteParticipant,
-  updateParticipantsAttendance,
+  updateParticipantAttendance,
+  updateTempParticipantsAttendance,
 } from "@/lib/actions/event/participant";
 import { showErrorToast } from "@/lib/toast/toast-utils";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import Modal from "../../modal";
+import { notFound } from "next/navigation";
 
 type ParticipantListItemProps = {
   initialIsAttended: boolean;
+  isTemp: boolean;
   eventId: string;
   participantId: number;
   name: string;
@@ -23,6 +26,7 @@ type ParticipantListItemProps = {
 
 export default function ParticipantListItem({
   initialIsAttended,
+  isTemp,
   eventId,
   participantId,
   name,
@@ -33,29 +37,42 @@ export default function ParticipantListItem({
   const [isAttended, setIsAttended] = useState<boolean>(initialIsAttended);
 
   const handleChangeAttendStatus = async () => {
+    let response;
     try {
       console.log("Before request: ", { eventId, participantId, isAttended });
-      const response = await updateParticipantsAttendance(
-        eventId,
-        participantId,
-        !isAttended,
-      );
-
-      console.log("API Response:", response);
-
-      if (response.success) {
-        setIsAttended((prev) => !prev);
+      if(isTemp) {
+        response = await updateTempParticipantsAttendance(
+          eventId,
+          participantId,
+          !isAttended,
+        )
+      } else {
+        response = await updateParticipantAttendance(
+          eventId,
+          participantId,
+          !isAttended,
+        );
       }
 
-      if (!response.success) {
-        throw new Error();
-      }
     } catch (err: unknown) {
       showErrorToast(
         toast,
         err,
         "Failed to change the status. Please try again.",
       );
+    }
+
+    if(!response) {
+      showErrorToast(toast, "Response was not received. Event or participant might not be found.");
+      notFound()
+    }
+
+    if (response.success) {
+      setIsAttended((prev) => !prev);
+    }
+
+    if (!response.success) {
+      throw new Error(`Failed to update attendance status.`);
     }
   };
 

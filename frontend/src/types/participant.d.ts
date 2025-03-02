@@ -8,7 +8,14 @@ export type BaseParticipantsType = {
   restrictionNote: string;
 };
 
-export type TempParticipantsType = Omit<BaseParticipantsType, "isAccepted" | "profileImageUrl">;
+export type TempParticipantsType = Omit<
+  BaseParticipantsType,
+  "isAccepted" | "profileImageUrl"
+>;
+
+export type AllParticipantsType = BaseParticipantsType & {
+  isTemp: boolean;
+};
 
 export type ParticipantsResponseType = {
   acceptedParticipants: BaseParticipantsType[];

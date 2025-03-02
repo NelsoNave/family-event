@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuthAxios } from "@/lib/api/axios-client";
 import { showErrorToast } from "@/lib/toast/toast-utils";
 import {
+  AllParticipantsType,
   BaseParticipantsType,
   ParticipantsResponseType,
 } from "@/types/participant";
@@ -15,7 +16,7 @@ import PersonModal from "../../person-modal";
 import ParticipantListItem from "./participant-list-item";
 
 type ParticipantsContainerProps = {
-  participants: BaseParticipantsType[];
+  participants: AllParticipantsType[];
   eventId: string;
 };
 
@@ -42,9 +43,15 @@ export default function ParticipantsContainer({
       const participantsInformation = response.data.data;
 
       const formattedParticipants = [
-        ...(participantsInformation.acceptedParticipants ?? []),
-        ...(participantsInformation.tempParticipants ?? []).map((tmp) => ({
-          ...tmp,
+        ...(participantsInformation.acceptedParticipants ?? []).map(
+          (participant) => ({
+            ...participant,
+            isTemp: false,
+          }),
+        ),
+        ...(participantsInformation.tempParticipants ?? []).map((temp) => ({
+          ...temp,
+          isTemp: true,
           isAccepted: false,
           profileImageUrl: "/images/profile_default.png",
         })),
@@ -75,11 +82,12 @@ export default function ParticipantsContainer({
   return (
     <>
       <ul className="grid gap-4">
-        {participants.map(({ id, isAttended, name, profileImageUrl }) => (
+        {participants.map(({ id, isTemp, isAttended, name, profileImageUrl }) => (
           <ParticipantListItem
             key={id}
             eventId={eventId}
             participantId={id}
+            isTemp={isTemp}
             initialIsAttended={isAttended}
             name={name}
             profileImageUrl={profileImageUrl}

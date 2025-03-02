@@ -22,8 +22,8 @@ export const getParticipants = async (
   }
 };
 
-// Update participants attendance
-export const updateParticipantsAttendance = async (
+// Update participant attendance
+export const updateParticipantAttendance = async (
   eventId: string,
   participantId: number,
   isAttended: boolean,
@@ -44,7 +44,35 @@ export const updateParticipantsAttendance = async (
       throw err;
     } else {
       throw new AxiosError(
-        "Failed to update participants attendance. Please try again.",
+        "Failed to update participant attendance. Please try again.",
+      );
+    }
+  }
+};
+
+// Update temporary participant attendance
+export const updateTempParticipantsAttendance = async (
+  eventId: string,
+  participantId: number,
+  isAttended: boolean,
+): Promise<{
+  success: boolean;
+  message: string;
+}> => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.patch(
+      `/events/${eventId}/participants/temporary/${participantId}/attendance`,
+      {isAttended},
+    );
+
+    return response.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      throw err;
+    } else {
+      throw new AxiosError(
+        "Failed to update temporary participant attendance. Please try again.",
       );
     }
   }

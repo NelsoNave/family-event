@@ -14,10 +14,22 @@ export default async function page({
   try {
     const response = await getParticipants(eventId);
 
+    // participants = [
+    //   ...(response.acceptedParticipants ?? []),
+    //   ...(response.tempParticipants ?? []).map((tmp) => ({
+    //     ...tmp,
+    //     isAccepted: false,
+    //     profileImageUrl: "/images/profile_default.png",
+    //   })),
+    // ];
     participants = [
-      ...(response.acceptedParticipants ?? []),
-      ...(response.tempParticipants ?? []).map((tmp) => ({
+      ...(response.acceptedParticipants ?? []).map(participant => ({
+        ...participant,
+        isTemp: false,
+      })),
+      ...(response.tempParticipants ?? []).map(tmp => ({
         ...tmp,
+        isTemp: true,
         isAccepted: false,
         profileImageUrl: "/images/profile_default.png",
       })),
