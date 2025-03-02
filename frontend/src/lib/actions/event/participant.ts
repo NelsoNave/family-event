@@ -2,6 +2,7 @@
 
 import { getServerAxiosInstance } from "@/lib/api/axios-server";
 import { ParticipantsResponseType } from "@/types/participant";
+import { BaseUserType } from "@/types/user";
 import { AxiosError } from "axios";
 
 // Fetch participants
@@ -13,6 +14,26 @@ export const getParticipants = async (
     const response = await axiosInstance.get(`/events/${eventId}/participants`);
 
     return response.data.data;
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      throw err;
+    } else {
+      throw new Error("Failed to fetch participants. Please try again.");
+    }
+  }
+};
+
+// Fetch who is coming data
+export const getWhoIsComing = async (
+  eventId: string,
+): Promise<BaseUserType[]> => {
+  try {
+    const axiosInstance = await getServerAxiosInstance();
+    const response = await axiosInstance.get(
+      `/events/${eventId}/who-is-coming`,
+    );
+
+    return response.data.data.whoIsComing;
   } catch (err) {
     if (err instanceof AxiosError) {
       throw err;
@@ -35,7 +56,7 @@ export const updateParticipantAttendance = async (
     const axiosInstance = await getServerAxiosInstance();
     const response = await axiosInstance.patch(
       `/events/${eventId}/participants/${participantId}/attendance`,
-      {isAttended},
+      { isAttended },
     );
 
     return response.data;
@@ -63,7 +84,7 @@ export const updateTempParticipantsAttendance = async (
     const axiosInstance = await getServerAxiosInstance();
     const response = await axiosInstance.patch(
       `/events/${eventId}/participants/temporary/${participantId}/attendance`,
-      {isAttended},
+      { isAttended },
     );
 
     return response.data;

@@ -1,14 +1,14 @@
-export type FamilyMemberType = {
+export type BaseUserType = {
   id: string;
   profileImageUrl: string;
   name: string;
+};
+
+export type FamilyMemberType = BaseUserType & {
   isDeleted: boolean;
 };
 
-export type UserType = {
-  id: string;
-  name: string;
-  profileImageUrl: string;
+export type UserType = BaseUserType & {
   email: string;
   userFamilies: FamilyMemberType[];
 };
