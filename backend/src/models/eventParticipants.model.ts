@@ -135,6 +135,20 @@ const addTemporaryParticipant = async (eventId: number, name: string) => {
   });
 };
 
+const updateTemporaryParticipantAttendance = async (
+  eventId: number,
+  participantId: number,
+  isAttended: boolean,
+) => {
+  return await prisma.eventTempParticipant.update({
+    where: {
+      id: participantId,
+      eventId,
+    },
+    data: { isAttended },
+  });
+};
+
 const deleteTemporaryParticipant = async (
   eventId: number,
   participantId: number,
@@ -153,5 +167,6 @@ export default {
   updateParticipantAttendance,
   deleteParticipant,
   addTemporaryParticipant,
+  updateTemporaryParticipantAttendance,
   deleteTemporaryParticipant,
 };

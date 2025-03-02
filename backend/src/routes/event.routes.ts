@@ -3,12 +3,23 @@ import albumController from "../controllers/album.controller";
 import eventController from "../controllers/event.controller";
 import eventParticipantsController from "../controllers/eventParticipants.controller";
 import timelineController from "../controllers/timeline.controller";
-import { isEventHost, isEventHostOrParticipant } from "../middleware/event.auth";
+import {
+  isEventHost,
+  isEventHostOrParticipant,
+} from "../middleware/event.auth";
 const eventRouter = Router();
 
 // Routes
-eventRouter.get("/:event_id", isEventHostOrParticipant, eventController.getEventById);
-eventRouter.get("/:event_id/is-host", isEventHostOrParticipant, eventController.checkIsEventHost);
+eventRouter.get(
+  "/:event_id",
+  isEventHostOrParticipant,
+  eventController.getEventById,
+);
+eventRouter.get(
+  "/:event_id/is-host",
+  isEventHostOrParticipant,
+  eventController.checkIsEventHost,
+);
 
 // Timelines
 eventRouter.get(
@@ -59,6 +70,11 @@ eventRouter.post(
   "/:event_id/participants/temporary",
   isEventHost,
   eventParticipantsController.addTemporaryParticipant,
+);
+eventRouter.patch(
+  "/:event_id/participants/temporary/:participant_id/attendance",
+  isEventHost,
+  eventParticipantsController.updateTemporaryParticipantAttendance,
 );
 eventRouter.delete(
   "/:event_id/participants/temporary/:participant_id",
