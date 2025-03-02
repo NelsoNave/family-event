@@ -4,15 +4,16 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import {
   deleteParticipant,
+  deleteTemporaryParticipant,
   updateParticipantAttendance,
   updateTempParticipantsAttendance,
 } from "@/lib/actions/event/participant";
 import { showErrorToast } from "@/lib/toast/toast-utils";
 import { X } from "lucide-react";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 import { useState } from "react";
 import Modal from "../../modal";
-import { notFound } from "next/navigation";
 
 type ParticipantListItemProps = {
   initialIsAttended: boolean;
@@ -21,7 +22,7 @@ type ParticipantListItemProps = {
   participantId: number;
   name: string;
   profileImageUrl: string;
-  onSuccess: () => void;
+  refreshData: () => void;
 };
 
 export default function ParticipantListItem({
@@ -31,7 +32,7 @@ export default function ParticipantListItem({
   participantId,
   name,
   profileImageUrl,
-  onSuccess
+  refreshData,
 }: ParticipantListItemProps) {
   const { toast } = useToast();
   const [isAttended, setIsAttended] = useState<boolean>(initialIsAttended);
@@ -39,13 +40,12 @@ export default function ParticipantListItem({
   const handleChangeAttendStatus = async () => {
     let response;
     try {
-      console.log("Before request: ", { eventId, participantId, isAttended });
-      if(isTemp) {
+      if (isTemp) {
         response = await updateTempParticipantsAttendance(
           eventId,
           participantId,
           !isAttended,
-        )
+        );
       } else {
         response = await updateParticipantAttendance(
           eventId,
@@ -53,7 +53,6 @@ export default function ParticipantListItem({
           !isAttended,
         );
       }
-
     } catch (err: unknown) {
       showErrorToast(
         toast,
@@ -62,9 +61,12 @@ export default function ParticipantListItem({
       );
     }
 
-    if(!response) {
-      showErrorToast(toast, "Response was not received. Event or participant might not be found.");
-      notFound()
+    if (!response) {
+      showErrorToast(
+        toast,
+        "Response was not received. Event or participant might not be found.",
+      );
+      notFound();
     }
 
     if (response.success) {
@@ -74,6 +76,24 @@ export default function ParticipantListItem({
     if (!response.success) {
       throw new Error(`Failed to update attendance status.`);
     }
+  };
+
+  const handleDelete = async () => {
+    let response;
+    if (isTemp) {
+      response = await deleteTemporaryParticipant(eventId, participantId);
+      if (response.success && refreshData) {
+        refreshData();
+      }
+      return response;
+    } else if (!isTemp) {
+      response = await deleteParticipant(eventId, participantId);
+      if (response.success && refreshData) {
+        refreshData();
+      }
+      return response;
+    }
+    return { success: false, message: "No action performed" };
   };
 
   return (
@@ -117,10 +137,11 @@ export default function ParticipantListItem({
           </Button>
         }
         title="Remove guest"
-        // TODO: implement
-        deleteAction={deleteParticipant}
+        deleteAction={handleDelete}
         deleteErrorMessage="Failed to delete guest. Please try again."
-        onSuccess={onSuccess}
+        onSuccess={refreshData}
+        button="Remove"
+        preventRedirect={true}
       />
     </li>
   );

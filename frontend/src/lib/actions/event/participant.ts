@@ -140,7 +140,7 @@ export const deleteTemporaryParticipant = async (
   try {
     const axiosInstance = await getServerAxiosInstance();
     const response = await axiosInstance.delete(
-      `events/${eventId}/temporary/${participantId}`,
+      `events/${eventId}/participants/temporary/${participantId}`,
     );
 
     return response.data;

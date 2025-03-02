@@ -6,7 +6,6 @@ import { useAuthAxios } from "@/lib/api/axios-client";
 import { showErrorToast } from "@/lib/toast/toast-utils";
 import {
   AllParticipantsType,
-  BaseParticipantsType,
   ParticipantsResponseType,
 } from "@/types/participant";
 import { useAuth } from "@clerk/nextjs";
@@ -16,19 +15,19 @@ import PersonModal from "../../person-modal";
 import ParticipantListItem from "./participant-list-item";
 
 type ParticipantsContainerProps = {
-  participants: AllParticipantsType[];
+  // participants: AllParticipantsType[];
   eventId: string;
 };
 
 export default function ParticipantsContainer({
-  participants,
+  // participants,
   eventId,
 }: ParticipantsContainerProps) {
   const axios = useAuthAxios();
   const { toast } = useToast();
   const { isLoaded, isSignedIn } = useAuth();
   const [participantsInfoData, setParticipantsInfoData] = useState<
-    BaseParticipantsType[]
+    AllParticipantsType[]
   >([]);
 
   const refreshData = useCallback(async () => {
@@ -57,12 +56,12 @@ export default function ParticipantsContainer({
         })),
       ];
 
-      if (
-        JSON.stringify(participantsInfoData) !==
-        JSON.stringify(participantsInformation)
-      ) {
-        setParticipantsInfoData(formattedParticipants);
-      }
+      setParticipantsInfoData((prev) => {
+        if (JSON.stringify(prev) === JSON.stringify(formattedParticipants)) {
+          return prev;
+        }
+        return formattedParticipants;
+      });
     } catch (err: unknown) {
       showErrorToast(
         toast,
@@ -81,36 +80,48 @@ export default function ParticipantsContainer({
 
   return (
     <>
-      <ul className="grid gap-4">
-        {participants.map(({ id, isTemp, isAttended, name, profileImageUrl }) => (
-          <ParticipantListItem
-            key={id}
+      {!isLoaded ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <h1 className="text-xl font-bold">
+            Guest list{" "}
+            <span className="text-base">({participantsInfoData.length})</span>
+          </h1>
+          <ul className="grid gap-4">
+            {participantsInfoData.map(
+              ({ id, isTemp, isAttended, name, profileImageUrl }) => (
+                <ParticipantListItem
+                  key={id}
+                  eventId={eventId}
+                  participantId={id}
+                  isTemp={isTemp}
+                  initialIsAttended={isAttended}
+                  name={name}
+                  profileImageUrl={profileImageUrl}
+                  refreshData={refreshData}
+                />
+              ),
+            )}
+          </ul>
+          <PersonModal
+            trigger={
+              <Button
+                type="button"
+                variant="outline"
+                className="justify-self-end rounded-full border border-primary bg-white text-primary hover:bg-primary hover:text-white"
+              >
+                <PlusIcon size={16} /> Add guest
+              </Button>
+            }
+            title="Add guest"
+            type="guest"
             eventId={eventId}
-            participantId={id}
-            isTemp={isTemp}
-            initialIsAttended={isAttended}
-            name={name}
-            profileImageUrl={profileImageUrl}
             onSuccess={refreshData}
+            errorMessage="Failed to add temporary participant"
           />
-        ))}
-      </ul>
-      <PersonModal
-        trigger={
-          <Button
-            type="button"
-            variant="outline"
-            className="justify-self-end rounded-full border border-primary bg-white text-primary hover:bg-primary hover:text-white"
-          >
-            <PlusIcon size={16} /> Add guest
-          </Button>
-        }
-        title="Add guest"
-        type="guest"
-        eventId={eventId}
-        onSuccess={refreshData}
-        errorMessage="Failed to add temporary participant"
-      />
+        </>
+      )}
     </>
   );
 }
