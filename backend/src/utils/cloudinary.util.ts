@@ -26,6 +26,21 @@ const uploadImage = (
   });
 };
 
+const deleteImage = (publicId: string): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(publicId, (error, result) => {
+      if (error) {
+        reject(new Error("Failed to delete image"));
+      } else if (result.result === "not found") {
+        reject(new Error("Image not found"));
+      } else {
+        resolve(true);
+      }
+    });
+  });
+};
+
 export default {
   uploadImage,
+  deleteImage,
 };
