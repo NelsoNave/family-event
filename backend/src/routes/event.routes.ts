@@ -6,11 +6,20 @@ import timelineController from "../controllers/timeline.controller";
 import requireAuthMiddleware from "../middleware/auth";
 import eventParticipantsController from "../controllers/eventParticipants.controller";
 import { isEventHost, isEventHostOrParticipant } from "../middleware/event.auth";
+
 const eventRouter = Router();
 
 // Routes
-eventRouter.get("/:event_id", isEventHostOrParticipant, eventController.getEventById);
-eventRouter.get("/:event_id/is-host", isEventHostOrParticipant, eventController.checkIsEventHost);
+eventRouter.get(
+  "/:event_id",
+  isEventHostOrParticipant,
+  eventController.getEventById,
+);
+eventRouter.get(
+  "/:event_id/is-host",
+  isEventHostOrParticipant,
+  eventController.checkIsEventHost,
+);
 
 eventRouter.get(
   "/:event_id/necessities",
@@ -89,6 +98,11 @@ eventRouter.post(
   "/:event_id/participants/temporary",
   isEventHost,
   eventParticipantsController.addTemporaryParticipant,
+);
+eventRouter.patch(
+  "/:event_id/participants/temporary/:participant_id/attendance",
+  isEventHost,
+  eventParticipantsController.updateTemporaryParticipantAttendance,
 );
 eventRouter.delete(
   "/:event_id/participants/temporary/:participant_id",

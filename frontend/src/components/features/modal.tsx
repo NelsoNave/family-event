@@ -10,11 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { FormEvent, ReactNode, useState } from "react";
-import { Button } from "../ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { showErrorToast } from "@/lib/toast/toast-utils";
-import { useClerk } from "@clerk/nextjs";
+import { FormEvent, ReactNode, useState } from "react";
+import { Button } from "../ui/button";
 
 type ModalProps = {
   trigger: ReactNode;
@@ -35,13 +34,12 @@ export default function Modal({
   deleteAction,
   id,
   deleteErrorMessage,
-  onSuccess
+  onSuccess,
 }: ModalProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const {toast} = useToast()
-  const { signOut } = useClerk()
+  const { toast } = useToast();
 
   const handleDelete = async (e: FormEvent) => {
     e.preventDefault();
@@ -62,7 +60,7 @@ export default function Modal({
       if (!id && deleteAction) {
         const response = await deleteAction();
         if (response.success) {
-          signOut({ redirectUrl: '/' });
+          setIsOpen(false);
           return;
         }
       }

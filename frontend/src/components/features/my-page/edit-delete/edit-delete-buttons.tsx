@@ -5,6 +5,7 @@ import { deleteFamilyInfo } from "@/lib/actions/my-page/my-page";
 import { UserRoundXIcon } from "lucide-react";
 import Modal from "../../modal";
 import PersonModal from "../../person-modal";
+import { useClerk } from "@clerk/nextjs";
 
 type DeleteAction = (
   id?: string,
@@ -39,12 +40,21 @@ export default function EditDeleteButtons({
   userDeleteAction,
   refreshData,
 }: EditDeleteButtonsProps) {
-  const deleteAction = type === "user" && userDeleteAction;
+  const { signOut } = useClerk();
+
   const handleDelete = async () => {
+    if (type === "user" && userDeleteAction) {
+      const response = await userDeleteAction();
+      if (response.success) {
+        signOut({ redirectUrl: "/" });
+      }
+      return response;
+    }
+
     if (type === "family" && familyId) {
       const response = await deleteFamilyInfo(familyId);
       if (response.success && refreshData) {
-        refreshData(); // If delete is successful, trigger refreshData
+        refreshData();
       }
       return response;
     }
@@ -68,7 +78,7 @@ export default function EditDeleteButtons({
         title={deleteTitle}
         description={deleteDescription}
         button={button}
-        deleteAction={deleteAction || handleDelete}
+        deleteAction={handleDelete}
         deleteErrorMessage={deleteErrorMessage}
         id={familyId}
         onSuccess={handleUpdate}

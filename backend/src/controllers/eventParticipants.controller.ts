@@ -126,6 +126,32 @@ const addTemporaryParticipant = async (
   }
 };
 
+const updateTemporaryParticipantAttendance = async (
+  req: Request<{ event_id: string; participant_id: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const eventId = Number(req.params.event_id);
+    const participantId = Number(req.params.participant_id);
+    if (isNaN(eventId) || isNaN(participantId)) {
+      throw new ValidationError("Invalid event ID or participant ID");
+    }
+    const isAttended = req.body.isAttended;
+    if (typeof isAttended !== "boolean") {
+      throw new ValidationError("Invalid isAttended value");
+    }
+    await eventParticipantsModel.updateTemporaryParticipantAttendance(
+      eventId,
+      participantId,
+      isAttended,
+    );
+    res.status(200).json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const deleteTemporaryParticipant = async (
   req: Request<{ event_id: string; participant_id: string }>,
   res: Response,
@@ -153,5 +179,6 @@ export default {
   updateParticipantAttendance,
   deleteParticipant,
   addTemporaryParticipant,
+  updateTemporaryParticipantAttendance,
   deleteTemporaryParticipant,
 };
