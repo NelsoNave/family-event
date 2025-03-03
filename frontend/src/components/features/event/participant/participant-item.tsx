@@ -140,7 +140,6 @@ export default function ParticipantItem({
         deleteErrorMessage="Failed to delete guest. Please try again."
         onSuccess={refreshData}
         button="Remove"
-        preventRedirect={true}
       />
     </li>
   );

@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { showErrorToast } from "@/lib/toast/toast-utils";
-import { useClerk } from "@clerk/nextjs";
 import { FormEvent, ReactNode, useState } from "react";
 import { Button } from "../ui/button";
 
@@ -25,7 +24,6 @@ type ModalProps = {
   id?: string;
   deleteErrorMessage: string;
   onSuccess?: () => void;
-  preventRedirect?: boolean;
 };
 
 export default function Modal({
@@ -37,13 +35,11 @@ export default function Modal({
   id,
   deleteErrorMessage,
   onSuccess,
-  preventRedirect,
 }: ModalProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { toast } = useToast();
-  const { signOut } = useClerk();
 
   const handleDelete = async (e: FormEvent) => {
     e.preventDefault();
@@ -65,9 +61,6 @@ export default function Modal({
         const response = await deleteAction();
         if (response.success) {
           setIsOpen(false);
-          if (!preventRedirect) {
-            signOut({ redirectUrl: "/" });
-          }
           return;
         }
       }
