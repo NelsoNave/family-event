@@ -46,12 +46,7 @@ const addNewPicture = async (
   });
 };
 
-const deletePicture = async (
-  eventId: number,
-  userId: number,
-  pictureIds: number[],
-  publicIds: string[],
-) => {
+const deletePicture = async (userId: number, pictureIds: number[]) => {
   return await prisma.$transaction(async (tx) => {
     try {
       const existingPictures = await tx.pictures.findMany({
@@ -61,6 +56,7 @@ const deletePicture = async (
       if (existingPictures.length === 0) {
         throw new Error("No images found in DB");
       }
+
       const deletePromises = existingPictures.map((image) =>
         cloudinaryUtil.deleteImage(image.imagePublicId),
       );
