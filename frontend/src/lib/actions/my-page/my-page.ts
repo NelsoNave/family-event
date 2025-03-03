@@ -6,7 +6,7 @@ import { UserType } from "@/types/user";
 // Update user information
 export const updateUserInfo = async (updatedData: {
   name?: string;
-  profileImageUrl?: File | string | null;
+  profileImageUrl?: File | null;
 }): Promise<{
   success: boolean;
   message: string;
@@ -19,10 +19,10 @@ export const updateUserInfo = async (updatedData: {
     if (updatedData.name) {
       formData.append("name", updatedData.name);
     }
-    if (updatedData.profileImageUrl) {
+    if (updatedData.profileImageUrl instanceof File) {
       formData.append("profileImage", updatedData.profileImageUrl);
       formData.append("remove_image", "false");
-    } else {
+    } else if (updatedData.profileImageUrl === null) {
       formData.append("remove_image", "true");
     }
 
@@ -116,14 +116,11 @@ export const addFamilyMember = async (familyData: {
     } else {
       formData.append("remove_image", "true");
     }
-    console.log(formData);
-    const response = await axiosInstance.post(`/me/family`, formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-    console.log("add family", response.data);
+    const response = await axiosInstance.post(`/me/family`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (err) {
     if (err instanceof Error) {

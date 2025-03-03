@@ -66,6 +66,8 @@ export default function PersonModal({
   const inputImageRef = useRef<HTMLInputElement>(null!);
   const { toast } = useToast();
 
+  const defaultImagePath = "/images/profile_default.png";
+
   useEffect(() => {
     if (isOpen) {
       setName(defaultName || "");
@@ -90,7 +92,7 @@ export default function PersonModal({
     e.preventDefault();
     e.stopPropagation();
     revokeObjectURL();
-    setImageUrl("/images/profile_default.png");
+    setImageUrl(defaultImagePath);
     setImageUrlData(null);
   };
 
@@ -120,27 +122,29 @@ export default function PersonModal({
 
     try {
       let response;
+      const updateData: { name: string; profileImageUrl?: File | null } = {
+        name,
+      };
+
+      if (imageUrlData) {
+        updateData.profileImageUrl = imageUrlData;
+      } else if (imageUrlData === defaultImagePath) {
+        updateData.profileImageUrl = null;
+      }
 
       if (type === "user") {
-        response = await updateUserInfo({
-          name,
-          profileImageUrl: imageUrlData,
-        });
+        response = await updateUserInfo(updateData);
       } else if (familyId && type === "family") {
         response = await updateFamilyInfo({
           familyId,
-          name,
-          profileImageUrl: imageUrlData,
+          ...updateData,
         });
-      } else if(eventId && type === "guest") {
-        response = await addTemporaryParticipant(eventId, name)
+      } else if (eventId && type === "guest") {
+        response = await addTemporaryParticipant(eventId, name);
       }
 
       if (mode === "new") {
-        response = await addFamilyMember({
-          name,
-          profileImageUrl: imageUrlData,
-        });
+        response = await addFamilyMember(updateData);
       }
 
       if (!response?.success) {
