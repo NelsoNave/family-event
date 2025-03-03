@@ -24,6 +24,7 @@ model Users {
   events Events[]
   eventParticipants EventParticipants[]
   participantNecessities ParticipantNecessities[]
+  pictures Pictures[]
 
   @@map("users")
 }
@@ -66,6 +67,7 @@ model Events {
   thingsToBuy ThingsToBuy[]
   timelines Timelines[]
   medias Medias[]
+  pictures Pictures[]
 
   @@map("events")
 }
@@ -153,4 +155,27 @@ model Medias {
   imageUrl String    @map("image_url")
 
   @@map("medias")
+}
+
+model Pictures {
+  id        Int      @id @default(autoincrement())
+  event       Events @relation(fields: [eventId], references: [id])
+  eventId     Int  @map("event_id")
+  user       Users @relation(fields: [userId], references: [id])
+  userId  Int    @map("user_id")
+  imageUrl String    @map("image_url")
+  imagePublicId String    @map("image_public_url")
+
+  facePictures FacePictures[]
+
+  @@map("pictures")
+}
+
+model FacePictures {
+  id        Int       @id @default(autoincrement())
+  picture   Pictures   @relation(fields: [pictureId], references: [id], onDelete: Cascade)
+  pictureId Int       @map("picture_id")
+  tag       String
+
+  @@map("face_pictures")
 }
