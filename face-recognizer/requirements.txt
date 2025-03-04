@@ -5,3 +5,5 @@ face_recognition_models==0.3.0
 numpy==2.2.3
 pillow==11.1.0
 setuptools==75.8.0
+functions-framework==3.4.0
+requests==2.31.0
