@@ -145,7 +145,7 @@ def recognize_faces_from_urls(image_urls, known_faces_urls, tolerance=0.5):
 
 
 @functions_framework.http
-def test_function(request):
+def face_recognizer(request):
     # CORSヘッダーを設定
     if request.method == 'OPTIONS':
         headers = {
