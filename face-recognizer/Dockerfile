@@ -18,4 +18,4 @@ EXPOSE 8888
 
 ENV PYTHONUNBUFFERED=1
 
-CMD ["functions-framework", "--target", "test_function", "--source", "main.py", "--port", "8888", "--host", "0.0.0.0", "--debug"]
+CMD ["functions-framework", "--target", "face_recognizer", "--source", "main.py", "--port", "8888", "--host", "0.0.0.0", "--debug"]
