@@ -18,12 +18,15 @@ def test_post():
     # }
     test_data = {
         "image_urls": [
-            "https://raw.githubusercontent.com/ageitgey/face_recognition/master/examples/biden.jpg"
+            "https://res.cloudinary.com/dh0ywk4cn/image/upload/v1741128689/amane_whosn9.jpg",
         ],
         "known_faces_urls": {
-            "Biden": "https://raw.githubusercontent.com/ageitgey/face_recognition/master/examples/biden.jpg"
+            "Biden": "https://raw.githubusercontent.com/ageitgey/face_recognition/master/examples/biden.jpg",
+            "Elmer": "https://res.cloudinary.com/dh0ywk4cn/image/upload/v1731916167/qorws7mpkurpzdzlogs4.jpg",
+            "Amane": "https://res.cloudinary.com/dh0ywk4cn/image/upload/v1741128699/amane-1_bpyegy.jpg",
+            "Billy": "https://res.cloudinary.com/dh0ywk4cn/image/upload/v1741182571/Billie_Eilish_1_ngb1p5.jpg"
         },
-        "tolerance": 0.6  # 閾値を少し緩める
+        "tolerance": 0.6  
     }
     
     # ヘッダー

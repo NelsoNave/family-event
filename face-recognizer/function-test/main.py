@@ -5,6 +5,35 @@ import tempfile
 import face_recognition
 import os
 import numpy as np
+import cv2
+
+def preprocess_image(img_path):
+    """画像の前処理を行う"""
+    try:
+        # 画像を読み込み
+        img = cv2.imread(img_path)
+        if img is None:
+            return None
+            
+        # グレースケール変換
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        
+        # コントラスト調整
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+        gray = clahe.apply(gray)
+        
+        # ノイズ除去
+        denoised = cv2.fastNlMeansDenoising(gray)
+        
+        # 一時ファイルとして保存
+        temp_path = img_path.replace('.jpg', '_processed.jpg')
+        cv2.imwrite(temp_path, denoised)
+        
+        return temp_path
+        
+    except Exception as e:
+        print(f"Error in preprocess_image: {str(e)}")
+        return None
 
 def download_image_from_url(url):
     """URLから画像をダウンロードして一時ファイルに保存"""
@@ -67,7 +96,14 @@ def recognize_faces_from_urls(image_urls, known_faces_urls, tolerance=0.5):
             continue
         
         try:
-            img = face_recognition.load_image_file(temp_path)
+            # preprocess
+            processed_path = preprocess_image(temp_path)
+            if not processed_path:
+                results.append({"image": url, "error": "Failed to preprocess image"})
+                os.unlink(temp_path)
+                continue
+            
+            img = face_recognition.load_image_file(processed_path)
             face_encodings = face_recognition.face_encodings(img)
             face_locations = face_recognition.face_locations(img)
             
