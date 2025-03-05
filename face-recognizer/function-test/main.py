@@ -35,6 +35,8 @@ def load_known_faces(known_faces_urls):
             try:
                 img = face_recognition.load_image_file(temp_path)
                 encodings = face_recognition.face_encodings(img)
+                print("img", img)
+                print("encodings", encodings)
                 if encodings:
                     known_encodings[name] = encodings[0]
                 else:
@@ -148,23 +150,16 @@ def test_function(request):
             return (json.dumps({'error': 'No known_faces_urls provided'}), 400, headers)
         
         ## 顔認識を実行
-        load_known_faces(known_faces_urls)
-        #results = recognize_faces_from_urls(image_urls, known_faces_urls, tolerance)
+        #load_known_faces(known_faces_urls)
+        results = recognize_faces_from_urls(image_urls, known_faces_urls, tolerance)
 
-            # レスポンスの作成
-        response_data = {
-            "message": "Hello from test function! hahaha",
-            "received_data": request_json
-        }
         
         headers = {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         }
         
-        return json.dumps(response_data), 200, headers
-        
-        #return (results, 200, headers)
+        return (results, 200, headers)
 
     except Exception as e:
         print(f"Error parsing request body: {e}")
