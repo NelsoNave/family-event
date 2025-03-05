@@ -12,7 +12,10 @@ const uploadImage = (
 ): Promise<{ url: string; publicId: string }> => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder },
+      {
+        folder,
+        transformation: [{ quality: "auto", fetch_format: "auto" }],
+      },
       (error, result) => {
         if (error || !result) {
           reject(new Error("faild to upload image"));

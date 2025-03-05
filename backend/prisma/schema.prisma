@@ -25,6 +25,7 @@ model Users {
   eventParticipants EventParticipants[]
   participantNecessities ParticipantNecessities[]
   pictures Pictures[]
+  pictures Pictures[]
 
   @@map("users")
 }
@@ -67,6 +68,7 @@ model Events {
   thingsToBuy ThingsToBuy[]
   timelines Timelines[]
   medias Medias[]
+  pictures Pictures[]
   pictures Pictures[]
 
   @@map("events")

@@ -1,12 +1,13 @@
 import { Router } from "express";
+import albumComtroller from "../controllers/album.comtroller";
 import eventController from "../controllers/event.controller";
-import necessitiesModel from "../controllers/necessities.controller";
-import participantNecessitiesModel from "../controllers/participantNecessities.controller";
-import timelineController from "../controllers/timeline.controller";
-import requireAuthMiddleware from "../middleware/auth";
 import eventParticipantsController from "../controllers/eventParticipants.controller";
-import { isEventHost, isEventHostOrParticipant } from "../middleware/event.auth";
-
+import timelineController from "../controllers/timeline.controller";
+import {
+  isEventHost,
+  isEventHostOrParticipant,
+} from "../middleware/event.auth";
+import upload from "../middleware/uploadMiddleware";
 const eventRouter = Router();
 
 // Routes
@@ -21,36 +22,6 @@ eventRouter.get(
   eventController.checkIsEventHost,
 );
 
-eventRouter.get(
-  "/:event_id/necessities",
-  requireAuthMiddleware,
-  necessitiesModel.getNecessities,
-);
-
-eventRouter.post(
-  "/:event_id/necessities",
-  requireAuthMiddleware,
-  necessitiesModel.addNewNecessitiesInfo,
-);
-
-eventRouter.patch(
-  "/:event_id/necessities",
-  requireAuthMiddleware,
-  necessitiesModel.updateNecessitiesInfo,
-);
-
-eventRouter.get(
-  "/:event_id/me/necessities",
-  requireAuthMiddleware,
-  participantNecessitiesModel.getParticipantNecessities,
-);
-
-eventRouter.patch(
-  "/:event_id/me/necessities/:necessity_id",
-  requireAuthMiddleware,
-  participantNecessitiesModel.updateParticipantNecessities,
-);
-
 // Timelines
 eventRouter.get(
   "/:event_id/timelines",
@@ -60,6 +31,7 @@ eventRouter.get(
 eventRouter.post(
   "/:event_id/timelines",
   isEventHost,
+  upload.single("profileImage"),
   timelineController.createTimeline,
 );
 eventRouter.put(
@@ -89,25 +61,22 @@ eventRouter.patch(
   isEventHost,
   eventParticipantsController.updateParticipantAttendance,
 );
-eventRouter.delete(
-  "/:event_id/participants/:participant_id",
-  isEventHost,
-  eventParticipantsController.deleteParticipant,
+
+//Album
+eventRouter.get(
+  "/:event_id/album",
+  isEventHostOrParticipant,
+  albumComtroller.getAlbumPictures,
 );
 eventRouter.post(
-  "/:event_id/participants/temporary",
-  isEventHost,
-  eventParticipantsController.addTemporaryParticipant,
-);
-eventRouter.patch(
-  "/:event_id/participants/temporary/:participant_id/attendance",
-  isEventHost,
-  eventParticipantsController.updateTemporaryParticipantAttendance,
+  "/:event_id/album",
+  isEventHostOrParticipant,
+  upload.array("picture", 20),
+  albumComtroller.uploadAlbumPictures,
 );
 eventRouter.delete(
-  "/:event_id/participants/temporary/:participant_id",
-  isEventHost,
-  eventParticipantsController.deleteTemporaryParticipant,
+  "/:event_id/album",
+  isEventHostOrParticipant,
+  albumComtroller.deleteAlbumPictures,
 );
-
 export default eventRouter;
