@@ -29,6 +29,7 @@ export default function MapWithMarkers({
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+  const [place, setPlace] = useState<string>("");
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
 
   // マップの初期化
@@ -50,6 +51,82 @@ export default function MapWithMarkers({
       setMap(mapInstance);
     });
   }, [apiKey, center, zoom]);
+
+  // 場所を検索する関数
+  const searchPlace = () => {
+    if (!map || !place) return;
+
+    const service = new google.maps.places.PlacesService(map);
+    service.textSearch(
+      {
+        query: place,
+      },
+      (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+          // 既存のマーカーをクリア
+          markers.forEach((marker) => marker.setMap(null));
+
+          // 検索結果から場所データを作成
+          const searchResults: Place[] = results.map((result, index) => ({
+            id: `search-${index}`,
+            name: result.name || "",
+            location: {
+              lat: result.geometry?.location?.lat() || 0,
+              lng: result.geometry?.location?.lng() || 0,
+            },
+            address: result.formatted_address || "",
+            type: result.types?.join(", ") || "",
+          }));
+
+          // 最初の結果を選択
+          if (searchResults.length > 0) {
+            setSelectedPlace(searchResults[0]);
+            onPlaceSelect?.(searchResults[0]);
+
+            // 地図の中心を移動
+            map.setCenter(searchResults[0].location);
+            map.setZoom(15);
+
+            // 新しいマーカーを作成
+            const newMarkers = searchResults.map((place) => {
+              const marker = new google.maps.Marker({
+                position: place.location,
+                map,
+                title: place.name,
+                animation: google.maps.Animation.DROP,
+              });
+
+              // 情報ウィンドウを作成
+              const infoWindow = new google.maps.InfoWindow({
+                content: `
+                  <div>
+                    <h3 style="margin: 0; font-size: 16px;">${place.name}</h3>
+                    <p style="margin: 5px 0 0;">${place.address}</p>
+                    <p style="margin: 5px 0 0; color: #666;">${place.type}</p>
+                  </div>
+                `,
+              });
+
+              // マーカークリックイベント
+              marker.addListener("click", () => {
+                infoWindow.open({
+                  anchor: marker,
+                  map,
+                });
+
+                setSelectedPlace(place);
+                onPlaceSelect?.(place);
+              });
+
+              return marker;
+            });
+
+            setMarkers(newMarkers);
+          }
+        }
+      },
+    );
+  };
 
   // マーカーの設定
   useEffect(() => {
@@ -122,6 +199,26 @@ export default function MapWithMarkers({
   return (
     <div className="flex flex-col gap-4">
       <div ref={mapRef} className="h-[400px] w-full rounded border"></div>
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          onChange={(e) => setPlace(e.target.value)}
+          value={place}
+          className="flex-1 rounded border p-2"
+          placeholder="Enter a location"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              searchPlace();
+            }
+          }}
+        />
+        <button
+          className="rounded bg-blue-500 p-2 text-white"
+          onClick={searchPlace}
+        >
+          Search
+        </button>
+      </div>
 
       {selectedPlace && (
         <div className="rounded border bg-gray-50 p-4">
