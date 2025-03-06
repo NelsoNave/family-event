@@ -1,6 +1,6 @@
 # Media API Documentation
 
-## 1. Get Things To Buy
+## 1. Get Medias
 
 ### Endpoint
 
@@ -27,10 +27,9 @@ Retrieves event's medias. (host and guests can access)
 }
 ```
 
-## 2. Create Things To Buy
+## 2. Create Media
 
 ### Endpoint
-
 POST /api/v1/events/{event_id}/media
 
 ### Description
@@ -63,7 +62,7 @@ Creates a media for an event. (only host can post)
 }
 ```
 
-## 3. Delete media
+## 3. Delete Media
 
 ### Endpoint
 
