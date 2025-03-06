@@ -1,10 +1,10 @@
-# Things To Buy API Documentation
+# Invitation API Documentation
 
 ## 1. Create Event
 
 ### Endpoint
 
-POST /api/v1/event
+POST /api/v1/events
 
 ### Description
 
@@ -16,7 +16,6 @@ Create a event.
 {
     "event":{
         "title": "String",
-        "thumbnailUrl": file,
         "startTime" : "string",
         "endTime" : "string",
         "country" : "string",
@@ -27,10 +26,8 @@ Create a event.
         "address2" : "string",
         "isAskRestrictions": Boolean,
         "theme" : "string",
-        "noteForThingsToBuy" : "string",
-        "noteForNecessities" : "string",
-        "budget": number
-      }
+      },
+      "thumbnail": file
 }
 ```
 
