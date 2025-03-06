@@ -42,19 +42,6 @@ export default function CreateEventPage() {
     setPlaces(data.places);
   };
 
-  // 近くの公園を検索
-  //   const searchNearbyParks = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `/api/places/nearby?lat=${location.lat}&lng=${location.lng}&type=park`,
-  //       );
-  //       const data = await response.json();
-  //       setPlaces(data.places);
-  //     } catch (error) {
-  //       console.error("Error fetching nearby parks:", error);
-  //     }
-  //   };
-
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-2xl font-bold">Create New Event</h1>

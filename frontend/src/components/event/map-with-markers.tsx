@@ -52,6 +52,89 @@ export default function MapWithMarkers({
     });
   }, [apiKey, center, zoom]);
 
+  // Tim Hortons店舗を検索する関数
+  const searchTimHortons = () => {
+    if (!map) return;
+
+    const service = new google.maps.places.PlacesService(map);
+    service.textSearch(
+      {
+        query: "Tim Hortons downtown",
+        // ダウンタウンエリアに限定するため、位置と半径を指定することもできます
+        // location: new google.maps.LatLng(center.lat, center.lng),
+        // radius: 5000, // 5km
+      },
+      (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+          // 既存のマーカーをクリア
+          markers.forEach((marker) => marker.setMap(null));
+
+          // 最大3件の結果を取得
+          const limitedResults = results.slice(0, 3);
+
+          // 検索結果から場所データを作成
+          const searchResults: Place[] = limitedResults.map(
+            (result, index) => ({
+              id: `timhortons-${index}`,
+              name: result.name || "",
+              location: {
+                lat: result.geometry?.location?.lat() || 0,
+                lng: result.geometry?.location?.lng() || 0,
+              },
+              address: result.formatted_address || "",
+              type: "Coffee Shop",
+            }),
+          );
+
+          // 地図の表示範囲を調整
+          if (searchResults.length > 0) {
+            const bounds = new google.maps.LatLngBounds();
+            searchResults.forEach((place) => {
+              bounds.extend(place.location);
+            });
+            map.fitBounds(bounds);
+
+            // 新しいマーカーを作成
+            const newMarkers = searchResults.map((place) => {
+              const marker = new google.maps.Marker({
+                position: place.location,
+                map,
+                title: place.name,
+                animation: google.maps.Animation.DROP,
+              });
+
+              // 情報ウィンドウを作成
+              const infoWindow = new google.maps.InfoWindow({
+                content: `
+                  <div>
+                    <h3 style="margin: 0; font-size: 16px;">${place.name}</h3>
+                    <p style="margin: 5px 0 0;">${place.address}</p>
+                    <p style="margin: 5px 0 0; color: #666;">Coffee Shop</p>
+                  </div>
+                `,
+              });
+
+              // マーカークリックイベント
+              marker.addListener("click", () => {
+                infoWindow.open({
+                  anchor: marker,
+                  map,
+                });
+
+                setSelectedPlace(place);
+                onPlaceSelect?.(place);
+              });
+
+              return marker;
+            });
+
+            setMarkers(newMarkers);
+          }
+        }
+      },
+    );
+  };
+
   // 場所を検索する関数
   const searchPlace = () => {
     if (!map || !place) return;
@@ -199,24 +282,33 @@ export default function MapWithMarkers({
   return (
     <div className="flex flex-col gap-4">
       <div ref={mapRef} className="h-[400px] w-full rounded border"></div>
-      <div className="flex items-center gap-2">
-        <input
-          type="text"
-          onChange={(e) => setPlace(e.target.value)}
-          value={place}
-          className="flex-1 rounded border p-2"
-          placeholder="Enter a location"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              searchPlace();
-            }
-          }}
-        />
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            onChange={(e) => setPlace(e.target.value)}
+            value={place}
+            className="flex-1 rounded border p-2"
+            placeholder="Enter a location"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                searchPlace();
+              }
+            }}
+          />
+          <button
+            className="rounded bg-blue-500 p-2 text-white"
+            onClick={searchPlace}
+          >
+            Search
+          </button>
+        </div>
+
         <button
-          className="rounded bg-blue-500 p-2 text-white"
-          onClick={searchPlace}
+          className="rounded bg-red-500 p-2 text-white"
+          onClick={searchTimHortons}
         >
-          Search
+          Show Tim Hortons
         </button>
       </div>
 
