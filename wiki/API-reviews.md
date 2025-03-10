@@ -43,9 +43,9 @@ Retrieves event's review images. (host and guests can access)
 ```json
 {
   "data": {
-    "review-images": [
-      "imageUrl": "string",
-      "imageUrl": "string"
+    "reviewImages": [
+      "string",
+      "string"
     ]
   }
 }
@@ -66,7 +66,7 @@ Creates a review for an event. (only guests can post)
 ```json
 {
   "reviewText":"string",
-  "image": [
+  "images": [
     file
   ],
 }
