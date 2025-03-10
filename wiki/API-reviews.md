@@ -20,8 +20,10 @@ Retrieves event's reviews. (host and guests can access)
         "id": number,
         "reviewText":"string",
         "userId": number,
-        "name": "string",
-        "profileImageUrl": "string"
+        "user":{
+          "name": "string",
+          "profileImageUrl": "string"
+        }
       }
     ]
   }
