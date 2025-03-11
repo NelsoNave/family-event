@@ -23,8 +23,8 @@ Create a event.
         "longitude" : "float",
         "isAskRestrictions": Boolean,
         "theme" : "string",
-      },
-      "thumbnail": file
+        "thumbnail": file
+      }
 }
 ```
 
