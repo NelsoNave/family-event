@@ -25,6 +25,8 @@ model Users {
   eventParticipants EventParticipants[]
   participantNecessities ParticipantNecessities[]
   pictures Pictures[]
+  announcements Announcements[]
+  replies Replies[]
 
   @@map("users")
 }
@@ -65,6 +67,7 @@ model Events {
   timelines Timelines[]
   medias Medias[]
   pictures Pictures[]
+  announcements Announcements[]
 
   @@map("events")
 }
@@ -175,4 +178,35 @@ model FacePictures {
   tag       String
 
   @@map("face_pictures")
+}
+
+model Announcements {
+  id        Int      @id @default(autoincrement())
+  event       Events @relation(fields: [eventId], references: [id])
+  eventId     Int  @map("event_id")
+  user       Users @relation(fields: [userId], references: [id])
+  userId  Int    @map("user_id")
+  contentText String    @map("content_text")
+  imageUrl String    @map("image_url")
+  imagePublicId String    @map("image_public_url")
+  isSent Boolean  @map("is_sent")
+  createdAt DateTime  @map("created_at")
+
+  replies Replies[]
+
+  @@map("announcements")
+}
+
+model Replies {
+  id        Int      @id @default(autoincrement())
+  announcement      Announcements @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  announcementId     Int  @map("announcement_id")
+  user       Users @relation(fields: [userId], references: [id])
+  userId  Int    @map("user_id")
+  replyText String    @map("replytext")
+  isMessage Boolean    @map("is_message")
+  isFavorite Boolean    @map("is_favorite")
+  createdAt DateTime  @map("created_at")
+
+  @@map("replies")
 }
