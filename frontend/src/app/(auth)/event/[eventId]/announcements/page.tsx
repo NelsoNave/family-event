@@ -1,3 +1,3 @@
-export default function CreateAnnouncement() {
+export default function Announcements() {
   return <div>This is announcements</div>;
 }
