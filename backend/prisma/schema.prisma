@@ -189,7 +189,7 @@ model Announcements {
   contentText String    @map("content_text")
   imageUrl String    @map("image_url")
   imagePublicId String    @map("image_public_url")
-  isSent Boolean  @map("is_sent")
+  isEmailSent Boolean  @map("is_email_sent")
   createdAt DateTime  @map("created_at")
 
   replies Replies[]
