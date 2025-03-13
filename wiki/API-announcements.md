@@ -31,6 +31,7 @@ Retrieves event's announcements. (host and guests can access)
             {
             "reply_text": "string",
             "timeAgo": "string",
+            "isOwnReply": Boolean,
             "user":{
                 "name": "string",
                 "profileImageUrl": "string"
