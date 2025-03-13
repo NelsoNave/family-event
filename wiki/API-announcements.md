@@ -284,6 +284,7 @@ Delete a reply for a announcement. (only guests can delete)
   "message": "string"
 }
 ```
+## Notes
 
-is_message flag means this record is a reply message or not.(to verify this record for a reply or a favorite.)
-is_favorite flag means guests liked a announcement or not.
+-is_message flag means this record is a reply message or not.(to verify this record for a reply or a favorite.)
+-is_favorite flag means guests liked a announcement or not.
