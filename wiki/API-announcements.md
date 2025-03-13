@@ -38,7 +38,8 @@ Retrieves event's announcements. (host and guests can access)
             }
           ]
             "countFavorite": number,
-            "countMessage": number
+            "countMessage": number,
+            "hasFavorited" : Boolean
         }
     ]
   }
@@ -156,6 +157,87 @@ DELETE /api/v1/events/{event_id}/announcements/{announcement_id}
 ### Description
 
 Delete a announcement and replies. (only host can update)
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "string"
+}
+```
+
+## 6. Create a reply
+
+### Endpoint
+
+POST /api/v1/events/{event_id}/announcements/{announcement_id}/reply
+
+### Description
+
+Creates a reply for a announcement. (only guests can post)
+
+### Request
+
+```json
+{
+  "replyText": "string"
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": {
+    "announcement": {
+      "id": "string",
+      "contentText": "string",
+      "imageUrl": "string",
+      "isSent": Boolean,
+    }
+  }
+}
+```
+
+## 7. Create a favorite and remove a favorite
+
+### Endpoint
+
+POST /api/v1/events/{event_id}/announcements/{announcement_id}/favorite
+
+### Description
+
+Creates a reply for a announcement. (only guests can post)
+
+### Request
+
+```json
+{
+  "favorite": Boolean
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "string"
+}
+```
+
+## 8. Delete a reply
+
+### Endpoint
+
+DELETE /api/v1/events/{event_id}/announcements/{announcement_id}/reply/{reply_id}
+
+### Description
+
+Delete a reply for a announcement. (only guests can delete)
 
 ### Response
 
