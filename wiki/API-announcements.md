@@ -1,0 +1,167 @@
+# Announcements API Documentation
+
+## 1. Get Announcements
+
+### Endpoint
+
+GET /api/v1/events/{event_id}/announcements
+
+### Description
+
+Retrieves event's announcements. (host and guests can access)
+
+### Response
+
+```json
+{
+  "data": {
+    "announcements": [
+      {
+        "id": number,
+        "contentText": "string",
+        "imageUrl": "string"
+        "isSent": Boolean,
+        "timeAgo": "string",
+        "hostId": number,
+        "user":{
+          "name": "string",
+          "profileImageUrl": "string"
+            }
+        "replies"[
+            {
+            "reply_text": "string",
+            "timeAgo": "string",
+            "user":{
+                "name": "string",
+                "profileImageUrl": "string"
+                }
+            }
+          ]
+            "countFavorite": number,
+            "countMessage": number
+        }
+    ]
+  }
+}
+```
+
+## 2. Create a announcement
+
+### Endpoint
+
+POST /api/v1/events/{event_id}/announcements
+
+### Description
+
+Creates a announcement for an event. (only host can post)
+
+### Request
+
+```json
+{
+  "contentText":"string",
+  "is_sent": Boolean,
+  "image": {file}
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": {
+    "announcement": {
+      "id": "string",
+      "contentText": "string",
+      "imageUrl": "string",
+      "isSent": Boolean,
+    }
+  }
+}
+```
+
+## 3. Update a announcement
+
+### Endpoint
+
+PATCH /api/v1/events/{event_id}/announcements/{announcement_id}
+
+### Description
+
+Update a announcement for an event. (only host can update)
+
+### Request
+
+```json
+{
+  "contentText":"string",
+  "removeImage": Boolean,
+  "image": {file}
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": {
+    "announcement": {
+      "id": "string",
+      "contentText": "string",
+      "imageUrl": "string",
+      "isSent": Boolean,
+    }
+  }
+}
+```
+
+## 4. Sent a notification emails
+
+### Endpoint
+
+PATCH /api/v1/events/{event_id}/announcements/{announcement_id}/notification
+
+### Description
+
+Send notification emails to guests.
+Update isSent flag to true. (only host can update)
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": {
+    "announcement": {
+      "id": "string",
+      "contentText": "string",
+      "imageUrl": "string",
+      "isSent": Boolean,
+    }
+  }
+}
+```
+
+## 5. Delete a announcement
+
+### Endpoint
+
+DELETE /api/v1/events/{event_id}/announcements/{announcement_id}
+
+### Description
+
+Delete a announcement and replies. (only host can update)
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "string"
+}
+```
