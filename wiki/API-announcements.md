@@ -20,7 +20,7 @@ Retrieves event's announcements. (host and guests can access)
         "id": number,
         "contentText": "string",
         "imageUrl": "string"
-        "isSent": Boolean,
+        "isEmailSent": Boolean,
         "timeAgo": "string",
         "hostId": number,
         "user":{
@@ -56,7 +56,7 @@ Retrieves replies for an announcement. (host and guests can access)
         "id": number,
         "contentText": "string",
         "imageUrl": "string"
-        "isSent": Boolean,
+        "isEmailSent": Boolean,
         "timeAgo": "string",
         "hostId": number,
         "user":{
@@ -114,7 +114,7 @@ Creates a announcement for an event. (only host can post)
       "id": "string",
       "contentText": "string",
       "imageUrl": "string",
-      "isSent": Boolean,
+      "isEmailSent": Boolean,
     }
   }
 }
@@ -151,7 +151,7 @@ Update a announcement for an event. (only host can update)
       "id": "string",
       "contentText": "string",
       "imageUrl": "string",
-      "isSent": Boolean,
+      "isEmailSent": Boolean,
     }
   }
 }
@@ -166,7 +166,7 @@ PATCH /api/v1/events/{event_id}/announcements/{announcement_id}/notification
 ### Description
 
 Send notification emails to guests.
-Update isSent flag to true. (only host can update)
+Update isEmailSent flag to true. (only host can update)
 
 ### Response
 
@@ -179,7 +179,7 @@ Update isSent flag to true. (only host can update)
       "id": "string",
       "contentText": "string",
       "imageUrl": "string",
-      "isSent": Boolean,
+      "isEmailSent": Boolean,
     }
   }
 }
@@ -233,7 +233,7 @@ Creates a reply for a announcement. (only guests can post)
       "id": "string",
       "contentText": "string",
       "imageUrl": "string",
-      "isSent": Boolean,
+      "isEmailSent": Boolean,
     }
   }
 }
