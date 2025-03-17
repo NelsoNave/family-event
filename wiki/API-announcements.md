@@ -23,7 +23,7 @@ Retrieves event's announcements. (host and guests can access)
         "isEmailSent": Boolean,
         "timeAgo": "string",
         "hostId": number,
-        "user":{
+        "host":{
           "name": "string",
           "profileImageUrl": "string"
             }
@@ -59,7 +59,7 @@ Retrieves replies for an announcement. (host and guests can access)
         "isEmailSent": Boolean,
         "timeAgo": "string",
         "hostId": number,
-        "user":{
+        "host":{
           "name": "string",
           "profileImageUrl": "string"
             }
