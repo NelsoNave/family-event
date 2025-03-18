@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import Spinner from "../spinner";
 
 type ActivityFormProps = {
   eventId: string;
@@ -122,7 +123,7 @@ export function ActivityForm({ eventId, activityData }: ActivityFormProps) {
   }, [axios, eventId]);
 
   if (!eventDate) {
-    return <div>Loading...</div>;
+    return <Spinner color="text-primary" />;
   }
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {

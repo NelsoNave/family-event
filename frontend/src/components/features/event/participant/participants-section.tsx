@@ -12,6 +12,7 @@ import { useAuth } from "@clerk/nextjs";
 import { PlusIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import PersonModal from "../../person-modal";
+import Spinner from "../../spinner";
 import ParticipantItem from "./participant-item";
 
 type ParticipantsSectionProps = {
@@ -81,7 +82,7 @@ export default function ParticipantsSection({
   return (
     <>
       {!isLoaded ? (
-        <p>Loading...</p>
+        <Spinner color="text-primary" />
       ) : (
         <section className="grid gap-4">
           <h1 className="text-xl font-bold">

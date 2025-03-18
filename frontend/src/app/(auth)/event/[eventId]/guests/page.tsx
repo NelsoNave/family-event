@@ -25,11 +25,13 @@ export default async function page({
         path={`/event/${eventId}`}
         previousPageName="Event Home"
       />
-      {isHost ? (
-        <ParticipantsSection eventId={eventId} />
-      ) : (
-        <WhoIsComing eventId={eventId} />
-      )}
+      <section className="px-4 pb-20 pt-2">
+        {isHost ? (
+          <ParticipantsSection eventId={eventId} />
+        ) : (
+          <WhoIsComing eventId={eventId} />
+        )}
+      </section>
     </section>
   );
 }

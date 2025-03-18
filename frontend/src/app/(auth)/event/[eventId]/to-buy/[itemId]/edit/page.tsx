@@ -39,16 +39,18 @@ export default async function EditItem({
           path={`/event/${eventId}/to-buy`}
           previousPageName="Things to buy"
         />
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between px-4">
           <h1 className="text-xl font-bold">Edit item</h1>
           <ItemDeleteButton eventId={eventId} itemId={numericItemId} />
         </div>
       </div>
-      <ItemInputForm
-        eventId={eventId}
-        thingToBuy={thingToBuy}
-        remainBudget={remainBudget}
-      />
+      <div className="px-4 pb-20">
+        <ItemInputForm
+          eventId={eventId}
+          thingToBuy={thingToBuy}
+          remainBudget={remainBudget}
+        />
+      </div>
     </section>
   );
 }

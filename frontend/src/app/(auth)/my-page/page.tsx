@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default async function MyPage() {
   return (
-    <section className="grid gap-10">
+    <section className="grid gap-10 px-4 pb-20 pt-2">
       <UserFamilyContainer />
       <section className="grid gap-4">
         <div className="flex items-center justify-between text-text">

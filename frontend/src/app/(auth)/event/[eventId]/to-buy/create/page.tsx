@@ -43,13 +43,15 @@ export default async function Budget({
     <section className="space-y-4">
       <div>
         <BreadcrumbNavigation {...breadcrumbProps} />
-        <h1 className="text-xl font-bold">Add item</h1>
+        <h1 className="px-4 text-xl font-bold">Add item</h1>
       </div>
-      <ItemInputForm
-        eventId={eventId}
-        remainBudget={remainBudget}
-        isInitialCreate={isInitialCreate}
-      />
+      <div className="px-4 pb-20">
+        <ItemInputForm
+          eventId={eventId}
+          remainBudget={remainBudget}
+          isInitialCreate={isInitialCreate}
+        />
+      </div>
     </section>
   );
 }

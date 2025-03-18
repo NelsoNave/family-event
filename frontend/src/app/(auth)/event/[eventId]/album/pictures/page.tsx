@@ -18,11 +18,13 @@ export default async function page({
         path={`/event/${eventId}/album`}
         previousPageName="Album"
       />
-      {tag ? (
-        <FacePictures eventId={eventId} tag={tag} />
-      ) : (
-        <AllPictures eventId={eventId} />
-      )}
+      <section className="px-4 pb-20 pt-2">
+        {tag ? (
+          <FacePictures eventId={eventId} tag={tag} />
+        ) : (
+          <AllPictures eventId={eventId} />
+        )}
+      </section>
     </section>
   );
 }

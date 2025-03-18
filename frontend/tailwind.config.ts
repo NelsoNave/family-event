@@ -116,19 +116,46 @@ export default {
           "60%": { backgroundPosition: "0%  50%, 50% 100%,100%   0%" },
           "80%": { backgroundPosition: "0%  50%, 50%  50%,100% 100%" },
         },
-        corners: {
-          "0%": { borderRadius: "55% 45% 74% 26% / 66% 32% 68% 34%" },
-          "25%": { borderRadius: "33% 67% 44% 56% / 28% 56% 44% 72%" },
-          "50%": { borderRadius: "29% 71% 37% 63% / 55% 40% 60% 45%" },
-          "75%": { borderRadius: "53% 47% 53% 47% / 49% 63% 37% 51%" },
-          "100%": { borderRadius: "55% 45% 74% 26% / 66% 32% 68% 34%" },
+        spinner: {
+          "0%, 100%": {
+            boxShadow:
+              "0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0",
+          },
+          "12.5%": {
+            boxShadow:
+              "0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em",
+          },
+          "25%": {
+            boxShadow:
+              "0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em",
+          },
+          "37.5%": {
+            boxShadow:
+              "0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em",
+          },
+          "50%": {
+            boxShadow:
+              "0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em",
+          },
+          "62.5%": {
+            boxShadow:
+              "0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em",
+          },
+          "75%": {
+            boxShadow:
+              "0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0",
+          },
+          "87.5%": {
+            boxShadow:
+              "0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em",
+          },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         l3: "l3 1s infinite linear",
-        corners: "corners 20s linear infinite",
+        spinner: "spinner 1.3s infinite linear",
       },
     },
   },

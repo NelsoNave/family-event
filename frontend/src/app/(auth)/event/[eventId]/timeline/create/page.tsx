@@ -18,8 +18,10 @@ export default async function CreateActivity({
   return (
     <section className="space-y-4">
       <BreadcrumbNavigation {...breadcrumbProps} />
-      <h1 className="text-xl font-bold">Add Activity</h1>
-      <ActivityForm eventId={eventId} />
+      <div className="grid gap-4 px-4 pb-20 pt-2">
+        <h1 className="text-xl font-bold">Add Activity</h1>
+        <ActivityForm eventId={eventId} />
+      </div>
     </section>
   );
 }

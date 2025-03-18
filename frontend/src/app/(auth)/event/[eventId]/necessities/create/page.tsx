@@ -29,7 +29,7 @@ export default async function page({
           path={`/event/${eventId}`}
           previousPageName="Event Home"
         />
-        <div className="grid gap-2">
+        <div className="grid gap-2 px-4 pt-2">
           <h1 className="text-xl font-bold">Things to bring</h1>
           <p className="text-sm text-textSub">
             Create a list of items for your guests to bring to the event.

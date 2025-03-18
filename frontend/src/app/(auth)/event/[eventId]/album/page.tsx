@@ -29,7 +29,7 @@ export default async function page({
         path={`/event/${eventId}`}
         previousPageName="Event Home"
       />
-      <section className="grid gap-10">
+      <section className="grid gap-10 px-4 pb-20 pt-4">
         <AlbumCard albumData={albumData} />
         <FacesSection eventId={eventId} />
       </section>

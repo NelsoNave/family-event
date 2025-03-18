@@ -13,11 +13,11 @@ export default async function page({
   let hostNecessities;
 
   try {
-    const isHost = await checkIsHost(eventId)
-    if(isHost) {
+    const isHost = await checkIsHost(eventId);
+    if (isHost) {
       hostNecessities = await getHostNecessitiesInfo(eventId);
     } else {
-      redirect(`/event/${eventId}`)
+      redirect(`/event/${eventId}`);
     }
   } catch (err) {
     console.error(err);
@@ -26,12 +26,12 @@ export default async function page({
 
   return (
     <section className="grid gap-6">
-      <div className="grid gap-4">
+      <div>
         <BreadcrumbNavigation
           path={`/event/${eventId}/necessities`}
           previousPageName="Tings to bring"
         />
-        <h1 className="text-xl font-bold">Things to bring</h1>
+        <h1 className="px-4 pt-2 text-xl font-bold">Things to bring</h1>
       </div>
       <NecessitiesForm initialData={hostNecessities} />
     </section>

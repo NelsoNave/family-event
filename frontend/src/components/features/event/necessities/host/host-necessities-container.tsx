@@ -13,12 +13,12 @@ export default async function HostNecessitiesContainer({
   eventId,
 }: HostNecessitiesContainerProps) {
   return (
-    <section className="grig gap-10">
+    <section>
       <BreadcrumbNavigation
         path={`/event/${eventId}`}
         previousPageName="Event Home"
       />
-      <div className="grid gap-4">
+      <div className="grid gap-4 px-4 pb-20 pt-2">
         <h1 className="text-xl font-bold">Things to bring</h1>
         <ul className="list-disc pl-6">
           {hostNecessities.necessities.map(({ id, item }) => (

@@ -28,12 +28,14 @@ export default async function page({
         path={`/event/${eventId}`}
         previousPageName="Event Home"
       />
-      <h1 className="text-xl font-bold">Review the event</h1>
-      <p className="text-sm font-medium text-textSub">
-        The host would love to see your photos and hear your review on the
-        event!
-      </p>
-      <CreateReviewForm />
+      <div className="grid gap-4 px-4 pb-20 pt-2">
+        <h1 className="text-xl font-bold">Review the event</h1>
+        <p className="text-sm font-medium text-textSub">
+          The host would love to see your photos and hear your review on the
+          event!
+        </p>
+        <CreateReviewForm />
+      </div>
     </section>
   );
 }

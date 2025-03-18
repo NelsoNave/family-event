@@ -34,7 +34,6 @@ export default async function page({
 
     acceptedParticipants = response.acceptedParticipants;
     declinedParticipants = response.declinedParticipants;
-    
   } catch (err) {
     console.error(err);
     notFound();
@@ -46,29 +45,31 @@ export default async function page({
         path={`/event/${eventId}`}
         previousPageName="Event Home"
       />
-      <h1 className="text-xl font-bold">RSVP Responses</h1>
-      <Tabs defaultValue="attending" className="w-full">
-        <TabsList className="w-full bg-transparent">
-          <TabsTrigger
-            value="attending"
-            className="w-full border-b-2 border-textBorderLight bg-transparent pb-2 font-bold data-[state=active]:rounded-none data-[state=active]:border-b-2 data-[state=active]:border-accentGreen data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-accentGreen data-[state=active]:shadow-none"
-          >
-            Attending
-          </TabsTrigger>
-          <TabsTrigger
-            value="notAttending"
-            className="w-full border-b-2 border-textBorderLight bg-transparent pb-2 font-bold data-[state=active]:rounded-none data-[state=active]:border-b-2 data-[state=active]:border-accentGreen data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-accentGreen data-[state=active]:shadow-none"
-          >
-            Not Attending
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="attending">
-          <ParticipantsList participantsData={acceptedParticipants} />
-        </TabsContent>
-        <TabsContent value="notAttending">
-          <ParticipantsList participantsData={declinedParticipants} />
-        </TabsContent>
-      </Tabs>
+      <div className="px-4 pb-20 pt-2 grid gap-4">
+        <h1 className="text-xl font-bold">RSVP Responses</h1>
+        <Tabs defaultValue="attending" className="w-full">
+          <TabsList className="w-full bg-transparent">
+            <TabsTrigger
+              value="attending"
+              className="w-full border-b-2 border-textBorderLight bg-transparent pb-2 font-bold data-[state=active]:rounded-none data-[state=active]:border-b-2 data-[state=active]:border-accentGreen data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-accentGreen data-[state=active]:shadow-none"
+            >
+              Attending
+            </TabsTrigger>
+            <TabsTrigger
+              value="notAttending"
+              className="w-full border-b-2 border-textBorderLight bg-transparent pb-2 font-bold data-[state=active]:rounded-none data-[state=active]:border-b-2 data-[state=active]:border-accentGreen data-[state=active]:bg-transparent data-[state=active]:font-bold data-[state=active]:text-accentGreen data-[state=active]:shadow-none"
+            >
+              Not Attending
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="attending">
+            <ParticipantsList participantsData={acceptedParticipants} />
+          </TabsContent>
+          <TabsContent value="notAttending">
+            <ParticipantsList participantsData={declinedParticipants} />
+          </TabsContent>
+        </Tabs>
+      </div>
     </section>
   );
 }

@@ -1,7 +1,8 @@
+import WaveColorAnimation from "@/components/features/event/common/wave-color-animation";
 import EventDetail from "@/components/features/event/event-detail";
 import MenuIcon from "@/components/features/event/menu-icon";
-import AnimatedCircle from "@/components/features/event/review/animated-circle";
 import ReviewSection from "@/components/features/event/review/review-section";
+import Spinner from "@/components/features/spinner";
 import { MENU_LIST_GUEST, MENU_LIST_HOST } from "@/constants/icons";
 import { getWhoIsComing } from "@/lib/actions/event/participant";
 import { getAllReviews, getReviewImages } from "@/lib/actions/event/review";
@@ -59,77 +60,77 @@ export default async function EventHome({
   const hasEventStartedOneHourAgo = now >= reviewStartTime;
 
   return (
-    <section className="space-y-8">
-      {eventData ? (
-        <EventDetail eventData={eventData} isHost={isHost} />
-      ) : (
-        <p>Loading...</p>
-      )}
+    <section className="pt-2 h-full flex flex-col min-h-screen justify-between">
+      <div className="grid gap-8 px-4 pb-20">
+        {eventData ? (
+          <EventDetail eventData={eventData} isHost={isHost} />
+        ) : (
+          <Spinner color="text-primary" />
+        )}
 
-      <section className="grid grid-cols-4 gap-4">
-        {(isHost ? MENU_LIST_HOST : MENU_LIST_GUEST).map((menu) => (
-          <MenuIcon key={menu.path} iconDetail={menu} eventId={eventId} />
-        ))}
-      </section>
-      {!isHost && hasEventStartedOneHourAgo && !hasPostedReview && (
-        <div className="grid gap-2 rounded-lg border border-textSub bg-background p-4">
-          <h2 className="flex items-center gap-2 text-lg font-bold">
-            <ThumbsUpIcon size={32} className="text-accentGreen" />
-            How Was the Event?
-          </h2>
-          <p className="text-xs font-medium">
-            We&apos;d love to hear your thoughts and memories from the day!
-          </p>
-          <Link
-            href={`/event/${eventId}/review/create`}
-            className="justify-self-end rounded-full bg-accentGreen px-5 py-2 text-sm font-bold text-white hover:opacity-70 mt-2"
-          >
-            Add your review
-          </Link>
-        </div>
-      )}
-      {!isHost && (
-        <section className="px-3">
-          <div className="flex items-center justify-between border-b-[0.2px] border-gray-300 pb-2">
-            <h2 className="font-semibold">
-              {hasEventStartedOneHourAgo ? "Who Was There" : "Who is coming"}
+        <section className="grid grid-cols-4 gap-4">
+          {(isHost ? MENU_LIST_HOST : MENU_LIST_GUEST).map((menu) => (
+            <MenuIcon key={menu.path} iconDetail={menu} eventId={eventId} />
+          ))}
+        </section>
+        {!isHost && hasEventStartedOneHourAgo && !hasPostedReview && (
+          <div className="grid gap-2 rounded-lg border border-textSub bg-background p-4">
+            <h2 className="flex items-center gap-2 text-lg font-bold">
+              <ThumbsUpIcon size={32} className="text-accentGreen" />
+              How Was the Event?
             </h2>
-            <p className="text-sm font-medium text-textSub">
-              <span>{guests.length}</span> {hasEventStartedOneHourAgo ? "Went" : "Going"}
+            <p className="text-xs font-medium">
+              We&apos;d love to hear your thoughts and memories from the day!
             </p>
-          </div>
-          <div className="flex w-full flex-col">
-            <ul className="grid grid-cols-5 gap-2 pt-4">
-              {guests.map(({ id, name, profileImageUrl }) => (
-                <li
-                  className="grid h-auto w-16 justify-items-center gap-2"
-                  key={id}
-                >
-                  <Image
-                    src={profileImageUrl}
-                    width={64}
-                    height={64}
-                    alt={name}
-                    className="h-14 w-14 rounded-full object-cover"
-                  />
-                  <p className="line-clamp-2 w-full break-words text-center text-sm font-medium">
-                    {name}
-                  </p>
-                </li>
-              ))}
-            </ul>
             <Link
-              href={`/event/${eventId}/guests`}
-              className="ml-auto text-sm font-semibold text-accentBlue hover:text-accentBlue/60"
+              href={`/event/${eventId}/review/create`}
+              className="mt-2 justify-self-end rounded-full bg-accentGreen px-5 py-2 text-sm font-bold text-white hover:opacity-70"
             >
-              See all
+              Add your review
             </Link>
           </div>
-        </section>
-      )}
-
-      {hasEventStartedOneHourAgo && (
-        <>
+        )}
+        {!isHost && (
+          <section className="px-3">
+            <div className="flex items-center justify-between border-b-[0.2px] border-gray-300 pb-2">
+              <h2 className="font-semibold">
+                {hasEventStartedOneHourAgo ? "Who Was There" : "Who is coming"}
+              </h2>
+              <p className="text-sm font-medium text-textSub">
+                <span>{guests.length}</span>{" "}
+                {hasEventStartedOneHourAgo ? "Went" : "Going"}
+              </p>
+            </div>
+            <div className="flex w-full flex-col">
+              <ul className="grid grid-cols-5 gap-2 pt-4">
+                {guests.map(({ id, name, profileImageUrl }) => (
+                  <li
+                    className="grid h-auto w-16 justify-items-center gap-2"
+                    key={id}
+                  >
+                    <Image
+                      src={profileImageUrl}
+                      width={64}
+                      height={64}
+                      alt={name}
+                      className="h-14 w-14 rounded-full object-cover"
+                    />
+                    <p className="line-clamp-2 w-full break-words text-center text-sm font-medium">
+                      {name}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href={`/event/${eventId}/guests`}
+                className="ml-auto text-sm font-semibold text-accentBlue hover:text-accentBlue/60"
+              >
+                See all
+              </Link>
+            </div>
+          </section>
+        )}
+        {hasEventStartedOneHourAgo && (
           <ReviewSection
             eventId={eventId}
             reviewImages={reviewImages}
@@ -137,11 +138,12 @@ export default async function EventHome({
             hasPostedReview={hasPostedReview}
             isHost={isHost}
           />
-          <div className="h-14 overflow-hidden">
-            <AnimatedCircle />
-          </div>
-        </>
-      )}
+        )}
+      </div>
+
+      <div className="relative">
+        <WaveColorAnimation />
+      </div>
     </section>
   );
 }

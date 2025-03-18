@@ -19,8 +19,8 @@ export default async function EventCreated({
   const eventUrl = getInvitationUrl(eventId);
 
   return (
-    <section>
-      <p className="mb-6 mt-10 text-center text-2xl font-bold">
+    <section className="bg-white pt-10 px-4 pb-20">
+      <p className="mb-6 text-center text-2xl font-bold">
         Created your Event!
       </p>
       <div className="relative">

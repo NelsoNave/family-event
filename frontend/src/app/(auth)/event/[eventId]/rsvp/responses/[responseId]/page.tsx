@@ -44,7 +44,7 @@ export default async function page({
         path={`/event/${eventId}/rsvp/responses`}
         previousPageName="RSVP Responses"
       />
-      <div className="grid gap-10">
+      <div className="grid gap-10 px-4 pb-20 pt-2">
         <div className="grid justify-center gap-2">
           <Image
             src={profileImageUrl}

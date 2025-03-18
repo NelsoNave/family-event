@@ -83,7 +83,7 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-slate-200 text-text;
+    @apply bg-gray-400/30 text-text;
   }
   input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
@@ -98,5 +98,4 @@ body {
 .slick-next {
   right: 8px !important;
   z-index: 99;
-
 }

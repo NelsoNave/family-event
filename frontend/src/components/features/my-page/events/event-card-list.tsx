@@ -42,7 +42,7 @@ export default function EventCardList({ events, error }: EventCardListProps) {
                   width={0}
                   height={118}
                   sizes="50vw"
-                  className="w-full rounded-t-xl object-cover"
+                  className="w-full h-[118px] rounded-t-xl object-cover"
                 />
                 <p
                   className={`absolute right-2 top-2 rounded-md px-2 py-1 text-xs font-bold text-white ${isHost ? "bg-accentGreen/50" : "bg-primary/50"}`}

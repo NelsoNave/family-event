@@ -120,7 +120,9 @@ export default function ParticipantItem({
         )}
         <div className="flex items-center gap-2">
           <Image
-            src={profileImageUrl}
+            src={
+              profileImageUrl ? profileImageUrl : "/images/profile_default.png"
+            }
             width={40}
             height={40}
             alt="name"

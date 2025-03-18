@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { showErrorToast } from "@/lib/toast/toast-utils";
 import { FormEvent, ReactNode, useState } from "react";
 import { Button } from "../ui/button";
+import Loader from "./event/album/loader";
 
 type ModalProps = {
   trigger: ReactNode;
@@ -93,10 +94,10 @@ export default function Modal({
           </DialogClose>
           <Button
             type="submit"
-            className="w-full bg-error font-bold shadow-none"
+            className="w-full bg-error font-bold shadow-none hover:bg-error/70 focus:bg-error active:bg-error"
             onClick={handleDelete}
           >
-            {isLoading ? "Loading..." : button}
+            {isLoading ? <Loader /> : button}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -9,6 +9,7 @@ import { useAuth } from "@clerk/nextjs";
 import { PlusIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import PersonModal from "../../person-modal";
+import Spinner from "../../spinner";
 import FamilyCard from "../family/family-card";
 import ProfileCard from "../profile/profile-card";
 
@@ -41,11 +42,11 @@ export default function UserFamilyContainer() {
   }, [isLoaded, isSignedIn, axios, toast, userInfoData]);
 
   useEffect(() => {
-    refreshData(); // Run once the component is ready
+    refreshData();
   }, [isLoaded, isSignedIn, refreshData]);
 
   if (!userInfoData) {
-    return <p>Loading...</p>;
+    return <Spinner color="text-primary" />;
   }
 
   return (
@@ -54,7 +55,7 @@ export default function UserFamilyContainer() {
         name={userInfoData.name}
         email={userInfoData.email}
         profileImageUrl={userInfoData.profileImageUrl}
-        refreshData={refreshData} // Pass refreshData function
+        refreshData={refreshData}
       />
       <div className="grid gap-4">
         <div className="flex items-center justify-between text-text">

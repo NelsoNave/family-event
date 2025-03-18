@@ -30,9 +30,11 @@ export default async function CreateBudget({
           path={`/event/${eventId}/to-buy`}
           previousPageName="Things to buy"
         />
-        <h1 className="text-xl font-bold">Edit budget</h1>
+        <h1 className="px-4 text-xl font-bold">Edit budget</h1>
       </div>
-      <BudgetForm eventId={eventId} budget={budget} />
+      <div className="px-4 pb-20">
+        <BudgetForm eventId={eventId} budget={budget} />
+      </div>
     </section>
   );
 }

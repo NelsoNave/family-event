@@ -28,7 +28,9 @@ export default async function page({
         }
         previousPageName={albumData.length === 0 ? "Event Home" : "Album"}
       />
-      <Post eventId={eventId} />
+      <section className="px-4 pb-20 pt-2">
+        <Post eventId={eventId} />
+      </section>
     </section>
   );
 }

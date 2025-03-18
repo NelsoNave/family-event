@@ -45,24 +45,26 @@ export default async function ThingsToBuy({
           path={`/event/${eventId}`}
           previousPageName="Event Home"
         />
-        <h1 className="text-xl font-bold">Things to buy</h1>
+        <h1 className="px-4 text-xl font-bold">Things to buy</h1>
       </div>
-      <BudgetOverview
-        thingsToBuy={thingsToBuy}
-        budget={budget}
-        eventId={eventId}
-        remainBudget={remainBudget}
-        totalSpend={totalSpend}
-      />
-      <div className="flex justify-end">
-        <Link href={`/event/${eventId}/to-buy/create`}>
-          <Button
-            type="button"
-            className="mt-4 h-12 rounded-full border border-primary bg-white px-12 text-base font-bold text-primary hover:text-white"
-          >
-            Add item
-          </Button>
-        </Link>
+      <div className="px-4 pb-20">
+        <BudgetOverview
+          thingsToBuy={thingsToBuy}
+          budget={budget}
+          eventId={eventId}
+          remainBudget={remainBudget}
+          totalSpend={totalSpend}
+        />
+        <div className="flex justify-end">
+          <Link href={`/event/${eventId}/to-buy/create`}>
+            <Button
+              type="button"
+              className="mt-4 h-12 rounded-full border border-primary bg-white px-12 text-base font-bold text-primary hover:text-white"
+            >
+              Add item
+            </Button>
+          </Link>
+        </div>
       </div>
     </section>
   );

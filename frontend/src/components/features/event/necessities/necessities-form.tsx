@@ -116,7 +116,7 @@ export default function NecessitiesForm({ initialData }: NecessitiesFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-6 space-y-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="mb-6 space-y-8 px-4 pb-20">
         <div className="space-y-4">
           <div className="space-y-2">
             {fields.map((field, index) => (
