@@ -124,29 +124,3 @@ Ben: "Perfect! I can see Naomi's review including her lovely comments. The app c
 Ben: "As you can see, Oiwai has transformed how I plan and remember special events. From the initial planning stages with the event creation and timeline, to managing the budget, to capturing and organizing photos with facial recognition, and finally collecting everyone's memories through reviews."
 Ben: "The entire process is streamlined in one place, making it so much easier to create meaningful celebrations without the usual stress and disorganization. Now I can focus on what really matters - creating special memories with Amane and our loved ones."
 Ben: "I've already started planning our summer beach trip using Oiwai. It's become my go-to app for any gathering that matters."
-
-# Text Copy
-
-### Event's Title
-
-Amane's Birthday Party
-
-### Send Invitation Message
-
-```
-Hi naomi, I'm planning a birthday party for Amane. Please join us
-
-localhost:3000/rsvp/5
-```
-
-### Message From Guest
-
-```
-Congratulations Amane! I'm looking forward to the party!
-```
-
-### Review Message
-
-```
-Thank you for inviting me! It was a great party! The cherry blossom setting was perfect, and Amane looked so happy. The timeline you created helped everyone know what was happening when, and the food was delicious. Can't wait for the next celebration!
-```
