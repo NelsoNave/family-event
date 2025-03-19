@@ -252,7 +252,7 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
 
   return (
     <div>
-      <h2 className="mb-4 mt-12 text-xl font-bold">Your Information</h2>
+      <h2 className="mb-4 mt-8 text-xl font-bold">Your Information</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="mb-6 space-y-8">
           <div className="space-y-6">
@@ -524,7 +524,15 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                       />
                     )}
                     <span className="text-sm font-medium text-text">
-                      I agree with the Terms and Conditions.
+                      I agree with the{" "}
+                      <span className="text-accentBlue hover:underline">
+                        Terms
+                      </span>{" "}
+                      and{" "}
+                      <span className="text-accentBlue hover:underline">
+                        Conditions
+                      </span>
+                      .
                     </span>
                   </button>
                 </FormControl>

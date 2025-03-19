@@ -40,7 +40,7 @@ const MENU_LIST_COMMON = [
 export const MENU_LIST_HOST = [
   ...MENU_LIST_COMMON,
   {
-    iconName: "Buy",
+    iconName: "Budget",
     backgroundColor: "accentGreen/20",
     iconColor: "accentGreen",
     path: "to-buy",
@@ -66,7 +66,7 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   Timeline: Timer,
   Album: Images,
   Talk: MessagesSquare,
-  Buy: ShoppingCart,
+  Budget: ShoppingCart,
   "Guest list": UsersRound,
   RSVP: ClipboardList,
 };
