@@ -103,8 +103,8 @@ export default function CreateEventPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      startTime: "",
-      endTime: "",
+      startTime: "00:00",
+      endTime: "00:00",
       isAskRestrictions: false,
       theme: THEME_CONFIG.orange.color,
       thumbnail: [],

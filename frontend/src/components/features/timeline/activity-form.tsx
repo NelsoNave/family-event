@@ -62,8 +62,8 @@ export function ActivityForm({ eventId, activityData }: ActivityFormProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      startTime: activityData ? extractTime(activityData.startTime) : "",
-      endTime: activityData ? extractTime(activityData?.endTime) : "",
+      startTime: activityData ? extractTime(activityData.startTime) : "00:00",
+      endTime: activityData ? extractTime(activityData?.endTime) : "00:00",
       title: activityData?.title || "",
       description: activityData?.description || "",
     },
