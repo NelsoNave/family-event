@@ -30,7 +30,7 @@ export default async function FacesSection({ eventId }: FacesSectionProps) {
                 <Link
                   key={tag}
                   href={`album/pictures?tag=${tag}`}
-                  className="w-full cursor-pointer"
+                  className="relative w-full cursor-pointer"
                 >
                   <Image
                     src={previewImageUrl}
@@ -39,6 +39,10 @@ export default async function FacesSection({ eventId }: FacesSectionProps) {
                     height={184}
                     className="h-[184px] w-full rounded-lg object-cover"
                   />
+                  <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/70 to-transparent rounded-b-lg"></div>
+                  <p className="absolute bottom-2 left-2 font-bold text-white">
+                    {tag}
+                  </p>
                 </Link>
               ))}
             </div>

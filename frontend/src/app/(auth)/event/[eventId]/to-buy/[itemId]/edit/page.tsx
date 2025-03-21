@@ -1,6 +1,7 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
 import ItemDeleteButton from "@/components/features/event/to-buy/item-delete-button";
 import ItemInputForm from "@/components/features/event/to-buy/item-input-form";
+import ScrollToTop from "@/components/features/scroll-to-top";
 import { checkIsHost } from "@/lib/api/event";
 import { getThingToBuy } from "@/lib/api/to-buy";
 import { notFound, redirect } from "next/navigation";
@@ -34,6 +35,7 @@ export default async function EditItem({
 
   return (
     <section className="space-y-4">
+      <ScrollToTop />
       <div>
         <BreadcrumbNavigation
           path={`/event/${eventId}/to-buy`}

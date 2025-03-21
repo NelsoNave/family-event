@@ -1,5 +1,6 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
 import ItemInputForm from "@/components/features/event/to-buy/item-input-form";
+import ScrollToTop from "@/components/features/scroll-to-top";
 import { checkIsHost } from "@/lib/api/event";
 import { getThingsToBuyBudget } from "@/lib/api/to-buy";
 import { redirect } from "next/navigation";
@@ -41,7 +42,8 @@ export default async function Budget({
 
   return (
     <section className="space-y-4">
-      <div>
+      <ScrollToTop />
+      <div className="grid gap-4">
         <BreadcrumbNavigation {...breadcrumbProps} />
         <h1 className="px-4 text-xl font-bold">Add item</h1>
       </div>

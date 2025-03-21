@@ -1,4 +1,5 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
+import ScrollToTop from "@/components/features/scroll-to-top";
 import { ActivityForm } from "@/components/features/timeline/activity-form";
 import { getTimeline } from "@/lib/api/timeline";
 
@@ -17,6 +18,7 @@ export default async function CreateActivity({
 
   return (
     <section className="space-y-4">
+      <ScrollToTop />
       <BreadcrumbNavigation {...breadcrumbProps} />
       <div className="grid gap-4 px-4 pb-20 pt-2">
         <h1 className="text-xl font-bold">Add Activity</h1>

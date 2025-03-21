@@ -18,7 +18,12 @@ const IconLink = ({
   src: string;
   alt: string;
 }) => (
-  <a href={href} target="_blank" rel="icon for sharing event">
+  <a
+    href={href}
+    target="_blank"
+    rel="icon for sharing event"
+    className="flex h-auto flex-col items-center justify-center gap-1"
+  >
     <Image
       src={src}
       alt={alt}
@@ -27,6 +32,7 @@ const IconLink = ({
       className="h-12 w-12 transform rounded-full object-cover duration-300 hover:scale-110"
       priority
     />
+    <p className="text-xs font-semibold">{alt}</p>
   </a>
 );
 
@@ -49,7 +55,7 @@ export const ShareLinks = ({ eventUrl }: ShareLinksProps) => {
   };
 
   return (
-    <div className="mt-8 flex h-6 justify-center gap-4">
+    <div className="flex justify-center gap-4">
       <IconLink
         href={`https://www.facebook.com/share.php?u=${eventUrl}`}
         src="/images/facebook.svg"
@@ -67,7 +73,7 @@ export const ShareLinks = ({ eventUrl }: ShareLinksProps) => {
         src="/images/whatsApp.svg"
         alt="WhatsApp"
       />
-      <button onClick={handleCopyLink} className="flex flex-col items-center">
+      <button onClick={handleCopyLink} className="flex flex-col items-center gap-1">
         <Image
           src="/images/link-share.svg"
           alt="Copy Link"
@@ -76,7 +82,9 @@ export const ShareLinks = ({ eventUrl }: ShareLinksProps) => {
           className="h-12 w-12 transform rounded-full object-cover duration-300 hover:scale-110"
           priority
         />
-        <p className="text-sm font-semibold">{isCopied ? "Copied!" : ""}</p>
+        <p className="text-xs font-semibold">
+          {isCopied ? "Copied!" : "Copy Link"}
+        </p>
       </button>
     </div>
   );

@@ -1,10 +1,12 @@
 "use client";
 
+import ScrollToTop from "@/components/features/scroll-to-top";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const SubmittedPage = () => {
   return (
     <section className="relative flex min-h-screen max-w-md flex-col items-center gap-6 bg-white px-8 pt-16 md:mx-auto">
+      <ScrollToTop />
       <div className="space-y-4">
         <h1 className="text-center text-4xl font-bold">
           Thank you <br /> for your response!

@@ -21,7 +21,7 @@ export default function EventDetail({ eventData, isHost }: eventDataProps) {
         width={200}
         height={200}
         alt="thumbnail"
-        className="aspect-[2/1] w-full rounded-xl object-cover"
+        className="aspect-[2/1] w-full h-auto rounded-xl object-cover"
         priority
       />
       <div className="space-y-3">

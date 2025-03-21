@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { HostNecessitiesListType } from "@/types/necessities";
 import Link from "next/link";
 import BreadcrumbNavigation from "../../breadcrumb-navigation";
+import ScrollToTop from "@/components/features/scroll-to-top";
 
 type HostNecessitiesContainerProps = {
   hostNecessities: HostNecessitiesListType;
@@ -13,12 +14,13 @@ export default async function HostNecessitiesContainer({
   eventId,
 }: HostNecessitiesContainerProps) {
   return (
-    <section>
+    <section className="grid gap-4 pb-20">
+      <ScrollToTop />
       <BreadcrumbNavigation
         path={`/event/${eventId}`}
         previousPageName="Event Home"
       />
-      <div className="grid gap-4 px-4 pb-20 pt-2">
+      <div className="grid gap-4 px-4 pt-2">
         <h1 className="text-xl font-bold">Things to bring</h1>
         <ul className="list-disc pl-6">
           {hostNecessities.necessities.map(({ id, item }) => (

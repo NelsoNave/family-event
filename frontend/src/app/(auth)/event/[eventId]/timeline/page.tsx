@@ -1,4 +1,5 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
+import ScrollToTop from "@/components/features/scroll-to-top";
 import ActivityCard from "@/components/features/timeline/activity-card";
 import { Button } from "@/components/ui/button";
 import { checkIsHost, getEventInformation } from "@/lib/api/event";
@@ -49,6 +50,7 @@ export default async function TimeLine({
 
   return (
     <section className="space-y-4">
+      <ScrollToTop />
       <BreadcrumbNavigation
         path={`/event/${eventId}`}
         previousPageName="Event Home"

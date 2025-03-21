@@ -1,6 +1,7 @@
 import AllPictures from "@/components/features/event/album/all-pictures";
 import FacePictures from "@/components/features/event/album/face-pictures";
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
+import ScrollToTop from "@/components/features/scroll-to-top";
 
 export default async function page({
   params,
@@ -14,6 +15,7 @@ export default async function page({
 
   return (
     <section>
+      <ScrollToTop />
       <BreadcrumbNavigation
         path={`/event/${eventId}/album`}
         previousPageName="Album"

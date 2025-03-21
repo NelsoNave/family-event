@@ -1,6 +1,7 @@
 "use client";
 
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
+import ScrollToTop from "@/components/features/scroll-to-top";
 import Spinner from "@/components/features/spinner";
 import { ActivityForm } from "@/components/features/timeline/activity-form";
 import { useToast } from "@/hooks/use-toast";
@@ -54,6 +55,7 @@ export default function EditActivity() {
 
   return (
     <section className="space-y-4">
+      <ScrollToTop />
       <BreadcrumbNavigation
         path={`/event/${eventId}/timeline`}
         previousPageName="Timeline"

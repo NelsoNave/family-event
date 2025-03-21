@@ -26,6 +26,7 @@ export default async function FacePictures({
 
   return (
     <section className="grid gap-4">
+      <h2 className="text-xl font-bold">{tag}</h2>
       <div className="grid grid-cols-2 gap-[6px]">
         {facePicturesData.map((picture) => (
           <Image

@@ -18,7 +18,7 @@ export default function MenuIcon({ iconDetail, eventId }: MenuIconProps) {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <Link href={`/event/${eventId}/${iconDetail.path}`}>
+      <Link href={`/event/${eventId}/${iconDetail.path}`} >
         <div
           className={`flex h-14 w-14 items-center justify-center rounded-full bg-${iconDetail.backgroundColor}`}
         >

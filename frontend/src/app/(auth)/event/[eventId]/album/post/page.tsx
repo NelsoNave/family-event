@@ -1,5 +1,6 @@
 import Post from "@/components/features/event/album/post";
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
+import ScrollToTop from "@/components/features/scroll-to-top";
 import { getAllPictures } from "@/lib/actions/event/album";
 import { notFound } from "next/navigation";
 
@@ -20,6 +21,7 @@ export default async function page({
 
   return (
     <section>
+      <ScrollToTop />
       <BreadcrumbNavigation
         path={
           albumData.length === 0

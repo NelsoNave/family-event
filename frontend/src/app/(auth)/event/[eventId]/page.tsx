@@ -2,11 +2,14 @@ import WaveColorAnimation from "@/components/features/event/common/wave-color-an
 import EventDetail from "@/components/features/event/event-detail";
 import MenuIcon from "@/components/features/event/menu-icon";
 import ReviewSection from "@/components/features/event/review/review-section";
+import { ShareLinks } from "@/components/features/rsvp/ShareLinks";
+import ScrollToTop from "@/components/features/scroll-to-top";
 import Spinner from "@/components/features/spinner";
 import { MENU_LIST_GUEST, MENU_LIST_HOST } from "@/constants/icons";
 import { getWhoIsComing } from "@/lib/actions/event/participant";
 import { getAllReviews, getReviewImages } from "@/lib/actions/event/review";
 import { checkIsHost, getEventInformation } from "@/lib/api/event";
+import { getInvitationUrl } from "@/lib/helpers/url-utils";
 import { ThumbsUpIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -23,6 +26,7 @@ export default async function EventHome({
   let reviewImages: string[] = [];
   let hasPostedReview = false;
   let reviewsData;
+  let eventUrl;
 
   const { eventId } = await params;
 
@@ -33,12 +37,14 @@ export default async function EventHome({
       guestList,
       reviewImagesResult,
       reviewsResult,
+      eventUrlResult,
     ] = await Promise.all([
       getEventInformation(eventId),
       checkIsHost(eventId),
       getWhoIsComing(eventId),
       getReviewImages(eventId),
       getAllReviews(eventId),
+      getInvitationUrl(eventId),
     ]);
 
     eventData = eventResponse.event;
@@ -47,20 +53,24 @@ export default async function EventHome({
     reviewImages = reviewImagesResult;
     reviewsData = reviewsResult.data.reviews;
     hasPostedReview = reviewsResult.hasPostedReview;
+    eventUrl = eventUrlResult;
   } catch (err) {
     console.error(`Error fetching data for event ${eventId}:`, err);
     notFound();
   }
 
   const now = new Date();
+  const eventStartTime = new Date(eventData.startTime);
 
   const reviewStartTime = new Date(eventData.startTime);
   reviewStartTime.setHours(reviewStartTime.getHours() + 1);
 
+  const hasEventStarted = now >= eventStartTime;
   const hasEventStartedOneHourAgo = now >= reviewStartTime;
 
   return (
-    <section className="pt-2 h-full flex flex-col min-h-screen justify-between">
+    <section className="flex h-full min-h-screen flex-col justify-between pt-2">
+      <ScrollToTop />
       <div className="grid gap-8 px-4 pb-20">
         {eventData ? (
           <EventDetail eventData={eventData} isHost={isHost} />
@@ -73,6 +83,14 @@ export default async function EventHome({
             <MenuIcon key={menu.path} iconDetail={menu} eventId={eventId} />
           ))}
         </section>
+        {isHost && !hasEventStarted && (
+          <div className="grid gap-6">
+            <h2 className="border-b-[0.2px] border-gray-300 pb-2 font-semibold">
+              Send Event Invitation!
+            </h2>
+            <ShareLinks eventUrl={eventUrl} />
+          </div>
+        )}
         {!isHost && hasEventStartedOneHourAgo && !hasPostedReview && (
           <div className="grid gap-2 rounded-lg border border-textSub bg-background p-4">
             <h2 className="flex items-center gap-2 text-lg font-bold">

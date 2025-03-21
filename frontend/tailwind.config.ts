@@ -35,6 +35,7 @@ export default {
         accentGreenLight: "hsl(172, 73%, 34%, 70%)",
         accentBlue: "hsl(200, 72%, 37%, 100%)",
         accentPurple: "hsl(284, 29%, 44%, 100%)",
+        accentPink: "hsl(340, 71%, 58%, 100%)",
         error: "hsl(0, 84%, 60%, 100%)",
         warning: "hsl(25, 95%, 53%, 100%)",
         backgroundSub: "#F4E5C6",

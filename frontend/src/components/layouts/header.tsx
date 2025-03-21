@@ -24,13 +24,22 @@ export default function Header() {
           <h1 className="text-xl font-bold text-text">Oiwai</h1>
         </Link>
         {pathname === "/" ? (
-          <SignedOut>
-            <SignUpButton>
-              <Button className="h-auto rounded-full px-4 py-1.5 text-xs font-bold">
-                CREATE EVENT
-              </Button>
-            </SignUpButton>
-          </SignedOut>
+          <div className="flex gap-3">
+            <SignedOut>
+              <SignInButton>
+                <Button className="h-auto rounded-full border border-primary bg-white px-4 py-1.5 text-xs font-bold text-primary hover:bg-white">
+                  LOG IN
+                </Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedOut>
+              <SignUpButton forceRedirectUrl="/event/create">
+                <Button className="h-auto rounded-full px-4 py-1.5 text-xs font-bold">
+                  SIGN UP
+                </Button>
+              </SignUpButton>
+            </SignedOut>
+          </div>
         ) : (
           <>
             <SignedOut>

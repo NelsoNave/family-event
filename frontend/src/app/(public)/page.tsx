@@ -4,8 +4,8 @@ import Image from "next/image";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import Footer from "@/components/layouts/footer";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
 
 const lato = Lato({
   weight: ["100", "300", "400", "700", "900"],
@@ -49,13 +49,13 @@ export default function Home() {
               <TabsList className="h-auto w-full border border-textBorder bg-white p-2">
                 <TabsTrigger
                   value="host"
-                  className="w-full border border-white hover:opacity-70 font-bold data-[state=active]:border data-[state=active]:border-accentGreen data-[state=active]:bg-white data-[state=active]:text-accentGreen data-[state=active]:shadow-none"
+                  className="w-full border border-white font-bold hover:opacity-70 data-[state=active]:border data-[state=active]:border-accentGreen data-[state=active]:bg-white data-[state=active]:text-accentGreen data-[state=active]:shadow-none"
                 >
                   EVENT HOST
                 </TabsTrigger>
                 <TabsTrigger
                   value="participants"
-                  className="w-full border border-white hover:opacity-70 font-bold data-[state=active]:border data-[state=active]:border-accentGreen data-[state=active]:bg-white data-[state=active]:text-accentGreen data-[state=active]:shadow-none"
+                  className="w-full border border-white font-bold hover:opacity-70 data-[state=active]:border data-[state=active]:border-accentGreen data-[state=active]:bg-white data-[state=active]:text-accentGreen data-[state=active]:shadow-none"
                 >
                   PARTICIPANTS
                 </TabsTrigger>

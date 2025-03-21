@@ -1,6 +1,7 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
 import ParticipantsSection from "@/components/features/event/participant/participants-section";
 import WhoIsComing from "@/components/features/event/participant/who-is-coming";
+import ScrollToTop from "@/components/features/scroll-to-top";
 import { checkIsHost } from "@/lib/api/event";
 import { notFound } from "next/navigation";
 
@@ -21,6 +22,7 @@ export default async function page({
 
   return (
     <section className="grid gap-4">
+      <ScrollToTop />
       <BreadcrumbNavigation
         path={`/event/${eventId}`}
         previousPageName="Event Home"

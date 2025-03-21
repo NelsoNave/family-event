@@ -1,5 +1,6 @@
 import BreadcrumbNavigation from "@/components/features/event/breadcrumb-navigation";
 import NecessitiesForm from "@/components/features/event/necessities/necessities-form";
+import ScrollToTop from "@/components/features/scroll-to-top";
 import { getHostNecessitiesInfo } from "@/lib/actions/event/necessities";
 import { checkIsHost } from "@/lib/api/event";
 import { notFound, redirect } from "next/navigation";
@@ -26,6 +27,7 @@ export default async function page({
 
   return (
     <section className="grid gap-6">
+      <ScrollToTop />
       <div>
         <BreadcrumbNavigation
           path={`/event/${eventId}/necessities`}
