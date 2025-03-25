@@ -86,6 +86,7 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
   const [termsAccepted, setTermsAccepted] = useState(
     form.getValues("termsAccepted"),
   );
+  const [showCompanionName, setShowCompanionName] = useState<boolean>(true);
   const [isEmailFetched, setIsEmailFetched] = useState(false);
   const [newCompanionName, setNewCompanionName] = useState<string>("");
   const [registeredFamilyMembers, setRegisteredFamilyMembers] = useState<
@@ -248,6 +249,12 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
   const handleTermsAgreement = () => {
     setTermsAccepted(!termsAccepted);
     form.setValue("termsAccepted", !termsAccepted);
+  };
+
+  // Toggle visibility of companion name
+  const handleShowCompanionName = () => {
+    setShowCompanionName(!showCompanionName);
+    // TODO: set value to the form field
   };
 
   return (
@@ -442,6 +449,30 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                     </span>
                   </button>
                 )}
+                <button
+                  type="button"
+                  onClick={handleShowCompanionName}
+                  className="flex items-center gap-2 rounded-full font-bold hover:opacity-70"
+                >
+                  {showCompanionName ? (
+                    <Image
+                      src="/images/checked.svg"
+                      width={16}
+                      height={16}
+                      alt="icon for checked"
+                    />
+                  ) : (
+                    <Image
+                      src="/images/unchecked.svg"
+                      width={16}
+                      height={16}
+                      alt="icon for unchecked"
+                    />
+                  )}
+                  <p className="text-sm font-medium">
+                    I agree to share companion name with other attendees
+                  </p>
+                </button>
               </div>
             </div>
           )}
@@ -513,14 +544,14 @@ const GuestInformationForm = ({ selection }: GuestInformationFormProps) => {
                         src="/images/checked.svg"
                         width={16}
                         height={16}
-                        alt="icon for add unchecked"
+                        alt="icon for checked"
                       />
                     ) : (
                       <Image
                         src="/images/unchecked.svg"
                         width={16}
                         height={16}
-                        alt="icon for add checked"
+                        alt="icon for unchecked"
                       />
                     )}
                     <span className="text-sm font-medium text-text">

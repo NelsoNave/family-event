@@ -79,8 +79,13 @@ export default async function EventHome({
         )}
 
         <section className="grid grid-cols-4 gap-4">
-          {(isHost ? MENU_LIST_HOST : MENU_LIST_GUEST).map((menu) => (
-            <MenuIcon key={menu.path} iconDetail={menu} eventId={eventId} />
+          {(isHost ? MENU_LIST_HOST : MENU_LIST_GUEST).map((menu, index) => (
+            <MenuIcon
+              key={menu.path}
+              iconDetail={menu}
+              eventId={eventId}
+              index={index}
+            />
           ))}
         </section>
         {isHost && !hasEventStarted && (
