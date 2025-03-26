@@ -45,7 +45,7 @@ const RSVP = async ({ params }: { params: Promise<{ eventId: string }> }) => {
 
   return (
     <section
-      className="max-w-md pb-3 md:mx-auto"
+      className="max-w-md pb-3 mx-auto"
       style={{ backgroundColor: getBackgroundColor(eventData.theme) }}
     >
       <EventInformation event={eventData} />

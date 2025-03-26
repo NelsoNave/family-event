@@ -33,16 +33,16 @@ export default function EventCardList({ events, error }: EventCardListProps) {
         const startTimeDate = new Date(startTime);
         const endTimeDate = new Date(endTime);
         return (
-          <li key={id} className="hover:opacity-70">
+          <li key={id} className="group hover:opacity-70">
             <Link href={`/event/${id}`} className="grid gap-4">
-              <div className="relative">
+              <div className="relative rounded-t-xl overflow-hidden">
                 <Image
                   src={thumbnailUrl}
                   alt={title}
                   width={0}
                   height={118}
                   sizes="50vw"
-                  className="w-full h-[118px] rounded-t-xl object-cover"
+                  className="h-[118px] w-full rounded-t-xl object-cover duration-300 group-hover:scale-105"
                 />
                 <p
                   className={`absolute right-2 top-2 rounded-md px-2 py-1 text-xs font-bold text-white ${isHost ? "bg-accentGreen/50" : "bg-primary/50"}`}

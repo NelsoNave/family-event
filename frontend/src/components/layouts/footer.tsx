@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="text-text bg-textBorderLight max-w-md md:mx-auto">
+    <footer className="text-text bg-textBorderLight max-w-md mx-auto">
       <div className="grid gap-4 px-4 py-8">
         <div className="flex flex-col gap-6">
           <h1 className="text-xl font-bold">Oiwai</h1>

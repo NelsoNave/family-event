@@ -18,7 +18,7 @@ export default function Header() {
   const { isSignedIn } = useAuth();
 
   return (
-    <header className="sticky top-0 z-50 max-w-md bg-white px-4 py-3 md:mx-auto">
+    <header className="sticky top-0 z-50 max-w-md bg-white px-4 py-3 mx-auto">
       <div className="flex items-start justify-between gap-2.5">
         <Link href={isSignedIn ? "/my-page" : "/"} className="hover:opacity-70">
           <h1 className="text-xl font-bold text-text">Oiwai</h1>

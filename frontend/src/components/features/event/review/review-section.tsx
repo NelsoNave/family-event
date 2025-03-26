@@ -35,7 +35,7 @@ export default async function ReviewSection({
           </p>
           <Link
             href={`/event/${eventId}/review/create`}
-            className="w-fit rounded-full bg-accentGreen px-5 py-2 text-sm font-bold text-white hover:opacity-70"
+            className="w-fit rounded-full bg-accentGreen px-5 py-2 text-sm font-bold text-white duration-200 hover:scale-105 hover:opacity-70"
           >
             Add your review
           </Link>

@@ -6,7 +6,7 @@ export default function PublicLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section className="min-h-screen max-w-md bg-white md:mx-auto">
+    <section className="min-h-screen max-w-md bg-white mx-auto">
       {children}
     </section>
   );

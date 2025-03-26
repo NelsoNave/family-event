@@ -17,7 +17,7 @@ const lato = Lato({
 export default function Home() {
   return (
     <>
-      <section className="max-w-md bg-white px-4 pb-20 pt-10 md:mx-auto">
+      <section className="max-w-md bg-white px-4 pb-20 pt-10 mx-auto">
         <section className="grid justify-items-center gap-6 text-center">
           <h1 className={`text-[32px] font-bold ${lato.className}`}>
             Celebrate & Connect <br />
