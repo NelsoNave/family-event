@@ -1,6 +1,6 @@
 import { getAllPicturesByTag } from "@/lib/actions/event/album";
-import Image from "next/image";
 import { notFound } from "next/navigation";
+import FacePictureCard from "./face-picture-card";
 
 type FacePicturesProps = {
   eventId: string;
@@ -29,14 +29,7 @@ export default async function FacePictures({
       <h2 className="text-xl font-bold">{tag}</h2>
       <div className="grid grid-cols-2 gap-[6px]">
         {facePicturesData.map((picture) => (
-          <Image
-            key={picture}
-            src={picture}
-            alt="test"
-            width={168}
-            height={184}
-            className="h-[184px] w-full rounded-lg object-cover"
-          />
+          <FacePictureCard key={picture} picture={picture} />
         ))}
       </div>
     </section>

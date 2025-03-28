@@ -117,6 +117,7 @@ export default async function TimeLine({
                     isEven={index % 2 === 0}
                     eventId={eventId}
                     isHost={isHost}
+                    index={index}
                   />
                   {isHost && index === timeline.length - 1 && (
                     <Link href={`/event/${eventId}/timeline/create`}>

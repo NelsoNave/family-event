@@ -201,7 +201,7 @@ export default function Post({ eventId }: PostProps) {
                 <PlusIcon size={24} className="text-primary" />
               </li>
               {imageUrls.map((image, index) => (
-                <li className="h-[100px] hover:opacity-70" key={index}>
+                <li className="group h-[100px] hover:opacity-70" key={index}>
                   <button
                     className="relative h-auto w-full"
                     onClick={(e) => {
@@ -209,7 +209,7 @@ export default function Post({ eventId }: PostProps) {
                       handleDelete(index, image);
                     }}
                   >
-                    <div className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-text/50">
+                    <div className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-text/50 group-hover:bg-error/100">
                       <X size={14} className="text-white" />
                     </div>
                     <Image

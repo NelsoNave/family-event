@@ -7,6 +7,11 @@ import Image from "next/image";
 import { useState } from "react";
 import Modal from "../../modal";
 
+import dynamic from "next/dynamic";
+import "react-medium-image-zoom/dist/styles.css";
+
+const Zoom = dynamic(() => import("react-medium-image-zoom"), { ssr: false });
+
 type PictureProps = {
   eventId: string;
   pictureId: string;
@@ -57,7 +62,7 @@ export default function Picture({
           trigger={
             <Button
               variant="ghost"
-              className="absolute right-2 top-2 flex h-auto items-center justify-center rounded-full bg-text/50 p-1 hover:bg-text/50"
+              className="absolute right-2 top-2 z-10 flex h-auto items-center justify-center rounded-full bg-text/50 p-1 hover:bg-text/50"
             >
               <X size={12} className="h-3 w-3 text-white" />
             </Button>
@@ -70,13 +75,11 @@ export default function Picture({
           onSuccess={refreshData}
         />
       )}
-      <Image
-        src={imageUrl}
-        alt="test"
-        width={124}
-        height={100}
-        className="h-[100px] w-full object-cover"
-      />
+      <Zoom zoomMargin={0}>
+        <div className="relative h-[100px] w-full">
+          <Image src={imageUrl} alt={imageUrl} fill className="object-cover" />
+        </div>
+      </Zoom>
     </li>
   );
 }

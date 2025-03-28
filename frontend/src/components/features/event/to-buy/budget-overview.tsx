@@ -57,43 +57,58 @@ export default function BudgetOverview({
 
   return (
     <section className="space-y-4">
-      <div className="space-y-2 rounded-md border-0.2 border-gray-300 bg-background p-4 shadow-sm">
-        <div className="flex w-full flex-col gap-3">
-          <p className="text-sm font-semibold">Budget remain</p>
-          <div className="mx-auto flex items-center justify-center gap-2">
-            <div className="flex items-end">
-              <p className="self-center text-2xl font-semibold">$&nbsp;</p>
+      <div
+        className="relative mx-6 space-y-2 overflow-hidden rounded-lg border-[0.2px] border-gray-300 bg-[#FCFCF8] px-8 py-7"
+        style={{ boxShadow: "0 3px 4px rgba(0, 0, 0, 0.08)" }}
+      >
+        <Image
+          src="/images/budget-decor.svg"
+          width={136}
+          height={136}
+          alt=""
+          className="absolute -right-7 -top-12 z-10"
+        />
+        <div className="flex w-full flex-col">
+          <p className="mb-2 font-semibold">Budget remain</p>
+          <div className="flex justify-between">
+            <div className="flex items-end text-black">
+              <p className="self-center text-4xl font-semibold">$&nbsp;</p>
               <p
                 className={`text-4xl font-bold ${
-                  remainBudget < 0 ? "text-error" : "text-primary"
+                  remainBudget < 0 ? "text-error" : ""
                 }`}
               >
                 {remainBudget}
               </p>
-              <p className="text-2xl font-semibold">/</p>
-              <p className="text-2xl font-semibold">{budget}</p>
+              <p className="text-2xl font-semibold text-text">
+                &nbsp;/ {budget}
+              </p>
             </div>
             <Link
               href={`/event/${eventId}/to-buy/budget/edit`}
-              className="flex w-full justify-between self-end"
+              className="self-end"
             >
               <Button className="h-8 w-8 rounded-full bg-textSub/20 text-textSub shadow-none hover:bg-textSub/20 hover:opacity-70">
                 <PencilLineIcon />
               </Button>
             </Link>
           </div>
-          <p className="text-center text-sm font-medium text-error">
+          <p
+            className={
+              remainBudget <= 0
+                ? "mt-1 text-sm font-medium text-error"
+                : undefined
+            }
+          >
             {remainBudget < 0 ? "It looks like you're over budget." : ""}
           </p>
+          <p className="mt-4 border-[0.5px] border-textBorder"></p>
         </div>
-        <div className="w-full space-y-1">
-          <p className="text-sm font-semibold">Total spend</p>
-          <div className="flex rounded-md bg-backgroundSub p-2">
-            <p className="mx-auto text-lg font-semibold">${totalSpend}</p>
-          </div>
-        </div>
+        <p className="mx-auto font-semibold">
+          Total spend&nbsp;:&nbsp;${totalSpend}
+        </p>
       </div>
-      <ul>
+      <ul className="mx-6">
         {thingsToBuy.map((item) => (
           <li key={item.id} className="flex items-center py-3">
             <Button
