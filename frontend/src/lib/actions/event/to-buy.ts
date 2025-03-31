@@ -32,7 +32,7 @@ export const createThingsToBuy = async ({
     if (err instanceof AxiosError) {
       throw new AxiosError(err.response?.data.message);
     } else {
-      throw new Error("Failed to create things to buy. Please try again.");
+      throw new Error("Failed to create the shopping list. Please try again.");
     }
   }
 };

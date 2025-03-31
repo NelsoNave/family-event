@@ -464,10 +464,10 @@ export default function CreateEventPage() {
                     House party
                   </div>
                 </SelectItem>
-                <SelectItem value="outside">
+                <SelectItem value="outdoor">
                   <div className="flex h-6 items-center gap-2 text-base">
                     <FerrisWheel size={16} className="text-textSub" />
-                    Outside
+                    Outdoor
                   </div>
                 </SelectItem>
               </SelectContent>
@@ -476,7 +476,7 @@ export default function CreateEventPage() {
 
           <div>
             <p className="mb-2 text-sm font-semibold">Location</p>
-            {eventType === "outside" ? (
+            {eventType === "outdoor" ? (
               <Tabs defaultValue="Current location" className="w-full">
                 <TabsList className="mb-2 flex w-full bg-transparent">
                   <TabsTrigger

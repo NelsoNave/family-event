@@ -39,7 +39,7 @@ export default async function EditItem({
       <div>
         <BreadcrumbNavigation
           path={`/event/${eventId}/to-buy`}
-          previousPageName="Things to buy"
+          previousPageName="Shopping List"
         />
         <div className="flex items-center justify-between px-4">
           <h1 className="text-xl font-bold">Edit item</h1>

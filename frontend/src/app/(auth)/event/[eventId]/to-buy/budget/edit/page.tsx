@@ -30,7 +30,7 @@ export default async function CreateBudget({
       <div className="grid gap-4">
         <BreadcrumbNavigation
           path={`/event/${eventId}/to-buy`}
-          previousPageName="Things to buy"
+          previousPageName="Shopping List"
         />
         <h1 className="px-4 text-xl font-bold">Edit budget</h1>
       </div>

@@ -37,7 +37,7 @@ export default async function Budget({
     path: budget
       ? `/event/${eventId}/to-buy/budget/create`
       : `/event/${eventId}/to-buy`,
-    previousPageName: budget ? "Set budget" : "Things to buy",
+    previousPageName: budget ? "Set budget" : "Shopping List",
   };
 
   return (

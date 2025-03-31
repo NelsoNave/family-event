@@ -44,7 +44,7 @@ export default async function EventCreated({
           type="submit"
           className="mt-8 h-12 w-full rounded-full text-base font-bold"
         >
-          Prepare more detail
+          Prepare additional details
         </Button>
       </Link>
     </section>

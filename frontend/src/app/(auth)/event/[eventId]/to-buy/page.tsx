@@ -47,7 +47,7 @@ export default async function ThingsToBuy({
           path={`/event/${eventId}`}
           previousPageName="Event Home"
         />
-        <h1 className="px-4 text-xl font-bold">Things to buy</h1>
+        <h1 className="px-4 text-xl font-bold">Shopping List</h1>
       </div>
       <div className="px-4 pb-20">
         <BudgetOverview
