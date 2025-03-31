@@ -461,7 +461,7 @@ export default function CreateEventPage() {
                 <SelectItem value="homeParty">
                   <div className="flex h-6 items-center gap-2 text-base">
                     <House size={16} className="text-textSub" />
-                    Home party
+                    House party
                   </div>
                 </SelectItem>
                 <SelectItem value="outside">
@@ -475,7 +475,7 @@ export default function CreateEventPage() {
           </FormItem>
 
           <div>
-            <p className="mb-2 text-sm font-semibold">location</p>
+            <p className="mb-2 text-sm font-semibold">Location</p>
             {eventType === "outside" ? (
               <Tabs defaultValue="Current location" className="w-full">
                 <TabsList className="mb-2 flex w-full bg-transparent">

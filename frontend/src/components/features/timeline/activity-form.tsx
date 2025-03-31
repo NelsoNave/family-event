@@ -269,7 +269,7 @@ export function ActivityForm({ eventId, activityData }: ActivityFormProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-semibold">Activity detail</FormLabel>
+              <FormLabel className="font-semibold">Activity details</FormLabel>
               <FormControl>
                 <textarea
                   className="w-full rounded-md border p-4 font-medium placeholder:text-textSub"

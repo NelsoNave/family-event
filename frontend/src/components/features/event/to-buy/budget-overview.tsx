@@ -69,7 +69,8 @@ export default function BudgetOverview({
           className="absolute -right-7 -top-12 z-10"
         />
         <div className="flex w-full flex-col">
-          <p className="mb-2 font-semibold">Budget remain</p>
+          <p className="mb-2 font-semibold">Remaining budget
+          </p>
           <div className="flex justify-between">
             <div className="flex items-end text-black">
               <p className="self-center text-4xl font-semibold">$&nbsp;</p>
@@ -105,7 +106,7 @@ export default function BudgetOverview({
           <p className="mt-4 border-[0.5px] border-textBorder"></p>
         </div>
         <p className="mx-auto font-semibold">
-          Total spend&nbsp;:&nbsp;${totalSpend}
+          Total spent&nbsp;:&nbsp;${totalSpend}
         </p>
       </div>
       <ul className="mx-6">
